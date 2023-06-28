@@ -13,7 +13,7 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Edit implements CommandType {
+public class Editor implements CommandType {
 
     @Override
     public @NotNull String getIdentifier() {

@@ -1,5 +1,5 @@
 name: CozyTreasureHunt
 version: '${project.version}'
 main: com.github.cozyplugins.cozytreasurehunt.CozyTreasureHunt
-api-version: 1.19
+api-version: 1.8
 authors: [ Smudge ]
