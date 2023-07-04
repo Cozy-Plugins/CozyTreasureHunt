@@ -4,7 +4,6 @@ import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.TreasureConfigurationDirectory;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
-import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
