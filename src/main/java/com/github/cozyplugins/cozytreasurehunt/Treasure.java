@@ -1,18 +1,22 @@
 package com.github.cozyplugins.cozytreasurehunt;
 
-import com.github.cozyplugins.cozytreasurehunt.database.ConvertableObject;
-import com.github.cozyplugins.cozytreasurehunt.database.SaveableObject;
-import com.github.cozyplugins.cozytreasurehunt.database.record.TreasureRecord;
-import com.github.cozyplugins.cozytreasurehunt.database.table.TreasureTable;
+import com.github.cozyplugins.cozylibrary.ConsoleManager;
+import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
+import com.github.cozyplugins.cozytreasurehunt.storage.indicator.ConfigurationConvertable;
+import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
 
 /**
  * <h1>Represents a type of treasure</h1>
  * <li>Defaults to {@link Material#CHEST}</li>
  */
-public class Treasure implements ConvertableObject<TreasureRecord>, SaveableObject {
+public class Treasure implements ConfigurationConvertable, Savable {
 
     private final @NotNull String identifier;
     private @NotNull Material material;
@@ -49,6 +53,7 @@ public class Treasure implements ConvertableObject<TreasureRecord>, SaveableObje
 
     /**
      * <h1>Used to get the hdb value</h1>
+     *
      * @return The hdb value.
      */
     public @Nullable String getHdb() {
@@ -68,6 +73,7 @@ public class Treasure implements ConvertableObject<TreasureRecord>, SaveableObje
 
     /**
      * <h1>Used to set the hdb value</h1>
+     *
      * @param hdb The hdb value.
      * @return This instance.
      */
@@ -76,39 +82,39 @@ public class Treasure implements ConvertableObject<TreasureRecord>, SaveableObje
         return this;
     }
 
-    /**
-     * <h1>Used to create a treasure type based on a database record</h1>
-     *
-     * @param record The instance of the treasure record.
-     * @return The requested treasure instance.
-     */
-    public static @NotNull Treasure create(@NotNull TreasureRecord record) {
-        Treasure treasure = new Treasure(record.treasureId);
-
-        // Check if the record's material is invalid.
-        if (Material.getMaterial(record.material) == null) {
-            throw new NullPointerException("Database contains treasure that has a invalid material!");
-        }
-
-        treasure.material = Material.getMaterial(record.material);
-
-        return treasure;
-    }
-
     @Override
-    public @NotNull TreasureRecord convertToRecord() {
-        TreasureRecord record = new TreasureRecord();
+    public @NotNull ConfigurationSection convert() {
+        ConfigurationSection section = new MemoryConfigurationSection(new HashMap<>());
 
-        record.treasureId = this.identifier;
-        record.material = this.material.toString();
+        section.set("material", this.material.toString());
+        section.set("hdb", this.hdb);
 
-        return record;
+        return section;
     }
 
     @Override
     public void save() {
-        CozyTreasureHunt.getDatabase()
-                .getTable(TreasureTable.class)
-                .insert(this);
+        TreasureStorage.insert(this);
+    }
+
+    @SuppressWarnings("all")
+    public static @NotNull Treasure create(@NotNull String identifier, @NotNull ConfigurationSection section) {
+        Treasure treasure = new Treasure(identifier);
+
+        String materialName = section.getString("material", "CHEST").toUpperCase();
+        if (Material.getMaterial(materialName) == null) {
+            ConsoleManager.error("The treasure with identifier &f" + identifier + " &chas an invalid material. The treasure will default to a &fCHEST&c.");
+            materialName = "CHEST";
+        }
+
+        if (Material.getMaterial(materialName) == null) {
+            ConsoleManager.error("The material CHEST is invalid on this server version, further errors may occur.");
+            return treasure;
+        }
+
+        treasure.material = Material.getMaterial(materialName);
+        treasure.hdb = section.getString("hdb");
+
+        return treasure;
     }
 }
