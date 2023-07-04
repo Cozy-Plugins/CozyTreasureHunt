@@ -59,18 +59,26 @@ public class TreasureEditor extends InventoryInterface {
         // Previous button.
         this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lPrevious").addLore("&7Click to go back a page.").addAction((ClickAction) (user, type) -> {
             if (this.page <= 0) return;
-
-            user.getPlayer().closeInventory();
-            TreasureEditor editor = new TreasureEditor(this.treasure, this.page - 1);
-            editor.open(user.getPlayer());
+            this.page -= 1;
+            this.generateModifiers();
         }));
 
         // Next button.
         this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lNext").addLore("&7Click to go forward a page.").addAction((ClickAction) (user, type) -> {
-            user.getPlayer().closeInventory();
-            TreasureEditor editor = new TreasureEditor(this.treasure, this.page + 1);
-            editor.open(user.getPlayer());
+            this.page += 1;
+            this.generateModifiers();
         }));
+
+        // Change name.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.NAME_TAG)
+                .setName("&6&lChange name")
+                .addLore("&7Click to change the treasures name.")
+                .addSlot(10)
+        );
+    }
+
+    private void generateModifiers() {
 
     }
 }

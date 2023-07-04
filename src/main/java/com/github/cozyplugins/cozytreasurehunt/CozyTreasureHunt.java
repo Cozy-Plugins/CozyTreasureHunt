@@ -3,7 +3,7 @@ package com.github.cozyplugins.cozytreasurehunt;
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
 
 /**
- * <h1>Represents the main plugin class</h1>
+ * Represents the main plugin class.
  */
 public final class CozyTreasureHunt extends CozyPlugin {
 

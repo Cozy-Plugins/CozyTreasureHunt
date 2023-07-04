@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * Represents the treasure storage.
@@ -27,7 +28,7 @@ public final class TreasureStorage {
      * @param treasure The instance of the treasure.
      */
     public static void insert(@NotNull Treasure treasure) {
-        String identifier = treasure.getIdentifier();
+        UUID identifier = treasure.getIdentifier();
         ConfigurationSection section = treasure.convert();
 
         // Get the first file.
@@ -41,7 +42,7 @@ public final class TreasureStorage {
         // Save it to the first file.
         YamlConfiguration configuration = new YamlConfiguration(file);
         configuration.load();
-        configuration.set(identifier, section);
+        configuration.set(identifier.toString(), section);
         configuration.save();
     }
 
@@ -51,8 +52,8 @@ public final class TreasureStorage {
      * @param identifier The treasure's identifier.
      * @return The instance of the treasure.
      */
-    public @Nullable Treasure get(String identifier) {
-        ConfigurationSection section = TreasureStorage.storage.getSection(identifier);
+    public @Nullable Treasure get(UUID identifier) {
+        ConfigurationSection section = TreasureStorage.storage.getSection(identifier.toString());
         if (section == null) return null;
         return Treasure.create(identifier, section);
     }
