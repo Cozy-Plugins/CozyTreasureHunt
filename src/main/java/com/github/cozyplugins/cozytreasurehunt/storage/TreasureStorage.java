@@ -52,9 +52,25 @@ public final class TreasureStorage {
      * @param identifier The treasure's identifier.
      * @return The instance of the treasure.
      */
-    public @Nullable Treasure get(UUID identifier) {
+    public static @Nullable Treasure get(UUID identifier) {
         ConfigurationSection section = TreasureStorage.storage.getSection(identifier.toString());
         if (section == null) return null;
         return Treasure.create(identifier, section);
+    }
+
+    /**
+     * Used to delete a treasure from storage.
+     *
+     * @param identifier The treasure's identifier.
+     */
+    public static void delete(UUID identifier) {
+        for (File file : TreasureStorage.storage.getFiles()) {
+            YamlConfiguration configuration = new YamlConfiguration(file);
+            if (!configuration.getKeys().contains(identifier.toString())) continue;
+
+            configuration.set(identifier.toString(), null);
+            return;
+        }
+        ConsoleManager.warn("Unable to delete treasure with identifier " + identifier);
     }
 }

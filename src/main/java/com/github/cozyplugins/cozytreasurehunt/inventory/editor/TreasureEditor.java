@@ -4,10 +4,12 @@ import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.AnvilValueAction;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.PlaceAction;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
+import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
@@ -56,21 +58,21 @@ public class TreasureEditor extends InventoryInterface {
         this.setItem(new InventoryItem().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName("&7").addSlotRange(0, 26).addSlot(27, 36, 25, 45).addSlotRange(45, 53));
 
         // Back button.
-        this.setItem(new InventoryItem().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a&lBack").addLore("&7Click to go back to the list of treasure types.").addAction((ClickAction) (user, type) -> {
+        this.setItem(new InventoryItem().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a&lBack").addLore("&7Click to go back to the list of treasure types.").addAction((ClickAction) (user, type, inventory) -> {
             user.getPlayer().closeInventory();
             TreasureListEditor editor = new TreasureListEditor();
             editor.open(user.getPlayer());
         }));
 
         // Previous button.
-        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lPrevious").addLore("&7Click to go back a page.").addAction((ClickAction) (user, type) -> {
+        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lPrevious").addLore("&7Click to go back a page.").addAction((ClickAction) (user, type, inventory) -> {
             if (this.page <= 0) return;
             this.page -= 1;
             this.generateModifiers();
         }));
 
         // Next button.
-        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lNext").addLore("&7Click to go forward a page.").addAction((ClickAction) (user, type) -> {
+        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lNext").addLore("&7Click to go forward a page.").addAction((ClickAction) (user, type, inventory) -> {
             this.page += 1;
             this.generateModifiers();
         }));
@@ -171,6 +173,27 @@ public class TreasureEditor extends InventoryInterface {
                 .setMaterial(Material.CAULDRON)
                 .setName("&c&lDelete")
                 .addLore("&7Click to delete this treasure.")
+                .addAction(new ConfirmAction() {
+                    @Override
+                    public @NotNull String getTitle() {
+                        return "&8&lConfirm to delete treasure";
+                    }
+
+                    @Override
+                    public void onConfirm(@NotNull PlayerUser playerUser) {
+                        TreasureStorage.delete(treasure.getIdentifier());
+                        playerUser.sendMessage("&7Treasure with name &f" + treasure.getName() + "&7 has been deleted.");
+
+                        TreasureListEditor listEditor = new TreasureListEditor();
+                        listEditor.open(playerUser.getPlayer());
+                    }
+
+                    @Override
+                    public void onAbort(@NotNull PlayerUser playerUser) {
+                        TreasureEditor editor = new TreasureEditor(treasure);
+                        editor.open(playerUser.getPlayer());
+                    }
+                })
         );
     }
 
