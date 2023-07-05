@@ -2,11 +2,17 @@ package com.github.cozyplugins.cozytreasurehunt.inventory.editor;
 
 import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.AnvilValueAction;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.PlaceAction;
+import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An inventory used to edit a type of treasure.
@@ -72,9 +78,99 @@ public class TreasureEditor extends InventoryInterface {
         // Change name.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.NAME_TAG)
-                .setName("&6&lChange name")
+                .setName("&6&lChange Name")
                 .addLore("&7Click to change the treasures name.")
+                .addLore("&8&l------------")
+                .addLore("&aCurrently: &f" + this.treasure.getName())
                 .addSlot(10)
+                .addAction(new AnvilValueAction() {
+                    @Override
+                    public @NotNull String getAnvilTitle() {
+                        return "&8&lChange " + treasure.getName() + " to";
+                    }
+
+                    @Override
+                    public void onValue(@Nullable String text, @NotNull PlayerUser playerUser) {
+                        if (text != null && !text.equals("")) {
+                            treasure.setName(text);
+                            treasure.save();
+                        }
+
+                        TreasureEditor treasureEditor = new TreasureEditor(treasure);
+                        treasureEditor.open(player.getPlayer());
+                    }
+                })
+        );
+
+        // Change description.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.NAME_TAG)
+                .setName("&6&lChange Description")
+                .addLore("&7Click to change the treasures description.")
+                .addLore("&8&l------------")
+                .addLore("&aCurrently: &f" + this.treasure.getDescription())
+                .addSlot(11)
+                .addAction(new AnvilValueAction() {
+                    @Override
+                    public @NotNull String getAnvilTitle() {
+                        return "&8&lChange " + treasure.getName() + "'s description to";
+                    }
+
+                    @Override
+                    public void onValue(@Nullable String text, @NotNull PlayerUser playerUser) {
+                        if (text != null && !text.equals("")) {
+                            treasure.setDescription(text);
+                            treasure.save();
+                        }
+
+                        TreasureEditor treasureEditor = new TreasureEditor(treasure);
+                        treasureEditor.open(player.getPlayer());
+                    }
+                })
+        );
+
+        // The treasure block.
+        this.setItem(new InventoryItem()
+                .setMaterial(this.treasure.getMaterial())
+                .setName("&6&lMaterial")
+                .addLore("&7Replace this item with another")
+                .addLore("&7block or head to set the treasure's material.")
+                .addSlot(13)
+                .addAction((PlaceAction) (user, item) -> {
+                    this.treasure.setMaterial(item.getMaterial());
+                    this.treasure.save();
+
+                    // Replace the item type.
+                    this.setItem(new CozyItem()
+                            .setMaterial(this.treasure.getMaterial())
+                            .setName("&6&lMaterial")
+                            .addLore("&7Replace this item with another")
+                            .addLore("&7block or head to set the treasure's material.")
+                            , 13);
+                })
+        );
+
+        // Duplicate.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.ITEM_FRAME)
+                .setName("&6&lDuplicate")
+                .addLore("&7Click to duplicate this treasure.")
+                .addLore("&fClicking this option will not exit the inventory.")
+                .addLore("&fThe new treasure will appear in the list of treasure.")
+                .addSlot(15)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    Treasure clone = this.treasure.clone();
+                    clone.save();
+
+                    user.sendMessage("&7Created new clone with identifier &f" + clone.getIdentifier());
+                })
+        );
+
+        // Delete.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.CAULDRON)
+                .setName("&c&lDelete")
+                .addLore("&7Click to delete this treasure.")
         );
     }
 
