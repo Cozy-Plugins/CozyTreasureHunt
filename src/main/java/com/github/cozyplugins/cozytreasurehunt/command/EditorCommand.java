@@ -14,6 +14,9 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents the editor command.
+ */
 public class EditorCommand implements CommandType {
 
     @Override
