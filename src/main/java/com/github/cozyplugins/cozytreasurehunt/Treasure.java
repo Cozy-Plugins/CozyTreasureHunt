@@ -8,10 +8,13 @@ import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,6 +36,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     private @Nullable String privateBroadcastMessage;
     private @Nullable String publicActionBarMessage;
     private @Nullable String privateActionBarMessage;
+    private @Nullable Particle particleType;
+    private List<Integer> particleColor; // [Red,Green,Blue]
+    private int particleAmount;
 
     /**
      * Used to create a treasure type.
@@ -113,7 +119,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      * @return The private broadcast message.
      */
     public @Nullable String getPrivateBroadcastMessage() {
-        return privateBroadcastMessage;
+        return this.privateBroadcastMessage;
     }
 
     /**
@@ -124,7 +130,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      * @return The public action bar message.
      */
     public @Nullable String getPublicActionBarMessage() {
-        return publicActionBarMessage;
+        return this.publicActionBarMessage;
     }
 
     /**
@@ -136,7 +142,39 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      * @return The private action bar message.
      */
     public @Nullable String getPrivateActionBarMessage() {
-        return privateActionBarMessage;
+        return this.privateActionBarMessage;
+    }
+
+    /**
+     * Used to get the particle type.
+     *
+     * @return The particle type.
+     */
+    public @Nullable Particle getParticleType() {
+        return this.particleType;
+    }
+
+    /**
+     * Used to get the particle color.
+     * The index represents the type of color.
+     * <li>0 = Red</li>
+     * <li>1 = Green</li>
+     * <li>2 = Blue</li>
+     *
+     * @param index The color index.
+     * @return The color value.
+     */
+    public int getParticleColor(int index) {
+       return this.particleColor.get(index);
+    }
+
+    /**
+     * Used to get the number of particles.
+     *
+     * @return The number of particles.
+     */
+    public int getParticleAmount() {
+        return this.particleAmount;
     }
 
     /**
@@ -231,6 +269,99 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     public @NotNull Treasure setPrivateActionBarMessage(@Nullable String privateActionBarMessage) {
         this.privateActionBarMessage = privateActionBarMessage;
         return this;
+    }
+
+    /**
+     * Used to set the particle type to spawn when a
+     * player finds this treasure.
+     * If null, no particles will be spawned.
+     *
+     * @param particleType The particle type.
+     */
+    public @NotNull Treasure setParticleType(@Nullable Particle particleType) {
+        this.particleType = particleType;
+        return this;
+    }
+
+
+    /**
+     * Used to set the particle's color.
+     * If null, there is no color.
+     * <li>0 = Red</li>
+     * <li>1 = Green</li>
+     * <li>2 = Blue</li>
+     *
+     * @param particleColor The particle color.
+     */
+    public @NotNull Treasure setParticleColor(@Nullable List<Integer> particleColor) {
+        this.particleColor = particleColor;
+        return this;
+    }
+
+    /**
+     * Used to increase the red color in the particle.
+     *
+     * @param amount The amount to increase.
+     * @return This instance.
+     */
+    public @NotNull Treasure increaseRedParticle(int amount) {
+        if (this.particleColor == null) this.particleColor = new ArrayList<>();
+
+        if (this.particleColor.isEmpty()) {
+            this.particleColor.add(0);
+            this.particleColor.add(0);
+            this.particleColor.add(0);
+        }
+
+        this.particleColor.set(0, this.particleColor.get(0) + amount);
+        return this;
+    }
+
+    /**
+     * Used to increase the green color in the particle.
+     *
+     * @param amount The amount to increase.
+     * @return This instance.
+     */
+    public @NotNull Treasure increaseGreenParticle(int amount) {
+        if (this.particleColor == null) this.particleColor = new ArrayList<>();
+
+        if (this.particleColor.isEmpty()) {
+            this.particleColor.add(0);
+            this.particleColor.add(0);
+            this.particleColor.add(0);
+        }
+
+        this.particleColor.set(1, this.particleColor.get(1) + amount);
+        return this;
+    }
+
+    /**
+     * Used to increase the blue color in the particle.
+     *
+     * @param amount The amount to increase.
+     * @return This instance.
+     */
+    public @NotNull Treasure increaseBlueParticle(int amount) {
+        if (this.particleColor == null) this.particleColor = new ArrayList<>();
+
+        if (this.particleColor.isEmpty()) {
+            this.particleColor.add(0);
+            this.particleColor.add(0);
+            this.particleColor.add(0);
+        }
+
+        this.particleColor.set(2, this.particleColor.get(2) + amount);
+        return this;
+    }
+
+    /**
+     * Used to set the number of particles to spawn.
+     *
+     * @param particleAmount The particle amount.
+     */
+    public void setParticleAmount(int particleAmount) {
+        this.particleAmount = particleAmount;
     }
 
     @Override
