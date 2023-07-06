@@ -183,6 +183,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public @NotNull Treasure setPrivateBroadcastMessage(String privateBroadcastMessage) {
         this.privateBroadcastMessage = privateBroadcastMessage;
+        return this;
     }
 
     @Override
