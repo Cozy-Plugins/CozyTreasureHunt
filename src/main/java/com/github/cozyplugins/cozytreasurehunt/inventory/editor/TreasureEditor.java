@@ -21,6 +21,8 @@ public class TreasureEditor extends InventoryInterface {
 
     private final @NotNull Treasure treasure;
     private int page;
+    private final int LAST_PAGE = 0;
+    private @NotNull String modifierDescription;
 
     /**
      * Used to create a treasure editor.
@@ -32,6 +34,7 @@ public class TreasureEditor extends InventoryInterface {
 
         this.treasure = treasure;
         this.page = 0;
+        this.generatePageDescription();
     }
 
     /**
@@ -47,6 +50,7 @@ public class TreasureEditor extends InventoryInterface {
         this(treasure);
 
         this.page = page;
+        this.generatePageDescription();
     }
 
     @Override
@@ -66,7 +70,12 @@ public class TreasureEditor extends InventoryInterface {
                 .setMaterial(Material.LIME_STAINED_GLASS_PANE)
                 .setName("&a&lBack")
                 .addLore("&7Click to go back to the list of treasure types.")
+                .addSlot(45)
                 .addAction((ClickAction) (user, type, inventory) -> {
+                    // Save treasure.
+                    this.treasure.save();
+
+                    // Exit to the main list of treasure.
                     user.getPlayer().closeInventory();
                     TreasureListEditor editor = new TreasureListEditor();
                     editor.open(user.getPlayer());
@@ -74,19 +83,48 @@ public class TreasureEditor extends InventoryInterface {
 
         // Previous button.
         this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
-                .setName("&e&lPrevious").addLore("&7Click to go back a page.")
+                .setName("&e&lPrevious")
+                .setLore("&7Click to go back a page.",
+                        "&aPage &e" + this.page,
+                        "&aModifiers &e" + this.modifierDescription)
+                .addSlot(48)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (this.page <= 0) return;
                     this.page -= 1;
+
                     this.generateModifiers();
+                    this.generatePageDescription();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                                    .setName("&e&lPrevious")
+                                    .setLore("&7Click to go back a page.",
+                                            "&aPage &e" + this.page,
+                                            "&aModifiers &e" + this.modifierDescription), 48);
                 }));
 
         // Next button.
         this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
-                .setName("&e&lNext").addLore("&7Click to go forward a page.")
+                .setName("&e&lNext")
+                .setLore("&7Click to go to the next page.",
+                        "&aPage &e" + this.page,
+                        "&aModifiers &e" + this.modifierDescription)
+                .addSlot(50)
                 .addAction((ClickAction) (user, type, inventory) -> {
+                    if (this.page == this.LAST_PAGE) return;
                     this.page += 1;
+
                     this.generateModifiers();
+                    this.generatePageDescription();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                            .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                            .setName("&e&lNext")
+                            .setLore("&7Click to go to the next page.",
+                                    "&aPage &e" + this.page,
+                                    "&aModifiers &e" + this.modifierDescription), 48);
                 }));
 
         // Change name.
@@ -94,8 +132,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setMaterial(Material.NAME_TAG)
                 .setName("&6&lChange Name")
                 .addLore("&7Click to change the treasures name.")
-                .addLore("&8&l------------")
-                .addLore("&aCurrently: &f" + this.treasure.getName())
+                .addLore("&aCurrently &e" + this.treasure.getName())
                 .addSlot(10)
                 .addAction(new AnvilValueAction() {
                     @Override
@@ -110,7 +147,7 @@ public class TreasureEditor extends InventoryInterface {
                             treasure.save();
                         }
 
-                        TreasureEditor treasureEditor = new TreasureEditor(treasure);
+                        TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
                         treasureEditor.open(player.getPlayer());
                     }
                 })
@@ -121,8 +158,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setMaterial(Material.NAME_TAG)
                 .setName("&6&lChange Description")
                 .addLore("&7Click to change the treasures description.")
-                .addLore("&8&l------------")
-                .addLore("&aCurrently: &f" + this.treasure.getDescription())
+                .addLore("&aCurrently &e" + this.treasure.getDescription())
                 .addSlot(11)
                 .addAction(new AnvilValueAction() {
                     @Override
@@ -137,7 +173,7 @@ public class TreasureEditor extends InventoryInterface {
                             treasure.save();
                         }
 
-                        TreasureEditor treasureEditor = new TreasureEditor(treasure);
+                        TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
                         treasureEditor.open(player.getPlayer());
                     }
                 })
@@ -151,6 +187,8 @@ public class TreasureEditor extends InventoryInterface {
                 .addLore("&7block or head to set the treasure's material.")
                 .addSlot(13)
                 .addAction((PlaceAction) (user, item) -> {
+                    if (item.getMaterial() == Material.AIR) return;
+
                     this.treasure.setMaterial(item.getMaterial());
                     this.treasure.save();
 
@@ -159,8 +197,7 @@ public class TreasureEditor extends InventoryInterface {
                                     .setMaterial(this.treasure.getMaterial())
                                     .setName("&6&lMaterial")
                                     .addLore("&7Replace this item with another")
-                                    .addLore("&7block or head to set the treasure's material.")
-                            , 13);
+                                    .addLore("&7block or head to set the treasure's material."), 13);
                 })
         );
 
@@ -184,7 +221,8 @@ public class TreasureEditor extends InventoryInterface {
         this.setItem(new InventoryItem()
                 .setMaterial(Material.CAULDRON)
                 .setName("&c&lDelete")
-                .addLore("&7Click to delete this treasure.")
+                .setLore("&7Click to delete this treasure permanently.",
+                        "&7You will be asked to confirm this action.")
                 .addAction(new ConfirmAction() {
                     @Override
                     public @NotNull String getTitle() {
@@ -202,11 +240,19 @@ public class TreasureEditor extends InventoryInterface {
 
                     @Override
                     public void onAbort(@NotNull PlayerUser playerUser) {
-                        TreasureEditor editor = new TreasureEditor(treasure);
+                        TreasureEditor editor = new TreasureEditor(treasure, page);
                         editor.open(playerUser.getPlayer());
                     }
                 })
         );
+    }
+
+    /**
+     * Used to generate the page description.
+     * This should be called when the page has changed.
+     */
+    private void generatePageDescription() {
+        this.modifierDescription = "Cosmetic";
     }
 
     /**
