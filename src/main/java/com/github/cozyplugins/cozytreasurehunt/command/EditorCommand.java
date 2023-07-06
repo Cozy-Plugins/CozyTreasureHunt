@@ -9,6 +9,7 @@ import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
+import com.github.cozyplugins.cozytreasurehunt.inventory.editor.TreasureListEditor;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,7 +48,8 @@ public class EditorCommand implements CommandType {
 
     @Override
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
+        new TreasureListEditor().open(user.getPlayer());
+        return new CommandStatus();
     }
 
     @Override

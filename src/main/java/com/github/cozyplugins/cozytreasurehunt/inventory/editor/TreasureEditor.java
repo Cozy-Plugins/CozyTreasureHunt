@@ -97,11 +97,11 @@ public class TreasureEditor extends InventoryInterface {
 
                     // Reset the item.
                     this.setItem(new CozyItem()
-                                    .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
-                                    .setName("&e&lPrevious")
-                                    .setLore("&7Click to go back a page.",
-                                            "&aPage &e" + this.page,
-                                            "&aModifiers &e" + this.modifierDescription), 48);
+                            .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                            .setName("&e&lPrevious")
+                            .setLore("&7Click to go back a page.",
+                                    "&aPage &e" + this.page,
+                                    "&aModifiers &e" + this.modifierDescription), 48);
                 }));
 
         // Next button.
@@ -194,10 +194,10 @@ public class TreasureEditor extends InventoryInterface {
 
                     // Replace the item type.
                     this.setItem(new CozyItem()
-                                    .setMaterial(this.treasure.getMaterial())
-                                    .setName("&6&lMaterial")
-                                    .addLore("&7Replace this item with another")
-                                    .addLore("&7block or head to set the treasure's material."), 13);
+                            .setMaterial(this.treasure.getMaterial())
+                            .setName("&6&lMaterial")
+                            .addLore("&7Replace this item with another")
+                            .addLore("&7block or head to set the treasure's material."), 13);
                 })
         );
 
