@@ -29,6 +29,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     private @NotNull Material material;
     private @Nullable String hdb;
 
+    private @Nullable String publicBroadcastMessage;
+    private @Nullable String privateBroadcastMessage;
+
     /**
      * Used to create a treasure type.
      *
@@ -54,9 +57,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     }
 
     /**
-     * Used to get the treasures name.
+     * Used to get the treasure's name.
      *
-     * @return The treasures name.
+     * @return The treasure's name.
      */
     public @NotNull String getName() {
         return this.name;
@@ -73,7 +76,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     }
 
     /**
-     * Used to get the treasures material.
+     * Used to get the treasure's material.
      *
      * @return The treasure's material.
      */
@@ -88,6 +91,27 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public @Nullable String getHdb() {
         return this.hdb;
+    }
+
+    /**
+     * Used to get the public broadcast message.
+     * If null, no public broadcast message should be displayed.
+     *
+     * @return The public broadcast message.
+     */
+    public @Nullable String getPublicBroadcastMessage() {
+        return this.publicBroadcastMessage;
+    }
+
+    /**
+     * Used to get the private broadcast message.
+     * If null, no private broadcast message should be
+     * sent to the player that clicked the treasure.
+     *
+     * @return The private broadcast message.
+     */
+    public @Nullable String getPrivateBroadcastMessage() {
+        return privateBroadcastMessage;
     }
 
     /**
@@ -113,7 +137,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     }
 
     /**
-     * Used to set the treasures material.
+     * Used to set the treasure's material.
      *
      * @param material The material to set the treasure.
      * @return This instance.
@@ -134,6 +158,33 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         return this;
     }
 
+    /**
+     * Used to set the public broadcast message.
+     * Setting this value to null will not show a
+     * public broadcast message in chat.
+     *
+     * @param message The message.
+     * @return This instance.
+     */
+    public @NotNull Treasure setPublicBroadcastMessage(@Nullable String message) {
+        this.publicBroadcastMessage = message;
+        return this;
+    }
+
+    /**
+     * Used to set the private broadcast message.
+     * <p>
+     * This message will be sent to the player that clicked the treasure.
+     * If null, the private broadcast message will not be sent.
+     * </p>
+     *
+     * @param privateBroadcastMessage The private broadcast message.
+     * @return This instance.
+     */
+    public @NotNull Treasure setPrivateBroadcastMessage(String privateBroadcastMessage) {
+        this.privateBroadcastMessage = privateBroadcastMessage;
+    }
+
     @Override
     public @NotNull ConfigurationSection convert() {
         ConfigurationSection section = new MemoryConfigurationSection(new HashMap<>());
@@ -143,6 +194,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
         section.set("material", this.material.toString());
         section.set("hdb", this.hdb);
+
+        section.set("public_broadcast_message", this.publicBroadcastMessage);
+        section.set("private_broadcast_message", this.privateBroadcastMessage);
 
         return section;
     }
@@ -160,6 +214,8 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         treasure.setDescription(this.description);
         treasure.setMaterial(this.material);
         treasure.setHdb(this.hdb);
+        treasure.setPublicBroadcastMessage(this.publicBroadcastMessage);
+        treasure.setPrivateBroadcastMessage(this.privateBroadcastMessage);
 
         return treasure;
     }
@@ -184,6 +240,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
         treasure.material = Material.getMaterial(materialName);
         treasure.hdb = section.getString("hdb");
+
+        treasure.publicBroadcastMessage = section.getString("public_broadcast_message");
+        treasure.publicBroadcastMessage = section.getString("private_broadcast_message");
 
         return treasure;
     }

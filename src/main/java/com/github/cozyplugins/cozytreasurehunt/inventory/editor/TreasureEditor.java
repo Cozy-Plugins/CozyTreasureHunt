@@ -11,8 +11,6 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,27 +53,41 @@ public class TreasureEditor extends InventoryInterface {
     protected void onGenerate(PlayerUser player) {
 
         // Create background.
-        this.setItem(new InventoryItem().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName("&7").addSlotRange(0, 26).addSlot(27, 36, 25, 45).addSlotRange(45, 53));
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.GRAY_STAINED_GLASS_PANE)
+                .setName("&7")
+                .addSlotRange(0, 26)
+                .addSlot(27, 36, 25, 45)
+                .addSlotRange(45, 53)
+        );
 
         // Back button.
-        this.setItem(new InventoryItem().setMaterial(Material.LIME_STAINED_GLASS_PANE).setName("&a&lBack").addLore("&7Click to go back to the list of treasure types.").addAction((ClickAction) (user, type, inventory) -> {
-            user.getPlayer().closeInventory();
-            TreasureListEditor editor = new TreasureListEditor();
-            editor.open(user.getPlayer());
-        }));
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.LIME_STAINED_GLASS_PANE)
+                .setName("&a&lBack")
+                .addLore("&7Click to go back to the list of treasure types.")
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    user.getPlayer().closeInventory();
+                    TreasureListEditor editor = new TreasureListEditor();
+                    editor.open(user.getPlayer());
+                }));
 
         // Previous button.
-        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lPrevious").addLore("&7Click to go back a page.").addAction((ClickAction) (user, type, inventory) -> {
-            if (this.page <= 0) return;
-            this.page -= 1;
-            this.generateModifiers();
-        }));
+        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                .setName("&e&lPrevious").addLore("&7Click to go back a page.")
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (this.page <= 0) return;
+                    this.page -= 1;
+                    this.generateModifiers();
+                }));
 
         // Next button.
-        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lNext").addLore("&7Click to go forward a page.").addAction((ClickAction) (user, type, inventory) -> {
-            this.page += 1;
-            this.generateModifiers();
-        }));
+        this.setItem(new InventoryItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                .setName("&e&lNext").addLore("&7Click to go forward a page.")
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    this.page += 1;
+                    this.generateModifiers();
+                }));
 
         // Change name.
         this.setItem(new InventoryItem()
@@ -88,7 +100,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction(new AnvilValueAction() {
                     @Override
                     public @NotNull String getAnvilTitle() {
-                        return "&8&lChange " + treasure.getName() + " to";
+                        return "&8&lChange name to";
                     }
 
                     @Override
@@ -115,7 +127,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction(new AnvilValueAction() {
                     @Override
                     public @NotNull String getAnvilTitle() {
-                        return "&8&lChange " + treasure.getName() + "'s description to";
+                        return "&8&lChange description to";
                     }
 
                     @Override
@@ -144,10 +156,10 @@ public class TreasureEditor extends InventoryInterface {
 
                     // Replace the item type.
                     this.setItem(new CozyItem()
-                            .setMaterial(this.treasure.getMaterial())
-                            .setName("&6&lMaterial")
-                            .addLore("&7Replace this item with another")
-                            .addLore("&7block or head to set the treasure's material.")
+                                    .setMaterial(this.treasure.getMaterial())
+                                    .setName("&6&lMaterial")
+                                    .addLore("&7Replace this item with another")
+                                    .addLore("&7block or head to set the treasure's material.")
                             , 13);
                 })
         );
@@ -197,7 +209,77 @@ public class TreasureEditor extends InventoryInterface {
         );
     }
 
+    /**
+     * Generates the modifiers for this page.
+     * Called when the page is changed.
+     */
     private void generateModifiers() {
+        // Remove actions.
+        this.removeActionRange(27, 45);
 
+        // Set the items on this page.
+        if (this.page == 0) this.setPage0();
+    }
+
+    /**
+     * Generates the modifiers on page 0.
+     */
+    private void setPage0() {
+        // Public broadcast message.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.NAME_TAG)
+                .setName("&6&lChange Public Broadcast Message")
+                .setLore("&7Click to change the public broadcast message.",
+                        "&7This message will appear in chat to all players",
+                        "&7when a player finds this treasure.")
+                .addSlot(28)
+                .addAction(new AnvilValueAction() {
+                    @Override
+                    public @NotNull String getAnvilTitle() {
+                        return "&8&lChange public broadcast message to";
+                    }
+
+                    @Override
+                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
+                        // Value can equal "".
+                        if (value != null) {
+                            treasure.setPublicBroadcastMessage(value);
+                            treasure.save();
+                        }
+
+                        TreasureEditor editor = new TreasureEditor(treasure);
+                        editor.open(user.getPlayer());
+                    }
+                })
+        );
+
+
+        // Private broadcast message.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.NAME_TAG)
+                .setName("&6&lChange Private Broadcast Message")
+                .setLore("&7Click to change the private broadcast message.",
+                        "&7This message will be sent to the player ",
+                        "&7that finds this treasure.")
+                .addSlot(28)
+                .addAction(new AnvilValueAction() {
+                    @Override
+                    public @NotNull String getAnvilTitle() {
+                        return "&8&lChange private broadcast message to";
+                    }
+
+                    @Override
+                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
+                        // Value can equal "".
+                        if (value != null) {
+                            treasure.setPrivateBroadcastMessage(value);
+                            treasure.save();
+                        }
+
+                        TreasureEditor editor = new TreasureEditor(treasure);
+                        editor.open(user.getPlayer());
+                    }
+                })
+        );
     }
 }
