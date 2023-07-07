@@ -16,24 +16,19 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt;
+package com.github.cozyplugins.cozytreasurehunt.listener;
 
-import com.github.cozyplugins.cozylibrary.CozyPlugin;
-import com.github.cozyplugins.cozytreasurehunt.command.EditorCommand;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
- * Represents the main plugin class.
+ * Represents this plugin's event listener.
  */
-public final class CozyTreasureHunt extends CozyPlugin {
+public class TreasureListener implements Listener {
 
-    @Override
-    public boolean enableCommandDirectory() {
-        return true;
-    }
-
-    @Override
-    public void onCozyEnable() {
-        // Add commands.
-        this.addCommandType(new EditorCommand());
+    @EventHandler
+    public void onClick(PlayerInteractEvent event) {
     }
 }

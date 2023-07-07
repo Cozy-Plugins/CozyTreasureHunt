@@ -16,24 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt;
-
-import com.github.cozyplugins.cozylibrary.CozyPlugin;
-import com.github.cozyplugins.cozytreasurehunt.command.EditorCommand;
+package com.github.cozyplugins.cozytreasurehunt.action;
 
 /**
- * Represents the main plugin class.
+ * Represents a simple click action.
  */
-public final class CozyTreasureHunt extends CozyPlugin {
+public enum ClickAction {
+    // When the left click is pressed.
+    LEFT,
 
-    @Override
-    public boolean enableCommandDirectory() {
-        return true;
-    }
-
-    @Override
-    public void onCozyEnable() {
-        // Add commands.
-        this.addCommandType(new EditorCommand());
-    }
+    // When the right click is pressed.
+    RIGHT
 }

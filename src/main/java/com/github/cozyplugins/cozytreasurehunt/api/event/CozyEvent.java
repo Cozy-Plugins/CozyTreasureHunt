@@ -16,24 +16,23 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt;
+package com.github.cozyplugins.cozytreasurehunt.api.event;
 
-import com.github.cozyplugins.cozylibrary.CozyPlugin;
-import com.github.cozyplugins.cozytreasurehunt.command.EditorCommand;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Represents the main plugin class.
- */
-public final class CozyTreasureHunt extends CozyPlugin {
+public class CozyEvent extends Event {
 
-    @Override
-    public boolean enableCommandDirectory() {
-        return true;
+    private static final HandlerList HANDLERS = new HandlerList();
+
+    public static HandlerList getHandlerList() {
+        return CozyEvent.HANDLERS;
     }
 
+    @NotNull
     @Override
-    public void onCozyEnable() {
-        // Add commands.
-        this.addCommandType(new EditorCommand());
+    public HandlerList getHandlers() {
+        return CozyEvent.HANDLERS;
     }
 }
