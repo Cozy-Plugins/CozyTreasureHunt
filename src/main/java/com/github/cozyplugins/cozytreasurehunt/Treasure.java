@@ -34,8 +34,6 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
     private @Nullable String publicBroadcastMessage;
     private @Nullable String privateBroadcastMessage;
-    private @Nullable String publicActionBarMessage;
-    private @Nullable String privateActionBarMessage;
     private @Nullable Particle particleType;
     private List<Integer> particleColor; // [Red,Green,Blue]
     private int particleAmount;
@@ -120,29 +118,6 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public @Nullable String getPrivateBroadcastMessage() {
         return this.privateBroadcastMessage;
-    }
-
-    /**
-     * Used to get the public action bar message.
-     * If null, the public action bar message should
-     * not be displayed.
-     *
-     * @return The public action bar message.
-     */
-    public @Nullable String getPublicActionBarMessage() {
-        return this.publicActionBarMessage;
-    }
-
-    /**
-     * Used to get the private action bar message.
-     * If null, the private action bar message should
-     * not be displayed. This message should only be sent
-     * to the player that finds the treasure.
-     *
-     * @return The private action bar message.
-     */
-    public @Nullable String getPrivateActionBarMessage() {
-        return this.privateActionBarMessage;
     }
 
     /**
@@ -246,28 +221,6 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public @NotNull Treasure setPrivateBroadcastMessage(String privateBroadcastMessage) {
         this.privateBroadcastMessage = privateBroadcastMessage;
-        return this;
-    }
-
-    /**
-     * Used to set the public action bar message.
-     *
-     * @param publicActionBarMessage The message.
-     * @return This instance.
-     */
-    public @NotNull Treasure setPublicActionBarMessage(@Nullable String publicActionBarMessage) {
-        this.publicActionBarMessage = publicActionBarMessage;
-        return this;
-    }
-
-    /**
-     * USed to set the private action bar message.
-     *
-     * @param privateActionBarMessage The message.
-     * @return This instance.
-     */
-    public @NotNull Treasure setPrivateActionBarMessage(@Nullable String privateActionBarMessage) {
-        this.privateActionBarMessage = privateActionBarMessage;
         return this;
     }
 
@@ -376,8 +329,6 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
         section.set("public_broadcast_message", this.publicBroadcastMessage);
         section.set("private_broadcast_message", this.privateBroadcastMessage);
-        section.set("public_action_bar_message", this.publicActionBarMessage);
-        section.set("private_action_bar_message", this.privateBroadcastMessage);
 
         return section;
     }
@@ -397,9 +348,6 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         treasure.setHdb(this.hdb);
         treasure.setPublicBroadcastMessage(this.publicBroadcastMessage);
         treasure.setPrivateBroadcastMessage(this.privateBroadcastMessage);
-        treasure.setPublicActionBarMessage(this.publicActionBarMessage);
-        treasure.setPrivateActionBarMessage(this.privateActionBarMessage);
-
         return treasure;
     }
 
@@ -426,8 +374,6 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
         treasure.publicBroadcastMessage = section.getString("public_broadcast_message");
         treasure.privateBroadcastMessage = section.getString("private_broadcast_message");
-        treasure.publicActionBarMessage = section.getString("public_action_bar_message");
-        treasure.privateActionBarMessage = section.getString("private_action_bar_message");
 
         return treasure;
     }

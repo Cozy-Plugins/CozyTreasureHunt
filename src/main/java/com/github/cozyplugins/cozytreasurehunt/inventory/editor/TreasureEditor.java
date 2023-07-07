@@ -332,29 +332,12 @@ public class TreasureEditor extends InventoryInterface {
         // Public action bar message.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.NAME_TAG)
-                .setName("&6&lChange Public Action Bar Message")
+                .setName("&7&lChange Public Action Bar Message")
                 .setLore("&7Click to change the public action bar message.",
                         "&7This message will be sent to the server ",
-                        "&7when a player finds this treasure.")
+                        "&7when a player finds this treasure.",
+                        "&eOnly available with CozyTreasureHuntPlus")
                 .addSlot(29)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "&8&lPublic action bar message";
-                    }
-
-                    @Override
-                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
-                        // Value can equal "".
-                        if (value != null) {
-                            treasure.setPublicActionBarMessage(value);
-                            treasure.save();
-                        }
-
-                        TreasureEditor editor = new TreasureEditor(treasure);
-                        editor.open(user.getPlayer());
-                    }
-                })
         );
 
         // Private action bar message.
@@ -363,26 +346,9 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&6&lChange Private Action Bar Message")
                 .setLore("&7Click to change the private action bar message.",
                         "&7This message will be sent to the player",
-                        "&7when they find this treasure.")
+                        "&7when they find this treasure.",
+                        "&eOnly available with CozyTreasureHuntPlus")
                 .addSlot(30)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "&8&lPrivate action bar message";
-                    }
-
-                    @Override
-                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
-                        // Value can equal "".
-                        if (value != null) {
-                            treasure.setPrivateActionBarMessage(value);
-                            treasure.save();
-                        }
-
-                        TreasureEditor editor = new TreasureEditor(treasure);
-                        editor.open(user.getPlayer());
-                    }
-                })
         );
     }
 }
