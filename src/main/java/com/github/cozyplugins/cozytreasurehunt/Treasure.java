@@ -329,6 +329,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
         section.set("public_broadcast_message", this.publicBroadcastMessage);
         section.set("private_broadcast_message", this.privateBroadcastMessage);
+        section.set("particle.type", this.particleType == null ? null : this.particleType.toString());
+        section.set("particle.color", this.particleColor);
+        section.set("particle.amount", this.particleAmount);
 
         return section;
     }
@@ -340,15 +343,8 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
     @Override
     public Treasure clone() {
-        Treasure treasure = new Treasure(UUID.randomUUID());
-
-        treasure.setName(this.name);
-        treasure.setDescription(this.description);
-        treasure.setMaterial(this.material);
-        treasure.setHdb(this.hdb);
-        treasure.setPublicBroadcastMessage(this.publicBroadcastMessage);
-        treasure.setPrivateBroadcastMessage(this.privateBroadcastMessage);
-        return treasure;
+        ConfigurationSection data = this.convert();
+        return Treasure.create(UUID.randomUUID(), data);
     }
 
     @SuppressWarnings("all")
@@ -374,6 +370,10 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
         treasure.publicBroadcastMessage = section.getString("public_broadcast_message");
         treasure.privateBroadcastMessage = section.getString("private_broadcast_message");
+        treasure.particleType = section.getString("particle.type") == null ?
+                null : Particle.valueOf(section.getString("particle.type"));
+        treasure.particleColor = section.getListInteger("particle.color");
+        treasure.particleAmount = section.getInteger("particle.amount", 10);
 
         return treasure;
     }

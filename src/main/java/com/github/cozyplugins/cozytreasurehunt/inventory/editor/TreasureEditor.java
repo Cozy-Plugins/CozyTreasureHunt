@@ -11,7 +11,9 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -294,7 +296,7 @@ public class TreasureEditor extends InventoryInterface {
                             treasure.save();
                         }
 
-                        TreasureEditor editor = new TreasureEditor(treasure);
+                        TreasureEditor editor = new TreasureEditor(treasure, page);
                         editor.open(user.getPlayer());
                     }
                 })
@@ -323,7 +325,7 @@ public class TreasureEditor extends InventoryInterface {
                             treasure.save();
                         }
 
-                        TreasureEditor editor = new TreasureEditor(treasure);
+                        TreasureEditor editor = new TreasureEditor(treasure, page);
                         editor.open(user.getPlayer());
                     }
                 })
@@ -349,6 +351,203 @@ public class TreasureEditor extends InventoryInterface {
                         "&7when they find this treasure.",
                         "&eOnly available with CozyTreasureHuntPlus")
                 .addSlot(30)
+        );
+
+        // Bottom row.
+        // Particle type.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.WHITE_CANDLE)
+                .setName("&6&lParticle Type")
+                .setLore("&7Click to change the particle type.",
+                        "&7This particle will be spawned when",
+                        "the treasure is found.")
+                .addSlot(37)
+                .addAction(new AnvilValueAction() {
+                    @Override
+                    public @NotNull String getAnvilTitle() {
+                        return "Particle type";
+                    }
+
+                    @Override
+                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
+                        if (value != null) {
+                            try {
+                                Particle particle = Particle.valueOf(value);
+                                treasure.setParticleType(particle);
+                                treasure.save();
+                            } catch (Exception exception) {
+                                user.sendMessage("&7Invalid particle type.");
+                            }
+                        }
+
+                        TreasureEditor editor = new TreasureEditor(treasure, page);
+                        editor.open(user.getPlayer());
+                    }
+                })
+        );
+
+        // Particle amount.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.WHITE_CANDLE)
+                .setName("&6&lParticle Amount")
+                .setLore("&7Click to change the amount of particles",
+                        "&7that will be spawned.",
+                        "&aCurrent &e" + treasure.getParticleAmount(),
+                        "&f+10 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-10 &7Right Click")
+                .addSlot(38)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.setParticleAmount(treasure.getParticleAmount() + 10);
+                    if (type == ClickType.LEFT) treasure.setParticleAmount(treasure.getParticleAmount() + 1);
+                    if (type == ClickType.RIGHT) treasure.setParticleAmount(treasure.getParticleAmount() - 1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.setParticleAmount(treasure.getParticleAmount() - 10);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                            .setMaterial(Material.WHITE_CANDLE)
+                            .setName("&6&lParticle Amount")
+                            .setLore("&7Click to change the amount of particles",
+                                    "&7that will be spawned.",
+                                    "&aCurrent &e" + treasure.getParticleAmount(),
+                                    "&f+10 &7Shift Left Click",
+                                    "&f+1 &7Left Click",
+                                    "&f-1 &7Right Click",
+                                    "&f-10 &7Right Click")
+                    , 38);
+                })
+        );
+
+        // Particle color red.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.RED_CANDLE)
+                .setName("&c&lParticle Color Red")
+                .setLore("&7Click to change the amount of ",
+                        "&7red in the particle.",
+                        "&7This will only work with particles ",
+                        "&7where the colour can change.",
+                        "&aCurrent &e" + treasure.getParticleColor(0),
+                        "&f+20 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-20 &7Right Click")
+                .addSlot(39)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.increaseRedParticle(20);
+                    if (type == ClickType.LEFT) treasure.increaseRedParticle(1);
+                    if (type == ClickType.RIGHT) treasure.increaseRedParticle(-1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.increaseRedParticle(-20);
+
+                    // Boundary's.
+                    if (treasure.getParticleColor(0) < 0) treasure.increaseGreenParticle(255);
+                    if (treasure.getParticleColor(0) > 255) treasure.increaseGreenParticle(-255);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.RED_CANDLE)
+                                    .setName("&c&lParticle Color Red")
+                                    .setLore("&7Click to change the amount of ",
+                                            "&7red in the particle.",
+                                            "&7This will only work with particles ",
+                                            "&7where the colour can change.",
+                                            "&aCurrent &e" + treasure.getParticleColor(0),
+                                            "&f+20 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-20 &7Right Click")
+                            , 39);
+                })
+        );
+
+        // Particle color green.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.GREEN_CANDLE)
+                .setName("&a&lParticle Color Green")
+                .setLore("&7Click to change the amount of ",
+                        "&7green in the particle.",
+                        "&7This will only work with particles ",
+                        "&7where the colour can change.",
+                        "&aCurrent &e" + treasure.getParticleColor(1),
+                        "&f+20 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-20 &7Right Click")
+                .addSlot(40)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.increaseGreenParticle(20);
+                    if (type == ClickType.LEFT) treasure.increaseGreenParticle(1);
+                    if (type == ClickType.RIGHT) treasure.increaseGreenParticle(-1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.increaseGreenParticle(-20);
+
+                    // Boundary's.
+                    if (treasure.getParticleColor(1) < 0) treasure.increaseGreenParticle(255);
+                    if (treasure.getParticleColor(1) > 255) treasure.increaseGreenParticle(-255);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.RED_CANDLE)
+                                    .setName("&c&lParticle Color Green")
+                                    .setLore("&7Click to change the amount of ",
+                                            "&7red in the particle.",
+                                            "&7This will only work with particles ",
+                                            "&7where the colour can change.",
+                                            "&aCurrent &e" + treasure.getParticleColor(0),
+                                            "&f+20 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-20 &7Right Click")
+                            , 40);
+                })
+        );
+
+        // Particle color blue.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.BLUE_CANDLE)
+                .setName("&a&lParticle Color Blue")
+                .setLore("&7Click to change the amount of ",
+                        "&7blue in the particle.",
+                        "&7This will only work with particles ",
+                        "&7where the colour can change.",
+                        "&aCurrent &e" + treasure.getParticleColor(2),
+                        "&f+20 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-20 &7Right Click")
+                .addSlot(41)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.increaseBlueParticle(20);
+                    if (type == ClickType.LEFT) treasure.increaseBlueParticle(1);
+                    if (type == ClickType.RIGHT) treasure.increaseBlueParticle(-1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.increaseBlueParticle(-20);
+
+                    // Boundary's.
+                    if (treasure.getParticleColor(2) < 0) treasure.increaseBlueParticle(255);
+                    if (treasure.getParticleColor(2) > 255) treasure.increaseBlueParticle(-255);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.BLUE_CANDLE)
+                                    .setName("&a&lParticle Color Blue")
+                                    .setLore("&7Click to change the amount of ",
+                                            "&7blue in the particle.",
+                                            "&7This will only work with particles ",
+                                            "&7where the colour can change.",
+                                            "&aCurrent &e" + treasure.getParticleColor(2),
+                                            "&f+20 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-20 &7Right Click")
+                            , 41);
+                })
         );
     }
 }
