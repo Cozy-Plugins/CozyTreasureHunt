@@ -425,16 +425,16 @@ public class TreasureEditor extends InventoryInterface {
 
                     // Reset the item.
                     this.setItem(new CozyItem()
-                            .setMaterial(Material.WHITE_CANDLE)
-                            .setName("&6&lParticle Amount")
-                            .setLore("&7Click to change the amount of particles",
-                                    "&7that will be spawned.",
-                                    "&aCurrent &e" + treasure.getParticleAmount(),
-                                    "&f+10 &7Shift Left Click",
-                                    "&f+1 &7Left Click",
-                                    "&f-1 &7Right Click",
-                                    "&f-10 &7Right Click")
-                    , 38);
+                                    .setMaterial(Material.WHITE_CANDLE)
+                                    .setName("&6&lParticle Amount")
+                                    .setLore("&7Click to change the amount of particles",
+                                            "&7that will be spawned.",
+                                            "&aCurrent &e" + treasure.getParticleAmount(),
+                                            "&f+10 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-10 &7Right Click")
+                            , 38);
                 })
         );
 

@@ -158,7 +158,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      * @return The color value.
      */
     public int getParticleColor(int index) {
-       return this.particleColor.get(index);
+        return this.particleColor.get(index);
     }
 
     /**

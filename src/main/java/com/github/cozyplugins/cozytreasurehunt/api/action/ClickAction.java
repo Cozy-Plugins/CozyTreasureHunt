@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.action;
+package com.github.cozyplugins.cozytreasurehunt.api.action;
 
 /**
  * Represents a simple click action.

@@ -20,7 +20,7 @@ package com.github.cozyplugins.cozytreasurehunt.api.event;
 
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
-import com.github.cozyplugins.cozytreasurehunt.action.ClickAction;
+import com.github.cozyplugins.cozytreasurehunt.api.action.ClickAction;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
@@ -44,12 +44,12 @@ public class TreasureClickEvent extends CozyEvent implements Cancellable {
      * Used to create a treasure click event.
      *
      * @param treasure The instance of the treasure.
-     * @param event The instance of the {@link PlayerInteractEvent} event.
+     * @param event    The instance of the {@link PlayerInteractEvent} event.
      */
     public TreasureClickEvent(
             @NotNull Treasure treasure,
             @NotNull PlayerInteractEvent event
-            ) {
+    ) {
 
         this.treasure = treasure;
         this.event = event;
