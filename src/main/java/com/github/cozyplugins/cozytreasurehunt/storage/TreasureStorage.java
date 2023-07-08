@@ -69,6 +69,7 @@ public final class TreasureStorage {
         configuration.load();
         configuration.set(identifier.toString(), section.getMap());
         configuration.save();
+        TreasureStorage.load();
     }
 
     /**
@@ -126,13 +127,16 @@ public final class TreasureStorage {
      * @param identifier The treasure's identifier.
      */
     public static void delete(UUID identifier) {
-        for (File file : TreasureStorage.storage.getFiles()) {
-            YamlConfiguration configuration = new YamlConfiguration(file);
-            if (!configuration.getKeys().contains(identifier.toString())) continue;
+        YamlConfiguration configuration = Storage.getConfiguration(identifier.toString(), TreasureStorage.storage);
 
-            configuration.set(identifier.toString(), null);
+        if (configuration == null) {
+            ConsoleManager.warn("Unable to delete treasure with identifier " + identifier);
             return;
         }
-        ConsoleManager.warn("Unable to delete treasure with identifier " + identifier);
+
+        configuration.load();
+        configuration.set(identifier.toString(), null);
+        configuration.save();
+        TreasureStorage.load();
     }
 }

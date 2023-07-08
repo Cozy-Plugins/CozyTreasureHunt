@@ -423,7 +423,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         section.set("private_broadcast_message", this.privateBroadcastMessage);
         section.set("particle.type", this.particleType == null ? null : this.particleType.toString());
         section.set("particle.color", this.particleColor);
-        section.set("particle.size", this.particleSize);
+        section.set("particle.size", Double.valueOf(String.valueOf(this.particleSize)));
         section.set("particle.amount", this.particleAmount);
 
         return section;

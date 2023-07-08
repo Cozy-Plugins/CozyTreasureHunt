@@ -284,7 +284,7 @@ public class TreasureEditor extends InventoryInterface {
      */
     private void generateModifiers() {
         // Remove actions.
-        this.removeActionRange(27, 45);
+        this.removeActionRange(27, 44);
 
         // Set the items on this page.
         if (this.page == 0) this.setPage0();
@@ -330,7 +330,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setLore("&7Click to change the private broadcast message.",
                         "&7This message will be sent to the player ",
                         "&7that finds this treasure.")
-                .addSlot(28)
+                .addSlot(29)
                 .addAction(new AnvilValueAction() {
                     @Override
                     public @NotNull String getAnvilTitle() {
@@ -359,18 +359,18 @@ public class TreasureEditor extends InventoryInterface {
                         "&7This message will be sent to the server ",
                         "&7when a player finds this treasure.",
                         "&eOnly available with CozyTreasureHuntPlus")
-                .addSlot(29)
+                .addSlot(30)
         );
 
         // Private action bar message.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.NAME_TAG)
-                .setName("&6&lChange Private Action Bar Message")
+                .setName("&7&lChange Private Action Bar Message")
                 .setLore("&7Click to change the private action bar message.",
                         "&7This message will be sent to the player",
                         "&7when they find this treasure.",
                         "&eOnly available with CozyTreasureHuntPlus")
-                .addSlot(30)
+                .addSlot(31)
         );
 
         // Bottom row.
@@ -380,7 +380,8 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&6&lParticle Type")
                 .setLore("&7Click to change the particle type.",
                         "&7This particle will be spawned when",
-                        "the treasure is found.")
+                        "&7the treasure is found.",
+                        "&aCurrent &e" + this.treasure.getParticleType())
                 .addSlot(37)
                 .addAction(new AnvilValueAction() {
                     @Override
@@ -573,7 +574,7 @@ public class TreasureEditor extends InventoryInterface {
         // Particle size.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.WHITE_CANDLE)
-                .setName("&a&lParticle Size")
+                .setName("&6&lParticle Size")
                 .setLore("&7Click to change the particle size.",
                         "&7This will only work for particles that",
                         "&7have a dust option.",
