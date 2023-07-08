@@ -77,6 +77,21 @@ public final class TreasureStorage {
     }
 
     /**
+     * Used to get the list of all treasure stored.
+     *
+     * @return The list of treasure.
+     */
+    public static List<Treasure> getAll() {
+        List<Treasure> treasureList = new ArrayList<>();
+
+        for (String key : TreasureStorage.storage.getKeys()) {
+            treasureList.add(TreasureStorage.get(UUID.fromString(key)));
+        }
+
+        return treasureList;
+    }
+
+    /**
      * Used to get the names of the active treasure types.
      *
      * @return The list of treasure names.
@@ -87,6 +102,15 @@ public final class TreasureStorage {
             nameList.add(TreasureStorage.storage.getString(key + ".name"));
         }
         return nameList;
+    }
+
+    /**
+     * Used to get the amount of treasure saved in storage.
+     *
+     * @return The amount of treasure.
+     */
+    public static int getAmount() {
+        return TreasureStorage.storage.getKeys().size();
     }
 
     /**

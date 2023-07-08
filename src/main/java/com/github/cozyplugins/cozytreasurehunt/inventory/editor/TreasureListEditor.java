@@ -24,6 +24,7 @@ import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
+import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
@@ -73,17 +74,88 @@ public class TreasureListEditor extends InventoryInterface {
                 .addSlot(45, 53)
         );
 
+        // Previous.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                .setName("&e&lPrevious")
+                .setLore("&7Click to go back a page.")
+                .addSlot(48)
+                .addAction((ClickAction) (playerUser, clickType, inventory) -> {
+                    this.page -= 1;
+                    if (this.page < 0) this.page = 0;
+                    this.onGenerate(playerUser);
+                })
+        );
+
+        // Next.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                .setName("&e&lNext")
+                .setLore("&7Click to go to the next page.")
+                .addSlot(50)
+                .addAction((ClickAction) (playerUser, clickType, inventory) -> {
+                    this.page += 1;
+                    if (this.page > this.getLastPageNumber()) this.page = this.getLastPageNumber();
+                    this.onGenerate(playerUser);
+                })
+        );
+
         // Create new treasure.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.LIME_STAINED_GLASS_PANE)
                 .setName("&a&lCreate New Treasure")
                 .setLore("&7Click to create a new treasure type.")
-                .addSlot(47)
+                .addSlot(52)
                 .addAction((ClickAction) (playerUser, clickType, inventory) -> {
                     Treasure treasure = new Treasure(UUID.randomUUID());
                     treasure.save();
                     this.onGenerate(playerUser);
                 })
         );
+
+        int from = (this.page + 1) * 45;
+        int to = ((this.page + 2) * 45) -1;
+        int treasureIndex = -1;
+        int slot = -1;
+
+        for (Treasure treasure : TreasureStorage.getAll()) {
+            treasureIndex += 1;
+            if (treasureIndex < from) continue;
+            if (treasureIndex > to) continue;
+            slot += 1;
+
+            this.setItem(new InventoryItem()
+                    .setMaterial(treasure.getMaterial())
+                    .setName("&a&l" + treasure.getName())
+                    .setLore("&7Click to edit this treasure.",
+                            "&f" + treasure.getDescription(),
+                            "&8&l--------------",
+                            "&aMaterial &e" + treasure.getMaterial(),
+                            "&aHead Database Value &e" + treasure.getHdb(),
+                            "&aPublic Broadcast Message &e" + treasure.getPublicBroadcastMessage(),
+                            "&aPrivate Broadcast Message &e" + treasure.getPrivateBroadcastMessage(),
+                            "&aParticle Type &e" + treasure.getParticleType(),
+                            "&aParticle Amount &e" + treasure.getParticleAmount(),
+                            "&aParticle Color &c"
+                                    + treasure.getParticleColor(0)
+                                    + " &a" + treasure.getParticleColor(1)
+                                    + "&b" + treasure.getParticleColor(2),
+                            "&aParticle Size &e" + treasure.getParticleSize())
+                    .addSlot(slot)
+                    .addAction((ClickAction) (playerUser, clickType, inventory) -> {
+                        TreasureEditor editor = new TreasureEditor(treasure);
+                        editor.open(playerUser.getPlayer());
+                    })
+            );
+        }
+    }
+
+    /**
+     * Used to get the last page number.
+     *
+     * @return The last page number.
+     */
+    private int getLastPageNumber() {
+        return TreasureStorage.getAmount() / 45;
     }
 }

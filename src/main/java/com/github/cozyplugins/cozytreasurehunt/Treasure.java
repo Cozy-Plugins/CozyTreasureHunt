@@ -51,6 +51,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
 
     private @Nullable String publicBroadcastMessage;
     private @Nullable String privateBroadcastMessage;
+
     private @Nullable Particle particleType;
     private List<Integer> particleColor; // [Red,Green,Blue]
     private float particleSize;
@@ -159,6 +160,8 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      * @return The color value.
      */
     public int getParticleColor(int index) {
+        if (this.particleColor == null) return 255;
+        if (this.particleColor.isEmpty()) return 255;
         return this.particleColor.get(index);
     }
 
