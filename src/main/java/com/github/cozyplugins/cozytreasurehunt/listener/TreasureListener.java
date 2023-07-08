@@ -3,6 +3,7 @@ package com.github.cozyplugins.cozytreasurehunt.listener;
 import com.github.cozyplugins.cozylibrary.MessageManager;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostClickEvent;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -15,13 +16,20 @@ public class TreasureListener implements Listener {
     public void onTreasurePostClick(TreasurePostClickEvent event) {
         Treasure treasure = event.getTreasure();
 
-        // Broadcasts.
-        if (treasure.getPublicBroadcastMessage() != null) {
-
+        // Set the block to air.
+        if (event.getBlock() != null) {
+            event.getBlock().setType(Material.AIR);
         }
 
+        // Broadcasts.
+        if (treasure.getPublicBroadcastMessage() != null) {
+            MessageManager.broadcast(MessageManager.parse(treasure.getPublicBroadcastMessage(), event.getPlayer().getPlayer()));
+        }
         if (treasure.getPrivateBroadcastMessage() != null) {
             event.getPlayer().sendMessage(treasure.getPrivateBroadcastMessage());
         }
+
+        // Particles.
+        treasure.spawnParticles(event.getLocation());
     }
 }

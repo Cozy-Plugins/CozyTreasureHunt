@@ -389,7 +389,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
             world.spawnParticle(this.particleType, location, this.particleAmount, options);
             return this;
         }
-        
+
         world.spawnParticle(this.particleType, location, this.particleAmount);
         return this;
     }
