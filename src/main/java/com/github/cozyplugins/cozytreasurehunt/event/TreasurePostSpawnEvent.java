@@ -16,28 +16,33 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.storage.indicator;
+package com.github.cozyplugins.cozytreasurehunt.event;
 
-import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Indicates if a class can be converted into a {@link ConfigurationSection}.
+ * Called when the {@link TreasurePreSpawnEvent} has passed.
  */
-public interface ConfigurationConvertable {
+public class TreasurePostSpawnEvent extends CozyEvent {
+
+    private final @NotNull TreasureLocation treasureLocation;
 
     /**
-     * Used to convert the class into an unlinked configuration section.
+     * used to create a treasure post-spawn event.
      *
-     * @return The unlinked configuration section instance.
+     * @param treasureLocation The instance of the treasure location.
      */
-    @NotNull ConfigurationSection convert();
+    public TreasurePostSpawnEvent(@NotNull TreasureLocation treasureLocation) {
+        this.treasureLocation = treasureLocation;
+    }
 
     /**
-     * Used to convert a configuration section int oa treasure
-     * and apply it to this treasure.
+     * Used to get the {@link TreasureLocation} class.
      *
-     * @param section The instance of the configuration section.
+     * @return The instance of the treasure location.
      */
-    void convert(ConfigurationSection section);
+    public @NotNull TreasureLocation getTreasureLocation() {
+        return this.treasureLocation;
+    }
 }

@@ -125,6 +125,11 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
     }
 
     @Override
+    public void convert(ConfigurationSection section) {
+        this.isSpawned = section.getBoolean("is_spawned");
+    }
+
+    @Override
     public void save() {
         LocationStorage.insert(this);
     }
@@ -157,9 +162,7 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
         );
 
         TreasureLocation treasureLocation = new TreasureLocation(treasure, location);
-
-        treasureLocation.isSpawned = data.getBoolean("is_spawned");
-
+        treasureLocation.convert(data);
         return treasureLocation;
     }
 

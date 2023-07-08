@@ -17,7 +17,7 @@ public class Storage {
      * Used to get the configuration file instance where the key is saved to.
      * If this key does not exist in any of the files, it will return the first configuration file.
      *
-     * @param key The instance of the key.
+     * @param key       The instance of the key.
      * @param directory The instance of the configuration directory.
      * @return The configuration file.
      * Null, if there are no configuration files in the directory.

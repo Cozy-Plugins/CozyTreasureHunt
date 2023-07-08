@@ -16,28 +16,35 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.storage.indicator;
+package com.github.cozyplugins.cozytreasurehunt.event;
 
-import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Indicates if a class can be converted into a {@link ConfigurationSection}.
+ * Called before spawning a treasure.
  */
-public interface ConfigurationConvertable {
+public class TreasurePreSpawnEvent extends TreasurePostSpawnEvent implements Cancellable {
+
+    private boolean isCanceled;
 
     /**
-     * Used to convert the class into an unlinked configuration section.
+     * used to create a treasure post-spawn event.
      *
-     * @return The unlinked configuration section instance.
+     * @param treasureLocation The instance of the treasure location.
      */
-    @NotNull ConfigurationSection convert();
+    public TreasurePreSpawnEvent(@NotNull TreasureLocation treasureLocation) {
+        super(treasureLocation);
+    }
 
-    /**
-     * Used to convert a configuration section int oa treasure
-     * and apply it to this treasure.
-     *
-     * @param section The instance of the configuration section.
-     */
-    void convert(ConfigurationSection section);
+    @Override
+    public boolean isCancelled() {
+        return this.isCanceled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.isCanceled = cancel;
+    }
 }

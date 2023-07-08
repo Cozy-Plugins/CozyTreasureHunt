@@ -355,6 +355,34 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     }
 
     @Override
+    @SuppressWarnings("all")
+    public void convert(ConfigurationSection section) {
+        String materialName = section.getString("material", "CHEST").toUpperCase();
+        if (Material.getMaterial(materialName) == null) {
+            ConsoleManager.error("The treasure with identifier &f" + identifier + " &chas an invalid material. The treasure will default to a &fCHEST&c.");
+            materialName = "CHEST";
+        }
+
+        if (Material.getMaterial(materialName) == null) {
+            ConsoleManager.error("The material CHEST is invalid on this server version, further errors may occur.");
+            return;
+        }
+
+        this.name = section.getString("name", "New Treasure");
+        this.description = section.getString("description", "None");
+
+        this.material = Material.getMaterial(materialName);
+        this.hdb = section.getString("hdb");
+
+        this.publicBroadcastMessage = section.getString("public_broadcast_message");
+        this.privateBroadcastMessage = section.getString("private_broadcast_message");
+        this.particleType = section.getString("particle.type") == null ?
+                null : Particle.valueOf(section.getString("particle.type"));
+        this.particleColor = section.getListInteger("particle.color");
+        this.particleAmount = section.getInteger("particle.amount", 10);
+    }
+
+    @Override
     public void save() {
         TreasureStorage.insert(this);
     }
@@ -365,34 +393,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         return Treasure.create(UUID.randomUUID(), data);
     }
 
-    @SuppressWarnings("all")
     public static @NotNull Treasure create(@NotNull UUID identifier, @NotNull ConfigurationSection section) {
         Treasure treasure = new Treasure(identifier);
-
-        String materialName = section.getString("material", "CHEST").toUpperCase();
-        if (Material.getMaterial(materialName) == null) {
-            ConsoleManager.error("The treasure with identifier &f" + identifier + " &chas an invalid material. The treasure will default to a &fCHEST&c.");
-            materialName = "CHEST";
-        }
-
-        if (Material.getMaterial(materialName) == null) {
-            ConsoleManager.error("The material CHEST is invalid on this server version, further errors may occur.");
-            return treasure;
-        }
-
-        treasure.name = section.getString("name", "New Treasure");
-        treasure.description = section.getString("description", "None");
-
-        treasure.material = Material.getMaterial(materialName);
-        treasure.hdb = section.getString("hdb");
-
-        treasure.publicBroadcastMessage = section.getString("public_broadcast_message");
-        treasure.privateBroadcastMessage = section.getString("private_broadcast_message");
-        treasure.particleType = section.getString("particle.type") == null ?
-                null : Particle.valueOf(section.getString("particle.type"));
-        treasure.particleColor = section.getListInteger("particle.color");
-        treasure.particleAmount = section.getInteger("particle.amount", 10);
-
+        treasure.convert(section);
         return treasure;
     }
 }

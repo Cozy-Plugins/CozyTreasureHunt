@@ -23,7 +23,6 @@ import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -32,18 +31,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a treasure click event.
+ * Called when the treasure click event has passed.
  * <li>
- * This will be fired when a treasure has been
- * clicked, before it is processed.
+ * Plugins can listen to this event to add effects when someone clicks the treasure.
  * </li>
  */
-public class TreasureClickEvent extends CozyEvent implements Cancellable {
+public class TreasurePostClickEvent extends CozyEvent {
 
     private final @NotNull TreasureLocation treasureLocation;
     private final @NotNull PlayerInteractEvent event;
-
-    private boolean isCancelled;
 
     /**
      * Used to create a treasure click event.
@@ -51,24 +47,13 @@ public class TreasureClickEvent extends CozyEvent implements Cancellable {
      * @param treasureLocation The instance of the treasure location.
      * @param event            The instance of the {@link PlayerInteractEvent} event.
      */
-    public TreasureClickEvent(
+    public TreasurePostClickEvent(
             @NotNull TreasureLocation treasureLocation,
             @NotNull PlayerInteractEvent event
     ) {
 
         this.treasureLocation = treasureLocation;
         this.event = event;
-        this.isCancelled = false;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return this.isCancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.isCancelled = cancel;
     }
 
     /**

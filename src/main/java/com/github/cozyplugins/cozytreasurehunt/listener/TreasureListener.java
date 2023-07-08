@@ -19,7 +19,8 @@
 package com.github.cozyplugins.cozytreasurehunt.listener;
 
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
-import com.github.cozyplugins.cozytreasurehunt.event.TreasureClickEvent;
+import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostClickEvent;
+import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -43,10 +44,14 @@ public class TreasureListener implements Listener {
         if (treasureLocation == null) return;
 
         // Call the treasure click event.
-        TreasureClickEvent treasureClickEvent = new TreasureClickEvent(treasureLocation, event);
+        TreasurePreClickEvent treasureClickEvent = new TreasurePreClickEvent(treasureLocation, event);
         Bukkit.getPluginManager().callEvent(treasureClickEvent);
 
         // Check if the event has been canceled.
         if (treasureClickEvent.isCancelled()) return;
+
+        // Call the treasure post click event.
+        // This is where plugins will respond to a player clicking a treasure.
+        Bukkit.getPluginManager().callEvent(new TreasurePostClickEvent(treasureLocation, event));
     }
 }
