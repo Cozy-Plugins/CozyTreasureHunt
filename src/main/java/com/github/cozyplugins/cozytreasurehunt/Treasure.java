@@ -349,7 +349,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public @NotNull Treasure setParticleSize(float size) {
         this.particleSize = size;
-        return this.particleSize;
+        return this;
     }
 
     /**
