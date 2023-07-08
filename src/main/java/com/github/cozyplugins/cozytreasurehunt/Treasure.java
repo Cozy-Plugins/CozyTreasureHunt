@@ -25,8 +25,7 @@ import com.github.cozyplugins.cozytreasurehunt.storage.indicator.ConfigurationCo
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -360,6 +359,38 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public @NotNull Treasure setParticleAmount(int particleAmount) {
         this.particleAmount = particleAmount;
+        return this;
+    }
+
+    /**
+     * Used to attempt to spawn this treasures
+     * particles at a location.
+     *
+     * @return This instance.
+     */
+    public @NotNull Treasure spawnParticles(@NotNull Location location) {
+        World world = location.getWorld();
+        if (world == null) {
+            ConsoleManager.warn("Attempted to spawn particles for treasure " + this.getName() + " but the world is null. " + location);
+            return this;
+        }
+
+        // Check if the particle type is null.
+        if (this.particleType == null) return this;
+
+        // Check if a color is specified and the particle is able to display colors.
+        if (!this.particleColor.isEmpty() && this.particleType.getDataType() == Particle.DustOptions.class) {
+            Particle.DustOptions options = new Particle.DustOptions(
+                    Color.fromRGB(this.particleColor.get(0), this.particleColor.get(1), this.particleColor.get(2)),
+                    this.particleSize
+            );
+
+            // Spawn the particle.
+            world.spawnParticle(this.particleType, location, this.particleAmount, options);
+            return this;
+        }
+        
+        world.spawnParticle(this.particleType, location, this.particleAmount);
         return this;
     }
 
