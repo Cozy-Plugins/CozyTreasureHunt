@@ -27,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -72,6 +74,19 @@ public final class TreasureStorage {
         ConfigurationSection section = TreasureStorage.storage.getSection(identifier.toString());
         if (section == null) return null;
         return Treasure.create(identifier, section);
+    }
+
+    /**
+     * Used to get the names of the active treasure types.
+     *
+     * @return The list of treasure names.
+     */
+    public static List<String> getAllNames() {
+        List<String> nameList = new ArrayList<>();
+        for (String key : TreasureStorage.storage.getKeys()) {
+            nameList.add(TreasureStorage.storage.getString(key + ".name"));
+        }
+        return nameList;
     }
 
     /**

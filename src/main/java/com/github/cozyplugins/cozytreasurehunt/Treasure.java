@@ -362,6 +362,18 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         return this;
     }
 
+
+    /**
+     * Used to spawn the treasure block.
+     *
+     * @param location The location to spawn the treasure block.
+     * @return This instance.
+     */
+    public @NotNull Treasure spawn(Location location) {
+        location.getBlock().setType(this.material);
+        return this;
+    }
+
     /**
      * Used to attempt to spawn this treasures
      * particles at a location.

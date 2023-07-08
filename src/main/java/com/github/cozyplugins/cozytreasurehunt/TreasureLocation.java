@@ -27,6 +27,7 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,14 +97,28 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
     }
 
     /**
-     * Used to set if a treasure location is spawned.
-     * This will not save it in storage like every set method.
+     * Used to spawn the treasure at the location.
+     * This will also set {@link TreasureLocation#isSpawned} to true.
      *
-     * @param isSpawned If the treasure is spawned.
      * @return This instance.
      */
-    public @NotNull TreasureLocation setSpawned(boolean isSpawned) {
-        this.isSpawned = isSpawned;
+    public @NotNull TreasureLocation spawn() {
+        this.treasure.spawn(this.location);
+        this.isSpawned = true;
+
+        return this;
+    }
+
+    /**
+     * Used to remove the treasure at the location.
+     * This will also set {@link TreasureLocation#isSpawned} to false.
+     *
+     * @return This instance.
+     */
+    public @NotNull TreasureLocation remove() {
+        this.location.getBlock().setType(Material.AIR);
+        this.isSpawned = false;
+
         return this;
     }
 
