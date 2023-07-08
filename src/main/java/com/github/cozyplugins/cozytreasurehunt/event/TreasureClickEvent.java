@@ -16,11 +16,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.api.event;
+package com.github.cozyplugins.cozytreasurehunt.event;
 
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
-import com.github.cozyplugins.cozytreasurehunt.api.action.ClickAction;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
@@ -32,10 +33,14 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a treasure click event.
+ * <li>
+ * This will be fired when a treasure has been
+ * clicked, before it is processed.
+ * </li>
  */
 public class TreasureClickEvent extends CozyEvent implements Cancellable {
 
-    private final @NotNull Treasure treasure;
+    private final @NotNull TreasureLocation treasureLocation;
     private final @NotNull PlayerInteractEvent event;
 
     private boolean isCancelled;
@@ -43,15 +48,15 @@ public class TreasureClickEvent extends CozyEvent implements Cancellable {
     /**
      * Used to create a treasure click event.
      *
-     * @param treasure The instance of the treasure.
-     * @param event    The instance of the {@link PlayerInteractEvent} event.
+     * @param treasureLocation The instance of the treasure location.
+     * @param event            The instance of the {@link PlayerInteractEvent} event.
      */
     public TreasureClickEvent(
-            @NotNull Treasure treasure,
+            @NotNull TreasureLocation treasureLocation,
             @NotNull PlayerInteractEvent event
     ) {
 
-        this.treasure = treasure;
+        this.treasureLocation = treasureLocation;
         this.event = event;
         this.isCancelled = false;
     }
@@ -70,7 +75,27 @@ public class TreasureClickEvent extends CozyEvent implements Cancellable {
      * Used to get the instance of the treasure that was clicked.
      */
     public @NotNull Treasure getTreasure() {
-        return this.treasure;
+        return this.treasureLocation.getTreasure();
+    }
+
+    /**
+     * Used to get the location of the treasure that was clicked.
+     *
+     * @return The instance of the location.
+     */
+    public @NotNull Location getLocation() {
+        return this.treasureLocation.getLocation();
+    }
+
+    /**
+     * Used to get the instance of the treasure location.
+     * This class will also include the treasure and other
+     * data fields about the treasure that won't be found in the treasure class.
+     *
+     * @return The treasure location instance.
+     */
+    public @NotNull TreasureLocation getTreasureLocation() {
+        return this.treasureLocation;
     }
 
     /**

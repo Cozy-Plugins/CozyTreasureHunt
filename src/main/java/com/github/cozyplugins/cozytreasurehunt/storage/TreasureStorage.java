@@ -1,3 +1,21 @@
+/*
+    This file is part of the project CozyTreasureHunt.
+    Copyright (C) 2023  Smudge (Smuddgge), Cozy Plugins and contributors.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
@@ -11,12 +29,16 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.UUID;
 
+
 /**
  * Represents the treasure storage.
  * <p>
  * Contains static methods to get treasure and set treasure.
- * These method names should not change, however the type of storage can change.
  * </p>
+ * <li>
+ * These method names should not change.
+ * However, the type of storage can change.
+ * </li>
  */
 public final class TreasureStorage {
 
@@ -30,17 +52,11 @@ public final class TreasureStorage {
     public static void insert(@NotNull Treasure treasure) {
         UUID identifier = treasure.getIdentifier();
         ConfigurationSection section = treasure.convert();
+        YamlConfiguration configuration = Storage.getConfiguration(identifier.toString(), TreasureStorage.storage);
 
-        // Get the first file.
-        TreasureStorage.storage.reload();
-        File file = TreasureStorage.storage.getFiles().get(0);
-        if (file == null) {
-            ConsoleManager.error("There are no files in the treasure configuration directory.");
-            return;
-        }
+        if (configuration == null) return;
 
-        // Save it to the first file.
-        YamlConfiguration configuration = new YamlConfiguration(file);
+        // Save it to the file.
         configuration.load();
         configuration.set(identifier.toString(), section);
         configuration.save();

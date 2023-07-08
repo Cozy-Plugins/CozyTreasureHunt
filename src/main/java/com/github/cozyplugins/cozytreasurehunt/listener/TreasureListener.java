@@ -18,6 +18,10 @@
 
 package com.github.cozyplugins.cozytreasurehunt.listener;
 
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import com.github.cozyplugins.cozytreasurehunt.event.TreasureClickEvent;
+import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -29,5 +33,20 @@ public class TreasureListener implements Listener {
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
+
+        // Check if a treasure is clicked in the most efficient way.
+        if (event.getClickedBlock() == null) return;
+        if (!LocationStorage.contains(event.getClickedBlock().getLocation())) return;
+
+        // Get the treasure location.
+        TreasureLocation treasureLocation = LocationStorage.get(event.getClickedBlock().getLocation());
+        if (treasureLocation == null) return;
+
+        // Call the treasure click event.
+        TreasureClickEvent treasureClickEvent = new TreasureClickEvent(treasureLocation, event);
+        Bukkit.getPluginManager().callEvent(treasureClickEvent);
+
+        // Check if the event has been canceled.
+        if (treasureClickEvent.isCancelled()) return;
     }
 }

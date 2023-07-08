@@ -16,23 +16,15 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.api.event;
+package com.github.cozyplugins.cozytreasurehunt.event;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
+/**
+ * Represents a simple click action.
+ */
+public enum ClickAction {
+    // When the left click is pressed.
+    LEFT,
 
-public class CozyEvent extends Event {
-
-    private static final HandlerList HANDLERS = new HandlerList();
-
-    public static HandlerList getHandlerList() {
-        return CozyEvent.HANDLERS;
-    }
-
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return CozyEvent.HANDLERS;
-    }
+    // When the right click is pressed.
+    RIGHT
 }
