@@ -36,6 +36,10 @@ public interface ConfigurationConvertable {
     /**
      * Used to convert a configuration section int oa treasure
      * and apply it to this treasure.
+     * <li>
+     * This is not a static method as other plugins can build on
+     * top of the class.
+     * </li>
      *
      * @param section The instance of the configuration section.
      */
