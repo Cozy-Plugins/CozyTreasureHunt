@@ -47,6 +47,13 @@ public final class TreasureStorage {
     private final static TreasureConfigurationDirectory storage = new TreasureConfigurationDirectory();
 
     /**
+     * Used to load the treasure data.
+     */
+    public static void load() {
+        TreasureStorage.storage.reload();
+    }
+
+    /**
      * Used to insert treasure into the first file.
      *
      * @param treasure The instance of the treasure.
@@ -60,7 +67,7 @@ public final class TreasureStorage {
 
         // Save it to the file.
         configuration.load();
-        configuration.set(identifier.toString(), section);
+        configuration.set(identifier.toString(), section.getMap());
         configuration.save();
     }
 

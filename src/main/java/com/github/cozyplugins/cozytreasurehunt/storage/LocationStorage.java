@@ -46,6 +46,13 @@ public final class LocationStorage {
     private static final LocationConfigurationDirectory storage = new LocationConfigurationDirectory();
 
     /**
+     * Used to load the location data.
+     */
+    public static void load() {
+        LocationStorage.storage.reload();
+    }
+
+    /**
      * Used to insert a treasure location into the first file.
      *
      * @param treasureLocation The instance of the treasure location.
@@ -59,7 +66,7 @@ public final class LocationStorage {
 
         // Save it to the file.
         configuration.load();
-        configuration.set(identifier, section);
+        configuration.set(identifier, section.getMap());
         configuration.save();
     }
 

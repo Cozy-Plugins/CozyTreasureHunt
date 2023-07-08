@@ -50,7 +50,7 @@ public class TreasureEditor extends InventoryInterface {
      * @param treasure The treasure to edit.
      */
     public TreasureEditor(@NotNull Treasure treasure) {
-        super(54, "&8&l" + treasure.getIdentifier());
+        super(54, "&8&l" + treasure.getName());
 
         this.treasure = treasure;
         this.page = 0;
@@ -243,6 +243,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&c&lDelete")
                 .setLore("&7Click to delete this treasure permanently.",
                         "&7You will be asked to confirm this action.")
+                .addSlot(16)
                 .addAction(new ConfirmAction() {
                     @Override
                     public @NotNull String getTitle() {
@@ -265,6 +266,8 @@ public class TreasureEditor extends InventoryInterface {
                     }
                 })
         );
+
+        this.generateModifiers();
     }
 
     /**

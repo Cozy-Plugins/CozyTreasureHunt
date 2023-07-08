@@ -71,7 +71,7 @@ public class TreasureListEditor extends InventoryInterface {
         this.setItem(new InventoryItem()
                 .setMaterial(Material.GRAY_STAINED_GLASS_PANE)
                 .setName("&7")
-                .addSlot(45, 53)
+                .addSlotRange(45, 53)
         );
 
         // Previous.
@@ -113,12 +113,16 @@ public class TreasureListEditor extends InventoryInterface {
                 })
         );
 
-        int from = (this.page + 1) * 45;
-        int to = ((this.page + 2) * 45) -1;
+        int from = (this.page) * 45;
+        int to = ((this.page + 1) * 45) -1;
         int treasureIndex = -1;
         int slot = -1;
 
+        System.out.println(from);
+        System.out.println(to);
+
         for (Treasure treasure : TreasureStorage.getAll()) {
+            System.out.println(treasure.getIdentifier());
             treasureIndex += 1;
             if (treasureIndex < from) continue;
             if (treasureIndex > to) continue;
@@ -132,15 +136,15 @@ public class TreasureListEditor extends InventoryInterface {
                             "&8&l--------------",
                             "&aMaterial &e" + treasure.getMaterial(),
                             "&aHead Database Value &e" + treasure.getHdb(),
-                            "&aPublic Broadcast Message &e" + treasure.getPublicBroadcastMessage(),
-                            "&aPrivate Broadcast Message &e" + treasure.getPrivateBroadcastMessage(),
-                            "&aParticle Type &e" + treasure.getParticleType(),
-                            "&aParticle Amount &e" + treasure.getParticleAmount(),
-                            "&aParticle Color &c"
-                                    + treasure.getParticleColor(0)
+                            "&7Public Broadcast Message &f" + treasure.getPublicBroadcastMessage(),
+                            "&7Private Broadcast Message &f" + treasure.getPrivateBroadcastMessage(),
+                            "&7Particle Type &f" + treasure.getParticleType(),
+                            "&7Particle Amount &f" + treasure.getParticleAmount(),
+                            "&7Particle Color"
+                                    + " &c" + treasure.getParticleColor(0)
                                     + " &a" + treasure.getParticleColor(1)
-                                    + "&b" + treasure.getParticleColor(2),
-                            "&aParticle Size &e" + treasure.getParticleSize())
+                                    + " &b" + treasure.getParticleColor(2),
+                            "&7Particle Size &f" + treasure.getParticleSize())
                     .addSlot(slot)
                     .addAction((ClickAction) (playerUser, clickType, inventory) -> {
                         TreasureEditor editor = new TreasureEditor(treasure);

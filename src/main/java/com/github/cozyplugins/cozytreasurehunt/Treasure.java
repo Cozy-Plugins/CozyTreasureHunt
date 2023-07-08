@@ -454,7 +454,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         this.particleType = section.getString("particle.type") == null ?
                 null : Particle.valueOf(section.getString("particle.type"));
         this.particleColor = section.getListInteger("particle.color");
-        this.particleSize = (float) section.get("particle.size", 1f);
+        this.particleSize = Float.valueOf(((Double) section.get("particle.size", 1.0d)).toString());
         this.particleAmount = section.getInteger("particle.amount", 10);
     }
 

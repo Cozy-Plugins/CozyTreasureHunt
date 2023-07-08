@@ -23,6 +23,8 @@ import com.github.cozyplugins.cozytreasurehunt.command.TreasureCommand;
 import com.github.cozyplugins.cozytreasurehunt.command.subcommand.EditorCommand;
 import com.github.cozyplugins.cozytreasurehunt.listener.EventListener;
 import com.github.cozyplugins.cozytreasurehunt.listener.TreasureListener;
+import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
+import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 
 /**
  * Represents the main plugin class.
@@ -36,6 +38,10 @@ public final class CozyTreasureHunt extends CozyPlugin {
 
     @Override
     public void onCozyEnable() {
+        // Initialise the directory's.
+        TreasureStorage.load();
+        LocationStorage.load();
+
         // Add commands.
         this.addCommandType(new TreasureCommand());
 
