@@ -566,5 +566,46 @@ public class TreasureEditor extends InventoryInterface {
                             , 41);
                 })
         );
+
+        // Particle size.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.WHITE_CANDLE)
+                .setName("&a&lParticle Size")
+                .setLore("&7Click to change the particle size.",
+                        "&7This will only work for particles that",
+                        "&7have a dust option.",
+                        "&aCurrent &e" + treasure.getParticleSize(),
+                        "&f+0.1 &7Shift Left Click",
+                        "&f+0.02 &7Left Click",
+                        "&f-0.02 &7Right Click",
+                        "&f-0.1 &7Right Click")
+                .addSlot(42)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.1f);
+                    if (type == ClickType.LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.02f);
+                    if (type == ClickType.RIGHT)treasure.setParticleSize(treasure.getParticleSize() - 0.02f);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.1f);
+
+                    // Boundary's.
+                    if (treasure.getParticleSize() > 1f) treasure.setParticleSize(1f);
+                    if (treasure.getParticleSize() < 0f) treasure.setParticleSize(0f);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.WHITE_CANDLE)
+                                    .setName("&a&lParticle Size")
+                                    .setLore("&7Click to change the particle size.",
+                                            "&7This will only work for particles that",
+                                            "&7have a dust option.",
+                                            "&aCurrent &e" + treasure.getParticleSize(),
+                                            "&f+0.1 &7Shift Left Click",
+                                            "&f+0.02 &7Left Click",
+                                            "&f-0.02 &7Right Click",
+                                            "&f-0.1 &7Right Click")
+                            , 42);
+                })
+        );
     }
 }
