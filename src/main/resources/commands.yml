@@ -7,8 +7,12 @@
 # Organisation : Cozy Plugins
 # Author : Smudge
 
-edit:
+treasure:
   enabled: true
-  type: "editor"
-  name: "editor"
-  permission: "treasurehunt.editor"
+  type: "treasure"
+  name: "treasure"
+
+  editor:
+    enabled: true
+    name: "editor"
+    permission: "treasurehunt.editor"

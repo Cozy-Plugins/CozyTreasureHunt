@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.command;
+package com.github.cozyplugins.cozytreasurehunt.command.subcommand;
 
 import com.github.cozyplugins.cozylibrary.command.command.CommandType;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
@@ -44,7 +44,7 @@ public class EditorCommand implements CommandType {
 
     @Override
     public @Nullable String getSyntax() {
-        return "/[name]";
+        return "/[parent] [name]";
     }
 
     @Override
