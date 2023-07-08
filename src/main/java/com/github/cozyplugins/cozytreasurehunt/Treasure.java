@@ -356,9 +356,11 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      * Used to set the number of particles to spawn.
      *
      * @param particleAmount The particle amount.
+     * @return This instance.
      */
-    public void setParticleAmount(int particleAmount) {
+    public @NotNull Treasure setParticleAmount(int particleAmount) {
         this.particleAmount = particleAmount;
+        return this;
     }
 
     @Override
