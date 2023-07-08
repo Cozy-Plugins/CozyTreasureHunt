@@ -417,7 +417,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+10 &7Shift Left Click",
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
-                        "&f-10 &7Right Click")
+                        "&f-10 &7Shift Right Click")
                 .addSlot(38)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.setParticleAmount(treasure.getParticleAmount() + 10);
@@ -437,7 +437,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+10 &7Shift Left Click",
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
-                                            "&f-10 &7Right Click")
+                                            "&f-10 &7Shift Right Click")
                             , 38);
                 })
         );
@@ -454,7 +454,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+20 &7Shift Left Click",
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
-                        "&f-20 &7Right Click")
+                        "&f-20 &7Shift Right Click")
                 .addSlot(39)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.increaseRedParticle(20);
@@ -480,7 +480,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+20 &7Shift Left Click",
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
-                                            "&f-20 &7Right Click")
+                                            "&f-20 &7Shift Right Click")
                             , 39);
                 })
         );
@@ -497,7 +497,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+20 &7Shift Left Click",
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
-                        "&f-20 &7Right Click")
+                        "&f-20 &7Shift Right Click")
                 .addSlot(40)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.increaseGreenParticle(20);
@@ -523,7 +523,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+20 &7Shift Left Click",
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
-                                            "&f-20 &7Right Click")
+                                            "&f-20 &7Shift Right Click")
                             , 40);
                 })
         );
@@ -540,7 +540,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+20 &7Shift Left Click",
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
-                        "&f-20 &7Right Click")
+                        "&f-20 &7Shift Right Click")
                 .addSlot(41)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.increaseBlueParticle(20);
@@ -566,7 +566,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+20 &7Shift Left Click",
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
-                                            "&f-20 &7Right Click")
+                                            "&f-20 &7Shift Right Click")
                             , 41);
                 })
         );
@@ -582,7 +582,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+0.1 &7Shift Left Click",
                         "&f+0.02 &7Left Click",
                         "&f-0.02 &7Right Click",
-                        "&f-0.1 &7Right Click")
+                        "&f-0.1 &7Shift Right Click")
                 .addSlot(42)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.1f);
@@ -607,7 +607,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+0.1 &7Shift Left Click",
                                             "&f+0.02 &7Left Click",
                                             "&f-0.02 &7Right Click",
-                                            "&f-0.1 &7Right Click")
+                                            "&f-0.1 &7Shift Right Click")
                             , 42);
                 })
         );
