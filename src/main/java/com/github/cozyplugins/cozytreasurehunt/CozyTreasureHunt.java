@@ -20,7 +20,7 @@ package com.github.cozyplugins.cozytreasurehunt;
 
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.cozyplugins.cozytreasurehunt.command.EditorCommand;
-import com.github.cozyplugins.cozytreasurehunt.listener.TreasureListener;
+import com.github.cozyplugins.cozytreasurehunt.listener.EventListener;
 
 /**
  * Represents the main plugin class.
@@ -38,6 +38,6 @@ public final class CozyTreasureHunt extends CozyPlugin {
         this.addCommandType(new EditorCommand());
 
         // Add listeners.
-        this.getServer().getPluginManager().registerEvents(new TreasureListener(), this);
+        this.getServer().getPluginManager().registerEvents(new EventListener(), this);
     }
 }

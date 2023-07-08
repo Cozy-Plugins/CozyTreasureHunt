@@ -19,6 +19,7 @@
 package com.github.cozyplugins.cozytreasurehunt.event;
 
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
+import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import org.bukkit.Location;
@@ -54,6 +55,15 @@ public class TreasurePostClickEvent extends CozyEvent {
 
         this.treasureLocation = treasureLocation;
         this.event = event;
+    }
+
+    /**
+     * Used to get the player that clicked the treasure.
+     *
+     * @return The player user.
+     */
+    public @NotNull PlayerUser getPlayer() {
+        return new PlayerUser(this.event.getPlayer());
     }
 
     /**
