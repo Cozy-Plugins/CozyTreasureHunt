@@ -54,6 +54,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     private @Nullable String privateBroadcastMessage;
     private @Nullable Particle particleType;
     private List<Integer> particleColor; // [Red,Green,Blue]
+    private float particleSize;
     private int particleAmount;
 
     /**
@@ -66,6 +67,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         this.name = "New Treasure";
         this.description = "None";
         this.material = Material.CHEST;
+        this.particleSize = 1f;
     }
 
     /**
@@ -159,6 +161,17 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
      */
     public int getParticleColor(int index) {
         return this.particleColor.get(index);
+    }
+
+    /**
+     * Used to get the particle size.
+     * If the particle doesn't allow {@link Particle.DustOptions}
+     * the size will not be changed.
+     *
+     * @return The size of the particle.
+     */
+    public float getParticleSize() {
+        return this.particleSize;
     }
 
     /**
@@ -327,6 +340,19 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     }
 
     /**
+     * Used to set the particle size.
+     * This will only affect the particle if the particle
+     * has the data {@link Particle.DustOptions}
+     *
+     * @param size The size of the particle.
+     * @return This instance.
+     */
+    public @NotNull Treasure setParticleSize(float size) {
+        this.particleSize = size;
+        return this.particleSize;
+    }
+
+    /**
      * Used to set the number of particles to spawn.
      *
      * @param particleAmount The particle amount.
@@ -349,6 +375,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         section.set("private_broadcast_message", this.privateBroadcastMessage);
         section.set("particle.type", this.particleType == null ? null : this.particleType.toString());
         section.set("particle.color", this.particleColor);
+        section.set("particle.size", this.particleSize);
         section.set("particle.amount", this.particleAmount);
 
         return section;
@@ -379,6 +406,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
         this.particleType = section.getString("particle.type") == null ?
                 null : Particle.valueOf(section.getString("particle.type"));
         this.particleColor = section.getListInteger("particle.color");
+        this.particleSize = (float) section.get("particle.size", 1f);
         this.particleAmount = section.getInteger("particle.amount", 10);
     }
 
