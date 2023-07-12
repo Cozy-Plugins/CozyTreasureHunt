@@ -28,6 +28,8 @@ import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -90,6 +92,18 @@ public class TreasureListEditor extends InventoryInterface {
                 .setMaterial(Material.GRAY_STAINED_GLASS_PANE)
                 .setName("&7")
                 .addSlotRange(45, 53)
+        );
+
+        // Directory editor button.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
+                .setName("&e&lDirectory Editor")
+                .setLore("&7Click to go back to the directory editor.")
+                .addSlot(45)
+                .addAction((ClickAction) (playerUser, clickType, inventory) -> {
+                    playerUser.getPlayer().closeInventory();
+                    new TreasureDirectoryEditor().open(playerUser.getPlayer());
+                })
         );
 
         // Previous.

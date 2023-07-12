@@ -29,6 +29,7 @@ import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
+import com.github.cozyplugins.cozytreasurehunt.inventory.editor.TreasureDirectoryEditor;
 import com.github.cozyplugins.cozytreasurehunt.inventory.editor.TreasureListEditor;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
@@ -81,12 +82,7 @@ public class EditorCommand implements CommandType {
         }
 
         // Open the directory editor.
-        new ConfigurationDirectoryEditor(TreasureStorage.getMedium()) {
-            @Override
-            public void onOpenFile(@NotNull File file, @NotNull PlayerUser user) {
-                new TreasureListEditor(file).open(user.getPlayer());
-            }
-        }.open(user.getPlayer());
+        new TreasureDirectoryEditor().open(user.getPlayer());
         return new CommandStatus();
     }
 
