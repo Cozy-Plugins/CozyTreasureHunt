@@ -31,6 +31,7 @@ import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -154,23 +155,18 @@ public class TreasureEditor extends InventoryInterface {
                 .addLore("&7Click to change the treasures name.")
                 .addLore("&aCurrently &e" + this.treasure.getName())
                 .addSlot(10)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "&8&lChange name to";
-                    }
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lChange name to")
+                        .setAction((value, user) -> {
+                            if (value != null && !value.equals("")) {
+                                treasure.setName(value);
+                                treasure.save();
+                            }
 
-                    @Override
-                    public void onValue(@Nullable String text, @NotNull PlayerUser playerUser) {
-                        if (text != null && !text.equals("")) {
-                            treasure.setName(text);
-                            treasure.save();
-                        }
-
-                        TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
-                        treasureEditor.open(player.getPlayer());
-                    }
-                })
+                            TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
+                            treasureEditor.open(player.getPlayer());
+                        })
+                )
         );
 
         // Change description.
@@ -180,23 +176,18 @@ public class TreasureEditor extends InventoryInterface {
                 .addLore("&7Click to change the treasures description.")
                 .addLore("&aCurrently &e" + this.treasure.getDescription())
                 .addSlot(11)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "&8&lChange description to";
-                    }
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lChange description to")
+                        .setAction((value, user) -> {
+                            if (value != null && !value.equals("")) {
+                                treasure.setDescription(value);
+                                treasure.save();
+                            }
 
-                    @Override
-                    public void onValue(@Nullable String text, @NotNull PlayerUser playerUser) {
-                        if (text != null && !text.equals("")) {
-                            treasure.setDescription(text);
-                            treasure.save();
-                        }
-
-                        TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
-                        treasureEditor.open(player.getPlayer());
-                    }
-                })
+                            TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
+                            treasureEditor.open(player.getPlayer());
+                        })
+                )
         );
 
         // The treasure block.
@@ -244,27 +235,20 @@ public class TreasureEditor extends InventoryInterface {
                 .setLore("&7Click to delete this treasure permanently.",
                         "&7You will be asked to confirm this action.")
                 .addSlot(16)
-                .addAction(new ConfirmAction() {
-                    @Override
-                    public @NotNull String getTitle() {
-                        return "&8&lConfirm to delete treasure";
-                    }
+                .addAction(new ConfirmAction()
+                        .setAnvilTitle("&8&lDelete treasure")
+                        .setConfirm(user -> {
+                            TreasureStorage.delete(treasure.getIdentifier());
+                            user.sendMessage("&7Treasure with name &f" + treasure.getName() + "&7 has been deleted.");
 
-                    @Override
-                    public void onConfirm(@NotNull PlayerUser playerUser) {
-                        TreasureStorage.delete(treasure.getIdentifier());
-                        playerUser.sendMessage("&7Treasure with name &f" + treasure.getName() + "&7 has been deleted.");
-
-                        TreasureListEditor listEditor = new TreasureListEditor();
-                        listEditor.open(playerUser.getPlayer());
-                    }
-
-                    @Override
-                    public void onAbort(@NotNull PlayerUser playerUser) {
-                        TreasureEditor editor = new TreasureEditor(treasure, page);
-                        editor.open(playerUser.getPlayer());
-                    }
-                })
+                            TreasureListEditor listEditor = new TreasureListEditor();
+                            listEditor.open(user.getPlayer());
+                        })
+                        .setAbort(user -> {
+                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            editor.open(user.getPlayer());
+                        })
+                )
         );
 
         this.generateModifiers();
@@ -302,24 +286,19 @@ public class TreasureEditor extends InventoryInterface {
                         "&7This message will appear in chat to all players",
                         "&7when a player finds this treasure.")
                 .addSlot(28)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "&8&lPublic broadcast message";
-                    }
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lPublic broadcast message")
+                        .setAction((value, user) -> {
+                            // Value can equal "".
+                            if (value != null) {
+                                treasure.setPublicBroadcastMessage(value);
+                                treasure.save();
+                            }
 
-                    @Override
-                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
-                        // Value can equal "".
-                        if (value != null) {
-                            treasure.setPublicBroadcastMessage(value);
-                            treasure.save();
-                        }
-
-                        TreasureEditor editor = new TreasureEditor(treasure, page);
-                        editor.open(user.getPlayer());
-                    }
-                })
+                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            editor.open(user.getPlayer());
+                        })
+                )
         );
 
 
@@ -331,24 +310,19 @@ public class TreasureEditor extends InventoryInterface {
                         "&7This message will be sent to the player ",
                         "&7that finds this treasure.")
                 .addSlot(29)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "&8&lPrivate broadcast message";
-                    }
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lPrivate broadcast message")
+                        .setAction((value, user) -> {
+                            // Value can equal "".
+                            if (value != null) {
+                                treasure.setPrivateBroadcastMessage(value);
+                                treasure.save();
+                            }
 
-                    @Override
-                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
-                        // Value can equal "".
-                        if (value != null) {
-                            treasure.setPrivateBroadcastMessage(value);
-                            treasure.save();
-                        }
-
-                        TreasureEditor editor = new TreasureEditor(treasure, page);
-                        editor.open(user.getPlayer());
-                    }
-                })
+                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            editor.open(user.getPlayer());
+                        })
+                )
         );
 
         // Public action bar message.
@@ -383,28 +357,23 @@ public class TreasureEditor extends InventoryInterface {
                         "&7the treasure is found.",
                         "&aCurrent &e" + this.treasure.getParticleType())
                 .addSlot(37)
-                .addAction(new AnvilValueAction() {
-                    @Override
-                    public @NotNull String getAnvilTitle() {
-                        return "Particle type";
-                    }
-
-                    @Override
-                    public void onValue(@Nullable String value, @NotNull PlayerUser user) {
-                        if (value != null) {
-                            try {
-                                Particle particle = Particle.valueOf(value);
-                                treasure.setParticleType(particle);
-                                treasure.save();
-                            } catch (Exception exception) {
-                                user.sendMessage("&7Invalid particle type.");
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lParticle type")
+                        .setAction((value, user) -> {
+                            if (value != null) {
+                                try {
+                                    Particle particle = Particle.valueOf(value);
+                                    treasure.setParticleType(particle);
+                                    treasure.save();
+                                } catch (Exception exception) {
+                                    user.sendMessage("&7Invalid particle type.");
+                                }
                             }
-                        }
 
-                        TreasureEditor editor = new TreasureEditor(treasure, page);
-                        editor.open(user.getPlayer());
-                    }
-                })
+                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            editor.open(user.getPlayer());
+                        })
+                )
         );
 
         // Particle amount.
