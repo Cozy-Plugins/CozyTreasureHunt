@@ -31,9 +31,7 @@ import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * An inventory used to edit a type of treasure.

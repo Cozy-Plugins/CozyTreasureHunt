@@ -25,11 +25,14 @@ import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
+import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,27 +41,41 @@ import java.util.UUID;
  */
 public class TreasureListEditor extends InventoryInterface {
 
+    private final @NotNull List<Treasure> treasureList;
     private int page;
 
     /**
      * Used to create a treasure editor.
-     * Displays the list of treasure.
+     * Displays the list of all treasures.
      */
     public TreasureListEditor() {
         super(54, "&8&lTreasure Editor");
 
         this.page = 0;
+        this.treasureList = TreasureStorage.getAll();
     }
 
     /**
      * Used to create a treasure editor.
-     * Displays the list of treasure.
+     * Displays the list of treasure in the file.
      *
-     * @param page The page.
+     * @param file The instance of the file.
      */
-    public TreasureListEditor(int page) {
-        this();
-        this.page = page;
+    public TreasureListEditor(@NotNull File file) {
+        super(54, "&8&l" + file.getName());
+
+        this.treasureList = new ArrayList<>();
+        this.page = 0;
+
+        YamlConfiguration configuration = new YamlConfiguration(file);
+
+        // Loop though all treasure in the configuration file.
+        for (String identifier : configuration.getKeys()) {
+            ConfigurationSection section = configuration.getSection(identifier);
+
+            // Add treasure.
+            this.treasureList.add(Treasure.create(UUID.fromString(identifier), section));
+        }
     }
 
     @Override
@@ -118,11 +135,7 @@ public class TreasureListEditor extends InventoryInterface {
         int treasureIndex = -1;
         int slot = -1;
 
-        System.out.println(from);
-        System.out.println(to);
-
-        for (Treasure treasure : TreasureStorage.getAll()) {
-            System.out.println(treasure.getIdentifier());
+        for (Treasure treasure : this.treasureList) {
             treasureIndex += 1;
             if (treasureIndex < from) continue;
             if (treasureIndex > to) continue;
