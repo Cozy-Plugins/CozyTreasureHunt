@@ -68,6 +68,7 @@ public class TreasureListEditor extends InventoryInterface {
         this.page = 0;
 
         YamlConfiguration configuration = new YamlConfiguration(file);
+        configuration.load();
 
         // Loop though all treasure in the configuration file.
         for (String identifier : configuration.getKeys()) {

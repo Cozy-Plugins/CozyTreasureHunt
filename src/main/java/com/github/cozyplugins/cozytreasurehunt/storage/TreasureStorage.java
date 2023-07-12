@@ -19,6 +19,7 @@
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
+import com.github.cozyplugins.cozylibrary.configuration.ConfigurationDirectory;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.TreasureConfigurationDirectory;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
@@ -138,5 +139,16 @@ public final class TreasureStorage {
         configuration.set(identifier.toString(), null);
         configuration.save();
         TreasureStorage.load();
+    }
+
+    /**
+     * Used to get the storage medium.
+     * If the return value is changed, functionality
+     * will need to also change elsewhere in the plugin.
+     *
+     * @return The command directory.
+     */
+    public static ConfigurationDirectory getMedium() {
+        return TreasureStorage.storage;
     }
 }
