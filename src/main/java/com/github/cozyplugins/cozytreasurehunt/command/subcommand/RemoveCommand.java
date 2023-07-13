@@ -63,7 +63,8 @@ public class RemoveCommand implements CommandType {
             return new CommandStatus();
         }
 
-        
+        // Get closest treasure in region.
+
 
         return new CommandStatus();
     }
