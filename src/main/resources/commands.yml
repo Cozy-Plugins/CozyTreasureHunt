@@ -30,3 +30,9 @@ treasure:
     invalid_treasure: "&7Treasure type does not exist."
     # When true, the treasure will be spawned immediately in the location.
     spawn_immediately: false
+
+  remove:
+    enable: true
+    name: "remove"
+    permission: "treasurehunt.remove"
+    remove_all: "&7All locations have been removed."

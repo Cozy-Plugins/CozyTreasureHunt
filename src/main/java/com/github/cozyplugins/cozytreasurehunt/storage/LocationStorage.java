@@ -68,6 +68,7 @@ public final class LocationStorage {
         configuration.load();
         configuration.set(identifier, section.getMap());
         configuration.save();
+        LocationStorage.storage.reload();
     }
 
     /**
@@ -124,18 +125,33 @@ public final class LocationStorage {
     }
 
     /**
-     * Used to delete a treasure location from storage.
+     * Used to remove a treasure location from storage.
      *
      * @param identifier The treasure's identifier.
      */
-    public static void delete(String identifier) {
+    public static void remove(String identifier) {
         for (File file : LocationStorage.storage.getFiles()) {
             YamlConfiguration configuration = new YamlConfiguration(file);
             if (!configuration.getKeys().contains(identifier)) continue;
 
             configuration.set(identifier, null);
+            configuration.save();
+            LocationStorage.storage.reload();
             return;
         }
         ConsoleManager.warn("Unable to delete treasure location with identifier " + identifier);
+    }
+
+    /**
+     * Used to remove all locations.
+     */
+    public static void removeAll() {
+        for (File file : LocationStorage.storage.getFiles()) {
+            YamlConfiguration configuration = new YamlConfiguration(file);
+            configuration.set(null);
+            configuration.save();
+        }
+
+        LocationStorage.storage.reload();
     }
 }
