@@ -39,6 +39,8 @@ import org.jetbrains.annotations.NotNull;
 public class TreasureEditor extends InventoryInterface {
 
     private final @NotNull Treasure treasure;
+    private TreasureListEditor listEditor;
+
     private int page;
     private final int LAST_PAGE = 0;
     private @NotNull String modifierDescription;
@@ -46,12 +48,15 @@ public class TreasureEditor extends InventoryInterface {
     /**
      * Used to create a treasure editor.
      *
-     * @param treasure The treasure to edit.
+     * @param treasure   The treasure to edit.
+     * @param listEditor The instance of the list editor. This will be used to go backwards.
      */
-    public TreasureEditor(@NotNull Treasure treasure) {
+    public TreasureEditor(@NotNull Treasure treasure, @NotNull TreasureListEditor listEditor) {
         super(54, "&8&l" + treasure.getName());
 
         this.treasure = treasure;
+        this.listEditor = listEditor;
+
         this.page = 0;
         this.generatePageDescription();
     }
@@ -62,11 +67,12 @@ public class TreasureEditor extends InventoryInterface {
      * The page can be changed to reveal new customisable options.
      * </li>
      *
-     * @param treasure The treasure to edit.
-     * @param page     The page number.
+     * @param treasure   The treasure to edit.
+     * @param listEditor The instance of the list editor. This will be used to go backwards.
+     * @param page       The page number.
      */
-    public TreasureEditor(@NotNull Treasure treasure, int page) {
-        this(treasure);
+    public TreasureEditor(@NotNull Treasure treasure, @NotNull TreasureListEditor listEditor, int page) {
+        this(treasure, listEditor);
 
         this.page = page;
         this.generatePageDescription();
@@ -96,8 +102,7 @@ public class TreasureEditor extends InventoryInterface {
 
                     // Exit to the main list of treasure.
                     user.getPlayer().closeInventory();
-                    TreasureListEditor editor = new TreasureListEditor();
-                    editor.open(user.getPlayer());
+                    this.listEditor.open(user.getPlayer());
                 }));
 
         // Previous button.
@@ -159,9 +164,11 @@ public class TreasureEditor extends InventoryInterface {
                             if (value != null && !value.equals("")) {
                                 treasure.setName(value);
                                 treasure.save();
+
+                                user.sendMessage("&7Changed treasures name to &f" + value);
                             }
 
-                            TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
+                            TreasureEditor treasureEditor = new TreasureEditor(treasure, this.listEditor, page);
                             treasureEditor.open(player.getPlayer());
                         })
                 )
@@ -182,7 +189,7 @@ public class TreasureEditor extends InventoryInterface {
                                 treasure.save();
                             }
 
-                            TreasureEditor treasureEditor = new TreasureEditor(treasure, page);
+                            TreasureEditor treasureEditor = new TreasureEditor(treasure, this.listEditor, page);
                             treasureEditor.open(player.getPlayer());
                         })
                 )
@@ -243,7 +250,7 @@ public class TreasureEditor extends InventoryInterface {
                             listEditor.open(user.getPlayer());
                         })
                         .setAbort(user -> {
-                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            TreasureEditor editor = new TreasureEditor(treasure, this.listEditor, page);
                             editor.open(user.getPlayer());
                         })
                 )
@@ -293,7 +300,7 @@ public class TreasureEditor extends InventoryInterface {
                                 treasure.save();
                             }
 
-                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            TreasureEditor editor = new TreasureEditor(treasure, this.listEditor, page);
                             editor.open(user.getPlayer());
                         })
                 )
@@ -317,7 +324,7 @@ public class TreasureEditor extends InventoryInterface {
                                 treasure.save();
                             }
 
-                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            TreasureEditor editor = new TreasureEditor(treasure, this.listEditor, page);
                             editor.open(user.getPlayer());
                         })
                 )
@@ -368,7 +375,7 @@ public class TreasureEditor extends InventoryInterface {
                                 }
                             }
 
-                            TreasureEditor editor = new TreasureEditor(treasure, page);
+                            TreasureEditor editor = new TreasureEditor(treasure, this.listEditor, page);
                             editor.open(user.getPlayer());
                         })
                 )
@@ -554,7 +561,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.1f);
                     if (type == ClickType.LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.02f);
-                    if (type == ClickType.RIGHT)treasure.setParticleSize(treasure.getParticleSize() - 0.02f);
+                    if (type == ClickType.RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.02f);
                     if (type == ClickType.SHIFT_RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.1f);
 
                     // Boundary's.

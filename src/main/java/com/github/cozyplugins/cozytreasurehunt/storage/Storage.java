@@ -25,7 +25,11 @@ public class Storage {
     public static @Nullable YamlConfiguration getConfiguration(@NotNull String key, @NotNull ConfigurationDirectory directory) {
         for (File file : directory.getFiles()) {
             YamlConfiguration configuration = new YamlConfiguration(file);
-            if (configuration.getKeys().contains(key)) return configuration;
+            configuration.load();
+
+            if (configuration.getKeys().contains(key)) {
+                return configuration;
+            }
         }
 
         // If it was not found, use the first file.

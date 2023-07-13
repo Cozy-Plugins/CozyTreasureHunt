@@ -178,7 +178,7 @@ public class TreasureListEditor extends InventoryInterface {
                             "&7Particle Size &f" + treasure.getParticleSize())
                     .addSlot(slot)
                     .addAction((ClickAction) (playerUser, clickType, inventory) -> {
-                        TreasureEditor editor = new TreasureEditor(treasure);
+                        TreasureEditor editor = new TreasureEditor(treasure, this);
                         editor.open(playerUser.getPlayer());
                     })
             );
@@ -204,6 +204,7 @@ public class TreasureListEditor extends InventoryInterface {
         }
 
         this.treasureList = new ArrayList<>();
+        this.configuration.load();
 
         // Loop though all treasure in the configuration file.
         for (String identifier : this.configuration.getKeys()) {
