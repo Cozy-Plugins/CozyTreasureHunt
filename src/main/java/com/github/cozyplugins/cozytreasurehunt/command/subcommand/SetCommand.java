@@ -9,10 +9,18 @@ import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
+import com.github.cozyplugins.cozytreasurehunt.Treasure;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class SetCommand implements CommandType {
 
@@ -42,22 +50,68 @@ public class SetCommand implements CommandType {
     }
 
     @Override
-    public @Nullable CommandStatus onUser(@NotNull User user, @NotNull ConfigurationSection configurationSection, @NotNull CommandArguments commandArguments) {
+    public @Nullable CommandStatus onUser(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
         return null;
     }
 
     @Override
-    public @Nullable CommandStatus onPlayer(@NotNull PlayerUser playerUser, @NotNull ConfigurationSection configurationSection, @NotNull CommandArguments commandArguments) {
+    public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
+        // Check if there is no treasure specified.
+        if (arguments.getArguments().isEmpty() || Objects.equals(arguments.getArguments().get(0), "")) {
+            user.sendMessage(section.getString("invalid_treasure", "&7Treasure type does not exist."));
+            return new CommandStatus();
+        }
+
+        // Get the treasure type.
+        Treasure treasure = TreasureStorage.getFirst(arguments.getArguments().get(0));
+
+        // Check if the treasure exists.
+        if (treasure == null) {
+            user.sendMessage(section.getString("invalid_treasure", "&7Treasure type does not exist."));
+            return new CommandStatus();
+        }
+
+        // Get the player location.
+        Location location = user.getPlayer().getLocation();
+
+        boolean treasureInLocation = LocationStorage.get(location) != null;
+
+        // Check if there is already treasure in this location
+        // and treasure cannot be overridden.
+        if (treasureInLocation && !section.getBoolean("override_treasure", true)) {
+            user.sendMessage(section.getString(
+                    "unable_to_override_treasure",
+                    "&7Treasure already exists in this location and cannot be overridden.")
+            );
+
+            return new CommandStatus();
+        }
+
+        // Create treasure location.
+        TreasureLocation treasureLocation = new TreasureLocation(treasure, location);
+        treasureLocation.save();
+
+        // Check if the treasure should be spawned immediately.
+        if (section.getBoolean("spawn_immediately", false)) {
+            treasureLocation.spawn();
+        }
+
+        if (treasureInLocation) {
+            user.sendMessage(section.getString("replaced_treasure", "&7The treasure in this location has been replaced."));
+            return new CommandStatus();
+        }
+
+        user.sendMessage(section.getString("placed_treasure", "&7Treasure has been placed in this location."));
+        return new CommandStatus();
+    }
+
+    @Override
+    public @Nullable CommandStatus onFakeUser(@NotNull FakeUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
         return null;
     }
 
     @Override
-    public @Nullable CommandStatus onFakeUser(@NotNull FakeUser fakeUser, @NotNull ConfigurationSection configurationSection, @NotNull CommandArguments commandArguments) {
-        return null;
-    }
-
-    @Override
-    public @Nullable CommandStatus onConsole(@NotNull ConsoleUser consoleUser, @NotNull ConfigurationSection configurationSection, @NotNull CommandArguments commandArguments) {
+    public @Nullable CommandStatus onConsole(@NotNull ConsoleUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
         return null;
     }
 }

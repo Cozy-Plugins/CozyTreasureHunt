@@ -86,6 +86,21 @@ public final class TreasureStorage {
     }
 
     /**
+     * Used to get the first treasure with the treasure name.
+     *
+     * @param treasureName The treasure's name to search for.
+     * @return The requested treasure.
+     */
+    public static @Nullable Treasure getFirst(@Nullable String treasureName) {
+        if (treasureName == null) return null;
+        for (String identifier : TreasureStorage.storage.getKeys()) {
+            String tempName = TreasureStorage.storage.getString(identifier + ".name", null);
+            if (treasureName.equals(tempName)) return TreasureStorage.get(UUID.fromString(identifier));
+        }
+        return null;
+    }
+
+    /**
      * Used to get the list of all treasure stored.
      *
      * @return The list of treasure.

@@ -19,7 +19,7 @@ public class TreasureListener implements Listener {
         TreasureLocation treasureLocation = event.getTreasureLocation();
 
         // Remove the treasure.
-        treasureLocation.remove();
+        treasureLocation.removeSilently();
 
         // Broadcasts.
         if (treasure.getPublicBroadcastMessage() != null) {

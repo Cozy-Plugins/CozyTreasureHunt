@@ -18,6 +18,8 @@
 
 package com.github.cozyplugins.cozytreasurehunt;
 
+import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostSpawnEvent;
+import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreSpawnEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Cloneable;
@@ -99,10 +101,14 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
     /**
      * Used to spawn the treasure at the location.
      * This will also set {@link TreasureLocation#isSpawned} to true.
+     * <li>
+     * Spawning silently will not broadcast with events.
+     * This will ensure the spawn of this treasure.
+     * </li>
      *
      * @return This instance.
      */
-    public @NotNull TreasureLocation spawn() {
+    public @NotNull TreasureLocation spawnSilently() {
         this.treasure.spawn(this.location);
         this.isSpawned = true;
 
@@ -112,13 +118,37 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
     /**
      * Used to remove the treasure at the location.
      * This will also set {@link TreasureLocation#isSpawned} to false.
+     * <li>This will not call the treasure click event.</li>
      *
      * @return This instance.
      */
-    public @NotNull TreasureLocation remove() {
+    public @NotNull TreasureLocation removeSilently() {
         this.location.getBlock().setType(Material.AIR);
         this.isSpawned = false;
 
+        return this;
+    }
+
+    /**
+     * Used to spawn the treasure.
+     * This will also call the spawn treasure events.
+     * Calling the events may cause the spawning to be canceled.
+     *
+     * @return This instance.
+     */
+    public @NotNull TreasureLocation spawn() {
+        // Call pre-spawn event.
+        TreasurePreSpawnEvent preSpawnEvent = new TreasurePreSpawnEvent(this);
+        Bukkit.getPluginManager().callEvent(preSpawnEvent);
+
+        // Check if the spawn has been canceled.
+        if (preSpawnEvent.isCancelled()) return this;
+
+        // Call post-spawn event.
+        TreasurePostSpawnEvent postSpawnEvent = new TreasurePostSpawnEvent(this);
+        Bukkit.getPluginManager().callEvent(postSpawnEvent);
+
+        this.spawnSilently();
         return this;
     }
 

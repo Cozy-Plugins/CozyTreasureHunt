@@ -16,3 +16,17 @@ treasure:
     enabled: true
     name: "editor"
     permission: "treasurehunt.editor"
+
+  set:
+    enabled: true
+    name: "set"
+    permission: "treasurehunt.set"
+    # Set to false if players should not
+    # be able to replace treasure locations.
+    override_treasure: true
+    unable_to_override_treasure: "&7Treasure already exists in this location and cannot be overridden."
+    replaced_treasure: "&7The treasure in this location has been replaced."
+    placed_treasure: "&7Treasure has been placed in this location."
+    invalid_treasure: "&7Treasure type does not exist."
+    # When true, the treasure will be spawned immediately in the location.
+    spawn_immediately: false
