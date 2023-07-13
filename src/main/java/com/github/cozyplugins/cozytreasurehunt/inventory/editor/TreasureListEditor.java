@@ -28,8 +28,6 @@ import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +42,7 @@ import java.util.UUID;
  */
 public class TreasureListEditor extends InventoryInterface {
 
-    private final @NotNull List<Treasure> treasureList;
+    private @NotNull List<Treasure> treasureList;
     private int page;
     private @Nullable YamlConfiguration configuration;
 
@@ -73,18 +71,12 @@ public class TreasureListEditor extends InventoryInterface {
 
         this.configuration = new YamlConfiguration(file);
         this.configuration.load();
-
-        // Loop though all treasure in the configuration file.
-        for (String identifier : configuration.getKeys()) {
-            ConfigurationSection section = configuration.getSection(identifier);
-
-            // Add treasure.
-            this.treasureList.add(Treasure.create(UUID.fromString(identifier), section));
-        }
     }
 
     @Override
     protected void onGenerate(PlayerUser player) {
+        this.reloadTreasure();
+
         // Reset all slots.
         this.removeActionRange(0, 53);
         this.setItem(new CozyItem().setMaterial(Material.AIR), 0 ,53);
@@ -150,6 +142,8 @@ public class TreasureListEditor extends InventoryInterface {
                     }
 
                     treasure.save();
+
+                    playerUser.sendMessage("&7Created treasure with identifier " + treasure.getIdentifier());
                     this.onGenerate(playerUser);
                 })
         );
@@ -198,5 +192,25 @@ public class TreasureListEditor extends InventoryInterface {
      */
     private int getLastPageNumber() {
         return TreasureStorage.getAmount() / 45;
+    }
+
+    /**
+     * Used to reload the treasure.
+     */
+    public void reloadTreasure() {
+        if (this.configuration == null) {
+            this.treasureList = TreasureStorage.getAll();
+            return;
+        }
+
+        this.treasureList = new ArrayList<>();
+
+        // Loop though all treasure in the configuration file.
+        for (String identifier : this.configuration.getKeys()) {
+            ConfigurationSection section = this.configuration.getSection(identifier);
+
+            // Add treasure.
+            this.treasureList.add(Treasure.create(UUID.fromString(identifier), section));
+        }
     }
 }
