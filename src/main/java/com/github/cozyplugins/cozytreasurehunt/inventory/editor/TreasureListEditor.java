@@ -31,6 +31,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class TreasureListEditor extends InventoryInterface {
 
     private final @NotNull List<Treasure> treasureList;
     private int page;
+    private @Nullable YamlConfiguration configuration;
 
     /**
      * Used to create a treasure editor.
@@ -69,8 +71,8 @@ public class TreasureListEditor extends InventoryInterface {
         this.treasureList = new ArrayList<>();
         this.page = 0;
 
-        YamlConfiguration configuration = new YamlConfiguration(file);
-        configuration.load();
+        this.configuration = new YamlConfiguration(file);
+        this.configuration.load();
 
         // Loop though all treasure in the configuration file.
         for (String identifier : configuration.getKeys()) {
@@ -140,6 +142,13 @@ public class TreasureListEditor extends InventoryInterface {
                 .addSlot(52)
                 .addAction((ClickAction) (playerUser, clickType, inventory) -> {
                     Treasure treasure = new Treasure(UUID.randomUUID());
+
+                    // If there is a specific file that it should be saved to.
+                    if (this.configuration != null) {
+                        this.configuration.set(treasure.getIdentifier().toString(), treasure.convert().getMap());
+                        this.configuration.save();
+                    }
+
                     treasure.save();
                     this.onGenerate(playerUser);
                 })
