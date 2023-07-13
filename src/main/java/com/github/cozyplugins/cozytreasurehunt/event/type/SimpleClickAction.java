@@ -16,12 +16,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.github.cozyplugins.cozytreasurehunt.event;
+package com.github.cozyplugins.cozytreasurehunt.event.type;
 
 /**
  * Represents a simple click action.
  */
-public enum ClickAction {
+public enum SimpleClickAction {
     // When the left click is pressed.
     LEFT,
 

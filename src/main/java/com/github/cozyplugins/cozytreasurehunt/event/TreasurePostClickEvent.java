@@ -22,6 +22,7 @@ import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import com.github.cozyplugins.cozytreasurehunt.event.type.SimpleClickAction;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.Action;
@@ -108,8 +109,8 @@ public class TreasurePostClickEvent extends CozyEvent {
      *
      * @return The click action.
      */
-    public @NotNull ClickAction getActionType() {
-        return this.event.getAction() == Action.LEFT_CLICK_BLOCK ? ClickAction.LEFT : ClickAction.RIGHT;
+    public @NotNull SimpleClickAction getActionType() {
+        return this.event.getAction() == Action.LEFT_CLICK_BLOCK ? SimpleClickAction.LEFT : SimpleClickAction.RIGHT;
     }
 
     /**

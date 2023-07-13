@@ -23,21 +23,15 @@ import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandSuggestions;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandTypePool;
-import com.github.cozyplugins.cozylibrary.configuration.ConfigurationDirectory;
-import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfigurationDirectoryEditor;
 import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
 import com.github.cozyplugins.cozytreasurehunt.inventory.editor.TreasureDirectoryEditor;
 import com.github.cozyplugins.cozytreasurehunt.inventory.editor.TreasureListEditor;
-import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
 
 /**
  * Represents the editor command.
