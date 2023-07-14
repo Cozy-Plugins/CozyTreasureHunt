@@ -1,5 +1,6 @@
 package com.github.cozyplugins.cozytreasurehunt.command.subcommand;
 
+import com.github.cozyplugins.cozylibrary.MessageManager;
 import com.github.cozyplugins.cozylibrary.command.command.CommandType;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
@@ -9,9 +10,18 @@ import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the find command.
@@ -51,7 +61,60 @@ public class FindCommand implements CommandType {
 
     @Override
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
+        int amountOfTreasure = 0;
+        List<TreasureLocation> foundTreasure = new ArrayList<>();
+
+        // If the player is searching for a specific treasure.
+        boolean specificTreasure = !arguments.getArguments().isEmpty() && !arguments.getArguments().get(0).equals("");
+
+        // Loop though every treasure.
+        for (TreasureLocation location : LocationStorage.getAll()) {
+            amountOfTreasure++;
+
+            // If they are searching for a specific treasure and this is not that treasure.
+            if (specificTreasure && !location.getTreasure().getName().equals(arguments.getArguments().get(0))) continue;
+
+            // Add treasure location.
+            foundTreasure.add(location);
+        }
+
+        // Send footer
+        user.sendMessage(section.getString("header", "&aFound &f{amount} &atreasure.")
+                .replace("{amount}", String.valueOf(amountOfTreasure))
+        );
+
+        // Get the maximum number of lines.
+        int max = section.getInteger("max_lines", 5);
+        int current = 0;
+
+        // Loop though found treasure.
+        for (TreasureLocation location : foundTreasure) {
+            current++;
+            if (current > max) return new CommandStatus();
+
+            // Create a text component and send.
+            TextComponent message = new TextComponent(
+                    MessageManager.parse(
+                            section.getString("line", "&e&l{name} &7is at &f{location}&7. &eClick to teleport.")
+                                    .replace("{location}", location.getLocation().getBlockX()
+                                            + " " + location.getLocation().getBlockY() + " " + location.getLocation().getBlockZ())
+                                    .replace("{name}", location.getTreasure().getName())
+                            , user.getPlayer()
+                    )
+            );
+
+            String teleportCommand = "/tp " +
+                    location.getLocation().getBlockX() + " " +
+                    location.getLocation().getBlockY() + " " +
+                    location.getLocation().getBlockZ();
+
+            message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, teleportCommand));
+            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(MessageManager.parse("&6&lTeleport")).create()));
+
+            user.getPlayer().spigot().sendMessage(message);
+        }
+
+        return new CommandStatus();
     }
 
     @Override

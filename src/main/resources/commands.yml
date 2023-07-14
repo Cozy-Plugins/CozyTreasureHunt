@@ -50,3 +50,11 @@ treasure:
     name: "unspawn"
     permission: "treasurehunt.unspawn"
     unspawned_treasure: "&7Attempted to un-spawn all the treasure."
+
+  find:
+    enable: true
+    name: "find"
+    permission: "treasurehunt.find"
+    header: "&aFound &f{amount} &atreasure."
+    max_lines: 5
+    line: "&e&l{name} &7is at &f{location}&7. &eClick to teleport."
