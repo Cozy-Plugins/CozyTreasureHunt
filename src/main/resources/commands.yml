@@ -44,3 +44,9 @@ treasure:
     name: "spawn"
     permission: "treasurehunt.spawn"
     spawned_treasure: "&7Attempted to spawn all treasure. {result}"
+
+  unspawn:
+    enable: true
+    name: "unspawn"
+    permission: "treasurehunt.unspawn"
+    unspawned_treasure: "&7Attempted to un-spawn all the treasure."

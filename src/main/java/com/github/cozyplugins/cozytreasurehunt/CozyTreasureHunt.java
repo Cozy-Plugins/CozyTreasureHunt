@@ -66,4 +66,15 @@ public final class CozyTreasureHunt extends CozyPlugin {
 
         return result;
     }
+
+
+    /**
+     * Used to un-spawn all the treasure at every
+     * treasure location.
+     */
+    public static void unSpawnTreasure() {
+        for (TreasureLocation location : LocationStorage.getAll()) {
+            location.removeSilently();
+        }
+    }
 }

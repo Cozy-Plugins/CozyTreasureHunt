@@ -111,7 +111,7 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Repl
     public @NotNull TreasureLocation spawnSilently() {
         this.treasure.spawn(this.location);
         this.isSpawned = true;
-
+        this.save();
         return this;
     }
 
@@ -125,7 +125,7 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Repl
     public @NotNull TreasureLocation removeSilently() {
         this.location.getBlock().setType(Material.AIR);
         this.isSpawned = false;
-
+        this.save();
         return this;
     }
 
