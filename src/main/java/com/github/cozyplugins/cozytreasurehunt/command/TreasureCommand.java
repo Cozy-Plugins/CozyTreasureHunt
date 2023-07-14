@@ -9,7 +9,7 @@ import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
-import com.github.cozyplugins.cozytreasurehunt.command.subcommand.EditorCommand;
+import com.github.cozyplugins.cozytreasurehunt.command.subcommand.*;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +36,11 @@ public class TreasureCommand implements CommandType {
         CommandTypePool pool = new CommandTypePool();
 
         pool.add(new EditorCommand());
+        pool.add(new FindCommand());
+        pool.add(new RemoveCommand());
+        pool.add(new SetCommand());
+        pool.add(new SpawnCommand());
+        pool.add(new UnSpawnCommand());
 
         return pool;
     }

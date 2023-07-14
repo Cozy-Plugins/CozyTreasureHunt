@@ -26,6 +26,7 @@ import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfigur
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,6 +82,7 @@ public final class LocationStorage {
      * @return The instance of the treasure location.
      */
     public static @Nullable TreasureLocation get(String identifier) {
+        if (!LocationStorage.storage.getKeys().contains(identifier)) return null;
         ConfigurationSection section = LocationStorage.storage.getSection(identifier);
         if (section == null) return null;
         return TreasureLocation.create(section);
