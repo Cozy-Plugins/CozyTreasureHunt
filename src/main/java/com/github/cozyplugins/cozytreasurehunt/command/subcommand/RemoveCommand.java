@@ -7,15 +7,21 @@ import com.github.cozyplugins.cozylibrary.command.datatype.CommandSuggestions;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandTypePool;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
 import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
+import com.github.cozyplugins.cozylibrary.location.Region3D;
 import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents the remove treasure command.
+ * This command is used to remove all or nearby treasure locations.
+ */
 public class RemoveCommand implements CommandType {
 
     @Override
@@ -64,7 +70,22 @@ public class RemoveCommand implements CommandType {
         }
 
         // Get closest treasure in region.
+        Region3D region = new Region3D(user.getPlayer().getLocation(), user.getPlayer().getLocation());
+        region.expand(4);
 
+        TreasureLocation location = LocationStorage.getClosest(region);
+        if (location == null) {
+            user.sendMessage(section.getString("none", "&7There are no treasure locations nearby. (4 block radius)"));
+            return new CommandStatus();
+        }
+
+        // Remove the location.
+        location.removeSilently();
+        LocationStorage.remove(location.getIdentifier());
+
+        user.sendMessage(section.getString("removed", "&7Removed treasure at location {location}")
+                .replace("{location}", location.toString())
+        );
 
         return new CommandStatus();
     }

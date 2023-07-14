@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the editor command.
+ * Used to edit the treasure types.
  */
 public class EditorCommand implements CommandType {
 

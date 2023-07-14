@@ -18,12 +18,12 @@
 
 package com.github.cozyplugins.cozytreasurehunt;
 
+import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
+import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostSpawnEvent;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreSpawnEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
-import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Cloneable;
-import com.github.cozyplugins.cozytreasurehunt.storage.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
@@ -39,7 +39,7 @@ import java.util.UUID;
 /**
  * Represents a location of a treasure.
  */
-public class TreasureLocation implements ConfigurationConvertable, Savable, Cloneable<TreasureLocation> {
+public class TreasureLocation implements ConfigurationConvertable, Savable, Replicable<TreasureLocation> {
 
     private final @NotNull Treasure treasure;
     private final @NotNull Location location;
@@ -153,6 +153,14 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
     }
 
     @Override
+    public String toString() {
+        return "{" + this.getIdentifier() + ": "
+                + this.location.getBlockX() + " "
+                + this.location.getBlockY() + " "
+                + this.location.getBlockZ() + "}";
+    }
+
+    @Override
     public @NotNull ConfigurationSection convert() {
         ConfigurationSection section = new MemoryConfigurationSection(new HashMap<>());
 
@@ -180,7 +188,7 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Clon
     }
 
     @Override
-    public TreasureLocation clone() {
+    public TreasureLocation duplicate() {
         ConfigurationSection data = this.convert();
         return TreasureLocation.create(data);
     }

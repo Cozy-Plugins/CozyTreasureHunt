@@ -19,9 +19,9 @@
 package com.github.cozyplugins.cozytreasurehunt;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
+import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
+import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
-import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Cloneable;
-import com.github.cozyplugins.cozytreasurehunt.storage.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
@@ -40,7 +40,7 @@ import java.util.UUID;
  * Defaults to {@link Material#CHEST}
  * </li>
  */
-public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Treasure> {
+public class Treasure implements ConfigurationConvertable, Savable, Replicable<Treasure> {
 
     private final @NotNull UUID identifier;
     private @NotNull String name;
@@ -464,7 +464,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Cloneable<Tr
     }
 
     @Override
-    public Treasure clone() {
+    public Treasure duplicate() {
         ConfigurationSection data = this.convert();
         return Treasure.create(UUID.randomUUID(), data);
     }

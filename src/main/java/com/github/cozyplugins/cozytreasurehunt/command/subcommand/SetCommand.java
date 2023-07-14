@@ -14,14 +14,16 @@ import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * Used to set treasure locations.
+ * This command is used to set treasure locations at where the player is standing.
+ */
 public class SetCommand implements CommandType {
 
     @Override

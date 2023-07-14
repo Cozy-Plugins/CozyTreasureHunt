@@ -19,6 +19,7 @@
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
+import com.github.cozyplugins.cozylibrary.location.Region3D;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.LocationConfigurationDirectory;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
@@ -30,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the treasure location storage.
@@ -110,6 +113,50 @@ public final class LocationStorage {
 
         Location location = new Location(world, x, y, z);
         return LocationStorage.get(location);
+    }
+
+    /**
+     * Used to get the list of all treasure locations.
+     *
+     * @return The list of all treasure locations.
+     */
+    public static @NotNull List<TreasureLocation> getAll() {
+        List<TreasureLocation> treasureLocationList = new ArrayList<>();
+
+        for (String key : LocationStorage.storage.getKeys()) {
+            ConfigurationSection section = LocationStorage.storage.getSection(key);
+            TreasureLocation location = TreasureLocation.create(section);
+            treasureLocationList.add(location);
+        }
+
+        return treasureLocationList;
+    }
+
+    /**
+     * Used to get the closest treasure location
+     * to the center of a region.
+     *
+     * @param region The instance of the region.
+     * @return The closest treasure location.
+     */
+    public static @Nullable TreasureLocation getClosest(@NotNull Region3D region) {
+        TreasureLocation toReturn = null;
+        double distance = 1000000;
+
+        for (TreasureLocation location : LocationStorage.getAll()) {
+            if (!region.contains(location.getLocation())) continue;
+
+            // Get distance.
+            double distanceFromCenter = region.getDistanceFromCenter(location.getLocation());
+
+            // Check if this distance is smaller than the current smallest.
+            if (distanceFromCenter < distance) {
+                toReturn = location;
+                distance = distanceFromCenter;
+            }
+        }
+
+        return toReturn;
     }
 
     /**

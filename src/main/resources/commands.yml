@@ -35,4 +35,6 @@ treasure:
     enable: true
     name: "remove"
     permission: "treasurehunt.remove"
+    removed: "&7Removed treasure at location {location}"
     remove_all: "&7All locations have been removed."
+    none: "&7There are no treasure locations nearby. (4 block radius)"

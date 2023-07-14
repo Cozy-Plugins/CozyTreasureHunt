@@ -226,7 +226,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addLore("&fThe new treasure will appear in the list of treasure.")
                 .addSlot(15)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    Treasure clone = this.treasure.clone();
+                    Treasure clone = this.treasure.duplicate();
                     clone.save();
 
                     user.sendMessage("&7Created new clone with identifier &f" + clone.getIdentifier());
