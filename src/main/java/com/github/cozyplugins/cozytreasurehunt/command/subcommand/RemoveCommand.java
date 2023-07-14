@@ -31,7 +31,7 @@ public class RemoveCommand implements CommandType {
 
     @Override
     public @Nullable String getSyntax() {
-        return "/[parent] [name";
+        return "/[parent] [name] <optional all>";
     }
 
     @Override

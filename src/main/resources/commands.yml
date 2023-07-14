@@ -38,3 +38,9 @@ treasure:
     removed: "&7Removed treasure at location {location}"
     remove_all: "&7All locations have been removed."
     none: "&7There are no treasure locations nearby. (4 block radius)"
+
+  spawn:
+    enable: true
+    name: "spawn"
+    permission: "treasurehunt.spawn"
+    spawned_treasure: "&7Attempted to spawn all treasure. {result}"

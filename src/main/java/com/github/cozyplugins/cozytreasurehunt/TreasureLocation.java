@@ -134,22 +134,22 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Repl
      * This will also call the spawn treasure events.
      * Calling the events may cause the spawning to be canceled.
      *
-     * @return This instance.
+     * @return True if the treasure was spawned.
      */
-    public @NotNull TreasureLocation spawn() {
+    public boolean spawn() {
         // Call pre-spawn event.
         TreasurePreSpawnEvent preSpawnEvent = new TreasurePreSpawnEvent(this);
         Bukkit.getPluginManager().callEvent(preSpawnEvent);
 
         // Check if the spawn has been canceled.
-        if (preSpawnEvent.isCancelled()) return this;
+        if (preSpawnEvent.isCancelled()) return false;
 
         // Call post-spawn event.
         TreasurePostSpawnEvent postSpawnEvent = new TreasurePostSpawnEvent(this);
         Bukkit.getPluginManager().callEvent(postSpawnEvent);
 
         this.spawnSilently();
-        return this;
+        return true;
     }
 
     @Override

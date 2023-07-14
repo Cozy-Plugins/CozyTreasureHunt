@@ -33,7 +33,7 @@ public class SetCommand implements CommandType {
 
     @Override
     public @Nullable String getSyntax() {
-        return "/[parent] [name]";
+        return "/[parent] [name] [treasure type]";
     }
 
     @Override
