@@ -24,6 +24,7 @@ import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -32,8 +33,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class EventListener implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onClick(PlayerInteractEvent event) {
+
+        System.out.println("click");
 
         // Check if a treasure is clicked in the most efficient way.
         if (event.getClickedBlock() == null) return;

@@ -21,6 +21,8 @@ public class TreasureListener implements Listener {
         // Remove the treasure.
         treasureLocation.removeSilently();
 
+        System.out.println("test");
+
         // Broadcasts.
         if (treasure.getPublicBroadcastMessage() != null) {
             MessageManager.broadcast(MessageManager.parse(treasure.getPublicBroadcastMessage(), event.getPlayer().getPlayer()));

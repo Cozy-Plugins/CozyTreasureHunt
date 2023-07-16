@@ -26,22 +26,5 @@ import org.jetbrains.annotations.NotNull;
  * Represents a cozy event.
  * Removes the need to create a handler list.
  */
-public class CozyEvent extends Event {
-
-    private static final HandlerList HANDLERS = new HandlerList();
-
-    /**
-     * Used to get the handler list for the cozy events.
-     *
-     * @return The handler list.
-     */
-    public static HandlerList getHandlerList() {
-        return CozyEvent.HANDLERS;
-    }
-
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return CozyEvent.HANDLERS;
-    }
+public abstract class CozyEvent extends Event {
 }

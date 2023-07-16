@@ -25,6 +25,7 @@ import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.event.type.SimpleClickAction;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -39,6 +40,23 @@ import org.jetbrains.annotations.Nullable;
  * </li>
  */
 public class TreasurePostClickEvent extends CozyEvent {
+
+    private static final HandlerList HANDLERS = new HandlerList();
+
+    /**
+     * Used to get the handler list for the cozy events.
+     *
+     * @return The handler list.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 
     private final @NotNull TreasureLocation treasureLocation;
     private final @NotNull PlayerInteractEvent event;

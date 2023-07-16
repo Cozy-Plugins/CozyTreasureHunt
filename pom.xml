@@ -46,6 +46,13 @@
             <artifactId>CozyLibrary</artifactId>
             <version>0.6.1</version>
         </dependency>
+
+        <!-- Particle Library -->
+        <dependency>
+            <groupId>com.github.ByteZ1337</groupId>
+            <artifactId>ParticleLib</artifactId>
+            <version>1.8.4</version>
+        </dependency>
     </dependencies>
 
     <build>

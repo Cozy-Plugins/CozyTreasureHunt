@@ -20,12 +20,30 @@ package com.github.cozyplugins.cozytreasurehunt.event;
 
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called before spawning a treasure.
  */
 public class TreasurePreSpawnEvent extends TreasurePostSpawnEvent implements Cancellable {
+
+    private static final HandlerList HANDLERS = new HandlerList();
+
+    /**
+     * Used to get the handler list for the cozy events.
+     *
+     * @return The handler list.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 
     private boolean isCanceled;
 

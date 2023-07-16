@@ -28,7 +28,10 @@ import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSectio
 import org.bukkit.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.xenondevs.particle.ParticleBuilder;
+import xyz.xenondevs.particle.ParticleEffect;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -393,19 +396,18 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         // Check if the particle type is null.
         if (this.particleType == null) return this;
 
+        ParticleBuilder particleBuilder = new ParticleBuilder(ParticleEffect.valueOf(this.particleType.toString()), location);
+
         // Check if a color is specified and the particle is able to display colors.
         if (!this.particleColor.isEmpty() && this.particleType.getDataType() == Particle.DustOptions.class) {
-            Particle.DustOptions options = new Particle.DustOptions(
-                    Color.fromRGB(this.particleColor.get(0), this.particleColor.get(1), this.particleColor.get(2)),
-                    this.particleSize
-            );
-
-            // Spawn the particle.
-            world.spawnParticle(this.particleType, location, this.particleAmount, options);
-            return this;
+            particleBuilder.setColor(new Color(this.particleColor.get(0), this.particleColor.get(1), this.particleColor.get(2)));
         }
 
-        world.spawnParticle(this.particleType, location, this.particleAmount);
+        particleBuilder.setOffset(-0.5f, -0.5f, -0.5f);
+        particleBuilder.setAmount(this.particleAmount);
+        particleBuilder.setSpeed(0.2f);
+
+        particleBuilder.display();
         return this;
     }
 

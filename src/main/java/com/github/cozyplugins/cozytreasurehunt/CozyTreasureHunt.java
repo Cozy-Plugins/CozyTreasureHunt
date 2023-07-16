@@ -20,7 +20,6 @@ package com.github.cozyplugins.cozytreasurehunt;
 
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.cozyplugins.cozytreasurehunt.command.TreasureCommand;
-import com.github.cozyplugins.cozytreasurehunt.command.subcommand.EditorCommand;
 import com.github.cozyplugins.cozytreasurehunt.listener.EventListener;
 import com.github.cozyplugins.cozytreasurehunt.listener.TreasureListener;
 import com.github.cozyplugins.cozytreasurehunt.result.TreasureSpawnResult;

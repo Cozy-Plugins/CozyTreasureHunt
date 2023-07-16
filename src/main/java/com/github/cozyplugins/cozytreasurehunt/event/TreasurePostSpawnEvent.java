@@ -19,12 +19,30 @@
 package com.github.cozyplugins.cozytreasurehunt.event;
 
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
+import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when the {@link TreasurePreSpawnEvent} has passed.
  */
 public class TreasurePostSpawnEvent extends CozyEvent {
+
+    private static final HandlerList HANDLERS = new HandlerList();
+
+    /**
+     * Used to get the handler list for the cozy events.
+     *
+     * @return The handler list.
+     */
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 
     private final @NotNull TreasureLocation treasureLocation;
 
