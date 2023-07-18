@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 public class TreasureEditor extends InventoryInterface {
 
     private final @NotNull Treasure treasure;
-    private TreasureListEditor listEditor;
+    private final TreasureListEditor listEditor;
 
     private int page;
     private final int LAST_PAGE = 0;
@@ -289,7 +289,8 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&6&lChange Public Broadcast Message")
                 .setLore("&7Click to change the public broadcast message.",
                         "&7This message will appear in chat to all players",
-                        "&7when a player finds this treasure.")
+                        "&7when a player finds this treasure.",
+                        "&aCurrently &e" + this.treasure.getPublicBroadcastMessage())
                 .addSlot(28)
                 .addAction(new AnvilValueAction()
                         .setAnvilTitle("&8&lPublic broadcast message")
@@ -313,7 +314,8 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&6&lChange Private Broadcast Message")
                 .setLore("&7Click to change the private broadcast message.",
                         "&7This message will be sent to the player ",
-                        "&7that finds this treasure.")
+                        "&7that finds this treasure.",
+                        "&aCurrently &e" + this.treasure.getPrivateBroadcastMessage())
                 .addSlot(29)
                 .addAction(new AnvilValueAction()
                         .setAnvilTitle("&8&lPrivate broadcast message")
@@ -352,7 +354,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addSlot(31)
         );
 
-        // Bottom row.
+        // To the side.
         // Particle type.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.WHITE_CANDLE)
@@ -361,7 +363,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&7This particle will be spawned when",
                         "&7the treasure is found.",
                         "&aCurrent &e" + this.treasure.getParticleType())
-                .addSlot(37)
+                .addSlot(32)
                 .addAction(new AnvilValueAction()
                         .setAnvilTitle("&8&lParticle type")
                         .setAction((value, user) -> {
@@ -392,7 +394,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
                         "&f-10 &7Shift Right Click")
-                .addSlot(38)
+                .addSlot(33)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.setParticleAmount(treasure.getParticleAmount() + 10);
                     if (type == ClickType.LEFT) treasure.setParticleAmount(treasure.getParticleAmount() + 1);
@@ -412,7 +414,48 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
                                             "&f-10 &7Shift Right Click")
-                            , 38);
+                            , 33);
+                })
+        );
+
+        // Particle size.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.WHITE_CANDLE)
+                .setName("&6&lParticle Size")
+                .setLore("&7Click to change the particle size.",
+                        "&7This will only work for particles that",
+                        "&7have a dust option.",
+                        "&aCurrent &e" + treasure.getParticleSize(),
+                        "&f+0.1 &7Shift Left Click",
+                        "&f+0.02 &7Left Click",
+                        "&f-0.02 &7Right Click",
+                        "&f-0.1 &7Shift Right Click")
+                .addSlot(34)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.1f);
+                    if (type == ClickType.LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.02f);
+                    if (type == ClickType.RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.02f);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.1f);
+
+                    // Boundary's.
+                    if (treasure.getParticleSize() > 1f) treasure.setParticleSize(1f);
+                    if (treasure.getParticleSize() < 0f) treasure.setParticleSize(0f);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.WHITE_CANDLE)
+                                    .setName("&a&lParticle Size")
+                                    .setLore("&7Click to change the particle size.",
+                                            "&7This will only work for particles that",
+                                            "&7have a dust option.",
+                                            "&aCurrent &e" + treasure.getParticleSize(),
+                                            "&f+0.1 &7Shift Left Click",
+                                            "&f+0.02 &7Left Click",
+                                            "&f-0.02 &7Right Click",
+                                            "&f-0.1 &7Shift Right Click")
+                            , 34);
                 })
         );
 
@@ -429,7 +472,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
                         "&f-20 &7Shift Right Click")
-                .addSlot(39)
+                .addSlot(41)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.increaseRedParticle(20);
                     if (type == ClickType.LEFT) treasure.increaseRedParticle(1);
@@ -455,7 +498,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
                                             "&f-20 &7Shift Right Click")
-                            , 39);
+                            , 41);
                 })
         );
 
@@ -472,7 +515,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
                         "&f-20 &7Shift Right Click")
-                .addSlot(40)
+                .addSlot(42)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.increaseGreenParticle(20);
                     if (type == ClickType.LEFT) treasure.increaseGreenParticle(1);
@@ -498,7 +541,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
                                             "&f-20 &7Shift Right Click")
-                            , 40);
+                            , 42);
                 })
         );
 
@@ -515,7 +558,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
                         "&f-20 &7Shift Right Click")
-                .addSlot(41)
+                .addSlot(43)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.increaseBlueParticle(20);
                     if (type == ClickType.LEFT) treasure.increaseBlueParticle(1);
@@ -541,49 +584,17 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
                                             "&f-20 &7Shift Right Click")
-                            , 41);
+                            , 43);
                 })
         );
 
-        // Particle size.
+        // Fireworks.
         this.setItem(new InventoryItem()
-                .setMaterial(Material.WHITE_CANDLE)
-                .setName("&6&lParticle Size")
-                .setLore("&7Click to change the particle size.",
-                        "&7This will only work for particles that",
-                        "&7have a dust option.",
-                        "&aCurrent &e" + treasure.getParticleSize(),
-                        "&f+0.1 &7Shift Left Click",
-                        "&f+0.02 &7Left Click",
-                        "&f-0.02 &7Right Click",
-                        "&f-0.1 &7Shift Right Click")
-                .addSlot(42)
-                .addAction((ClickAction) (user, type, inventory) -> {
-                    if (type == ClickType.SHIFT_LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.1f);
-                    if (type == ClickType.LEFT) treasure.setParticleSize(treasure.getParticleSize() + 0.02f);
-                    if (type == ClickType.RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.02f);
-                    if (type == ClickType.SHIFT_RIGHT) treasure.setParticleSize(treasure.getParticleSize() - 0.1f);
-
-                    // Boundary's.
-                    if (treasure.getParticleSize() > 1f) treasure.setParticleSize(1f);
-                    if (treasure.getParticleSize() < 0f) treasure.setParticleSize(0f);
-
-                    treasure.save();
-
-                    // Reset the item.
-                    this.setItem(new CozyItem()
-                                    .setMaterial(Material.WHITE_CANDLE)
-                                    .setName("&a&lParticle Size")
-                                    .setLore("&7Click to change the particle size.",
-                                            "&7This will only work for particles that",
-                                            "&7have a dust option.",
-                                            "&aCurrent &e" + treasure.getParticleSize(),
-                                            "&f+0.1 &7Shift Left Click",
-                                            "&f+0.02 &7Left Click",
-                                            "&f-0.02 &7Right Click",
-                                            "&f-0.1 &7Shift Right Click")
-                            , 42);
-                })
+                .setMaterial(Material.FIREWORK_ROCKET)
+                .setName("&7&lEdit Fireworks")
+                .setLore("&7Click to change the type of fireworks spawned when found.",
+                        "&eOnly available with CozyTreasureHuntPlus")
+                .addSlot(37)
         );
     }
 }

@@ -19,8 +19,6 @@
 package com.github.cozyplugins.cozytreasurehunt.event;
 
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a cozy event.
