@@ -15,7 +15,8 @@ import java.util.UUID;
  */
 public class PlayerData implements Savable, ConfigurationConvertable {
 
-    private @NotNull UUID playerUuid;
+    private final @NotNull UUID playerUuid;
+    private @NotNull ConfigurationSection information;
     /*
     This uses the treasure's name instead of the identifier, so it is easier to see
     in the data file.
@@ -29,6 +30,7 @@ public class PlayerData implements Savable, ConfigurationConvertable {
      */
     public PlayerData(@NotNull UUID playerUuid) {
         this.playerUuid = playerUuid;
+        this.information = new MemoryConfigurationSection(new HashMap<>());
         this.treasureFound = new HashMap<>();
     }
 
@@ -37,8 +39,18 @@ public class PlayerData implements Savable, ConfigurationConvertable {
      *
      * @return The players uuid.
      */
-    public UUID getIdentifier() {
+    public @NotNull UUID getIdentifier() {
         return this.playerUuid;
+    }
+
+    /**
+     * Used to get the information configuration section.
+     * Plugins can use this method to save extra data.
+     *
+     * @return The player information.
+     */
+    public @NotNull ConfigurationSection getInformation() {
+        return this.information;
     }
 
     /**
@@ -79,6 +91,17 @@ public class PlayerData implements Savable, ConfigurationConvertable {
         return this;
     }
 
+    /**
+     * Used to set the player's information.
+     *
+     * @param section The player's information.
+     * @return This instance.
+     */
+    public @NotNull PlayerData setInformation(@NotNull ConfigurationSection section) {
+        this.information = section;
+        return this;
+    }
+
     @Override
     public void save() {
         DataStorage.insert(this);
@@ -89,6 +112,7 @@ public class PlayerData implements Savable, ConfigurationConvertable {
         ConfigurationSection section = new MemoryConfigurationSection(new HashMap<>());
 
         section.set("treasure_found", this.treasureFound);
+        section.set("info", this.information.getMap());
 
         return section;
     }
@@ -101,6 +125,8 @@ public class PlayerData implements Savable, ConfigurationConvertable {
         for (String treasure : section.getSection("treasure_found").getKeys()) {
             this.treasureFound.put(treasure, section.getInteger("treasure_found." + treasure));
         }
+
+        this.information = section.getSection("info");
     }
 
     /**

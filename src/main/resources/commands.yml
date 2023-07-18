@@ -58,3 +58,8 @@ treasure:
     header: "&aFound &f{amount} &atreasure."
     max_lines: 5
     line: "&e&l{name} &7is at &f{location}&7. &eClick to teleport."
+
+  save:
+    enable: true
+    name: "save"
+    permission: "treasurehunt.save"

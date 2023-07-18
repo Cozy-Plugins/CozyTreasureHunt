@@ -41,6 +41,7 @@ public class TreasureCommand implements CommandType {
         pool.add(new SetCommand());
         pool.add(new SpawnCommand());
         pool.add(new UnSpawnCommand());
+        pool.add(new SaveToCommand());
 
         return pool;
     }
