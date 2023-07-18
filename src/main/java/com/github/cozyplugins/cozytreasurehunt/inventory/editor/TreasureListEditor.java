@@ -79,7 +79,7 @@ public class TreasureListEditor extends InventoryInterface {
 
         // Reset all slots.
         this.removeActionRange(0, 53);
-        this.setItem(new CozyItem().setMaterial(Material.AIR), 0 ,53);
+        this.setItem(new CozyItem().setMaterial(Material.AIR), 0, 53);
 
         // Background.
         this.setItem(new InventoryItem()
@@ -149,7 +149,7 @@ public class TreasureListEditor extends InventoryInterface {
         );
 
         int from = (this.page) * 45;
-        int to = ((this.page + 1) * 45) -1;
+        int to = ((this.page + 1) * 45) - 1;
         int treasureIndex = -1;
         int slot = -1;
 

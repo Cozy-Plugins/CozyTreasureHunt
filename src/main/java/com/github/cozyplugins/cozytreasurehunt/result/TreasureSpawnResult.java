@@ -24,7 +24,7 @@ public class TreasureSpawnResult implements TreasureResult {
     /**
      * Used to add data to the result set.
      *
-     * @param location The instance of a treasure location.
+     * @param location   The instance of a treasure location.
      * @param hasSpawned True if the treasure was successfully spawned.
      * @return This instance.
      */
