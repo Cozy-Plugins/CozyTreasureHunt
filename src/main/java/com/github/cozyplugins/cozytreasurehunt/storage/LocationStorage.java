@@ -178,13 +178,16 @@ public final class LocationStorage {
      *
      * @param identifier The treasure's identifier.
      */
-    public static void remove(String identifier) {
+    public static void remove(@NotNull String identifier) {
         for (File file : LocationStorage.storage.getFiles()) {
             YamlConfiguration configuration = new YamlConfiguration(file);
+            configuration.load();
+
             if (!configuration.getKeys().contains(identifier)) continue;
 
             configuration.set(identifier, null);
             configuration.save();
+
             LocationStorage.storage.reload();
             return;
         }
