@@ -28,15 +28,40 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * Represents this plugin's event listener.
  */
 public class EventListener implements Listener {
 
+    /**
+     * A map of user id's to time stamp.
+     * This is used to stop fast double clicks.
+     * Without this, fast double clicks could call the events twice.
+     */
+    private static Map<UUID, Long> playerMap = new HashMap<>();
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onClick(PlayerInteractEvent event) {
 
-        System.out.println("click");
+        // Check if the player is in the map.
+        // Meaning they have clicked most recently
+        if (playerMap.containsKey(event.getPlayer().getUniqueId())) {
+            long lastTimeStamp = playerMap.get(event.getPlayer().getUniqueId());
+
+            // Check if they have clicked within 0.5s.
+            if (System.currentTimeMillis() - lastTimeStamp < 500) {
+                return;
+            }
+            // Otherwise, reset the map.
+            playerMap = new HashMap<>();
+        }
+
+        // Add the player to the map.
+        playerMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
 
         // Check if a treasure is clicked in the most efficient way.
         if (event.getClickedBlock() == null) return;
