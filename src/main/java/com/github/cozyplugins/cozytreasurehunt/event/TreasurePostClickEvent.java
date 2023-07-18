@@ -23,6 +23,8 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.event.type.SimpleClickAction;
+import com.github.cozyplugins.cozytreasurehunt.storage.DataStorage;
+import com.github.cozyplugins.cozytreasurehunt.storage.PlayerData;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
@@ -83,6 +85,15 @@ public class TreasurePostClickEvent extends CozyEvent {
      */
     public @NotNull PlayerUser getPlayer() {
         return new PlayerUser(this.event.getPlayer());
+    }
+
+    /**
+     * Used to get the players treasure data.
+     *
+     * @return The players treasure data.
+     */
+    public @NotNull PlayerData getPlayerData() {
+        return DataStorage.get(this.getPlayer().getUuid());
     }
 
     /**
