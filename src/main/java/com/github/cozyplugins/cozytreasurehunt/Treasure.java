@@ -63,6 +63,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
     private float particleSize;
     private int particleAmount;
 
+    private int limit;
+    private @Nullable String limitMessage;
+
     /**
      * Used to create a treasure type.
      *
@@ -189,6 +192,29 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
      */
     public int getParticleAmount() {
         return this.particleAmount;
+    }
+
+    /**
+     * Used to get the treasure's limit.
+     * This is the amount of treasure a player can find
+     * for this type of treasure.
+     *
+     * @return The treasure's limit.
+     */
+    public int getLimit() {
+        return this.limit;
+    }
+
+    /**
+     * Used to get the limit message.
+     * The message displayed to the user when
+     * they try to click a treasure, but they have
+     * already gone to the limit.
+     *
+     * @return The limit message.
+     */
+    public @Nullable String getLimitMessage() {
+        return this.limitMessage;
     }
 
     /**
@@ -371,6 +397,33 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         return this;
     }
 
+    /**
+     * Used to set the amount of treasure each player
+     * may find.
+     * <li>Setting this to -1 will remove the limit.</li>
+     *
+     * @param limit The treasure's limit.
+     * @return This instance.
+     */
+    public @NotNull Treasure setLimit(int limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    /**
+     * Used to set the limit message.
+     * The message displayed to the user when
+     * they try to click a treasure, but they have
+     * already gone to the limit.
+     *
+     * @param message The limit message.
+     * @return This instance.
+     */
+    public @NotNull Treasure setLimitMessage(@Nullable String message) {
+        this.limitMessage = message;
+        return this;
+    }
+
 
     /**
      * Used to spawn the treasure block.
@@ -431,6 +484,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         section.set("particle.size", Double.valueOf(String.valueOf(this.particleSize)));
         section.set("particle.amount", this.particleAmount);
 
+        section.set("limit", this.limit);
+        section.set("limit_message", this.limitMessage);
+
         return section;
     }
 
@@ -461,6 +517,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         this.particleColor = section.getListInteger("particle.color");
         this.particleSize = Float.valueOf(((Double) section.get("particle.size", 1.0d)).toString());
         this.particleAmount = section.getInteger("particle.amount", 10);
+
+        this.limit = section.getInteger("limit", -1);
+        this.limitMessage = section.getString("limit_message", "&7You have reached the maximum amount of &f{name}&7.");
     }
 
     @Override

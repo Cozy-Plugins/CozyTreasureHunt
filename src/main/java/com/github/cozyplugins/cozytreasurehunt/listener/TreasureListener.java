@@ -4,6 +4,7 @@ import com.github.cozyplugins.cozylibrary.MessageManager;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostClickEvent;
+import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.PlayerData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,6 +14,26 @@ import org.bukkit.event.Listener;
  * Represents the base treasure listener.
  */
 public class TreasureListener implements Listener {
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onTreasurePreClick(TreasurePreClickEvent event) {
+        PlayerData playerData = event.getPlayerData();
+        Treasure treasure = event.getTreasure();
+
+        int amountFound = playerData.getTreasureFound().get(treasure.getName());
+        int limit = treasure.getLimit();
+
+        // Check if the player has gone over the limit.
+        if (amountFound >= limit) {
+            event.setCancelled(true);
+
+            if (treasure.getLimitMessage() != null) {
+                event.getPlayer().sendMessage(treasure.getLimitMessage()
+                        .replace("{name}", treasure.getName())
+                );
+            }
+        }
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTreasurePostClick(TreasurePostClickEvent event) {

@@ -31,7 +31,9 @@ import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An inventory used to edit a type of treasure.
@@ -42,7 +44,7 @@ public class TreasureEditor extends InventoryInterface {
     private final TreasureListEditor listEditor;
 
     private int page;
-    private final int LAST_PAGE = 0;
+    private final int LAST_PAGE = 1;
     private @NotNull String modifierDescription;
 
     /**
@@ -280,6 +282,7 @@ public class TreasureEditor extends InventoryInterface {
 
         // Set the items on this page.
         if (this.page == 0) this.setPage0();
+        if (this.page == 1) this.setPage1();
     }
 
     /**
@@ -598,6 +601,86 @@ public class TreasureEditor extends InventoryInterface {
                 .setLore("&7Click to change the type of fireworks spawned when found.",
                         "&eOnly available with CozyTreasureHuntPlus")
                 .addSlot(37)
+        );
+    }
+
+    private void setPage1() {
+        // Treasure limit.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.CLOCK)
+                .setName("&6&lSet Limit")
+                .setLore("&7Click to set the amount",
+                        "&7of this treasure a player can find.",
+                        "&7Setting this to -1 will let the player",
+                        "&7find unlimited amounts of this treasure.",
+                        "&aCurrent &e" + treasure.getLimit(),
+                        "&f+20 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-20 &7Shift Right Click")
+                .addSlot(28)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.setLimit(treasure.getLimit() + 20);
+                    if (type == ClickType.LEFT) treasure.setLimit(treasure.getLimit() + 1);
+                    if (type == ClickType.RIGHT) treasure.setLimit(treasure.getLimit() - 1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.setLimit(treasure.getLimit() - 20);
+
+                    // Boundary's.
+                    if (treasure.getLimit() < -1) treasure.setLimit(-1);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.CLOCK)
+                                    .setName("&6&lSet Limit")
+                                    .setLore("&7Click to set the amount",
+                                            "&7of this treasure a player can find.",
+                                            "&7Setting this to -1 will let the player",
+                                            "&7find unlimited amounts of this treasure.",
+                                            "&aCurrent &e" + treasure.getLimit(),
+                                            "&f+20 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-20 &7Shift Right Click")
+                            , 28);
+                })
+        );
+
+        // Limit message.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.CLOCK)
+                .setName("&6&lLimit Message")
+                .setLore("&7Click to set the limit message.",
+                        "&7This message is sent to the player when",
+                        "&7the player attempts to click anouther treasure",
+                        "&7while over the limit.",
+                        "&aCurrently &e" + treasure.getLimitMessage())
+                .addSlot(29)
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lLimit message")
+                        .setAction((value, user) -> {
+                            if (value != null) {
+                                if (value.equals("")) {
+                                    treasure.setLimitMessage(null);
+                                } else {
+                                    treasure.setLimitMessage(value);
+                                }
+                            }
+
+                            treasure.save();
+
+                            this.setItem(new CozyItem()
+                                            .setMaterial(Material.CLOCK)
+                                            .setName("&6&lLimit Message")
+                                            .setLore("&7Click to set the limit message.",
+                                                    "&7This message is sent to the player when",
+                                                    "&7the player attempts to click anouther treasure",
+                                                    "&7while over the limit.",
+                                                    "&aCurrently &e" + treasure.getLimitMessage())
+                                    , 29);
+                        })
+                )
         );
     }
 }
