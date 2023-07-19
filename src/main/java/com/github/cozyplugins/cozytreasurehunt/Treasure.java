@@ -21,6 +21,8 @@ package com.github.cozyplugins.cozytreasurehunt;
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozylibrary.indicator.Replicable;
+import com.github.cozyplugins.cozylibrary.item.CozyItem;
+import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
@@ -29,6 +31,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.particle.ParticleBuilder;
@@ -126,6 +129,21 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
      */
     public @Nullable String getHdb() {
         return this.hdb;
+    }
+
+    /**
+     * Used to get the treasure as an item.
+     *
+     * @return The treasure as an item.
+     */
+    public @NotNull CozyItem getItem() {
+        // Check if the head database is enabled and there is a hdb value.
+        if (HeadDatabaseDependency.isEnabled() && this.hdb != null && !this.hdb.equals("")) {
+            ItemStack item = HeadDatabaseDependency.get().getItemHead(this.hdb);
+            return new CozyItem(item);
+        }
+
+        return new CozyItem(this.material);
     }
 
     /**
@@ -433,6 +451,20 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
      */
     public @NotNull Treasure spawn(Location location) {
         location.getBlock().setType(this.material);
+
+        // If there is a head database value.
+        if (this.hdb != null && !this.hdb.equals("")) {
+
+            // Check if the head database is enabled.
+            if (!HeadDatabaseDependency.isEnabled()) {
+                ConsoleManager.warn("Attempted to spawn {treasure}, but the Head Database plugin is not enabled."
+                        .replace("{treasure}", this.getName()));
+                return this;
+            }
+
+            HeadDatabaseDependency.get().setBlockSkin(location.getBlock(), this.hdb);
+        }
+
         return this;
     }
 

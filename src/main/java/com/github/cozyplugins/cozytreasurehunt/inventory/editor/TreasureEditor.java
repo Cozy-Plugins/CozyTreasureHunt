@@ -27,7 +27,9 @@ import com.github.cozyplugins.cozylibrary.inventory.action.action.PlaceAction;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
+import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
@@ -188,12 +190,22 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction((PlaceAction) (user, item) -> {
                     if (item.getMaterial() == Material.AIR) return;
 
+                    // Set the material.
                     this.treasure.setMaterial(item.getMaterial());
+
+                    // Check if the material may be in the head database.
+                    if (this.treasure.getMaterial() == Material.PLAYER_HEAD && HeadDatabaseDependency.isEnabled()) {
+                        HeadDatabaseAPI api = HeadDatabaseDependency.get();
+                        String hdb = api.getItemID(item.create());
+
+                        // Check if there is a hdb value.
+                        if (hdb != null) this.treasure.setHdb(hdb);
+                    }
+
                     this.treasure.save();
 
                     // Replace the item type.
-                    this.setItem(new CozyItem()
-                            .setMaterial(this.treasure.getMaterial())
+                    this.setItem(new CozyItem(this.treasure.getItem().create())
                             .setName("&6&lMaterial")
                             .addLore("&7Replace this item with another")
                             .addLore("&7block or head to set the treasure's material."), 13);
