@@ -63,3 +63,8 @@ treasure:
     enable: true
     name: "save"
     permission: "treasurehunt.save"
+
+  reload:
+    enable: true
+    name: "reload"
+    permission: "treasurehunt.reload"
