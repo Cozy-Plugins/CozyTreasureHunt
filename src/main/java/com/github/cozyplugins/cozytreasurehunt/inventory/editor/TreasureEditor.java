@@ -117,17 +117,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (this.page <= 0) return;
                     this.page -= 1;
-
-                    this.generateModifiers();
-                    this.generatePageDescription();
-
-                    // Reset the item.
-                    this.setItem(new CozyItem()
-                            .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
-                            .setName("&e&lPrevious")
-                            .setLore("&7Click to go back a page.",
-                                    "&aPage &e" + this.page,
-                                    "&aModifiers &e" + this.modifierDescription), 48);
+                    this.onPageArrowClick();
                 }));
 
         // Next button.
@@ -140,17 +130,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (this.page == this.LAST_PAGE) return;
                     this.page += 1;
-
-                    this.generateModifiers();
-                    this.generatePageDescription();
-
-                    // Reset the item.
-                    this.setItem(new CozyItem()
-                            .setMaterial(Material.YELLOW_STAINED_GLASS_PANE)
-                            .setName("&e&lNext")
-                            .setLore("&7Click to go to the next page.",
-                                    "&aPage &e" + this.page,
-                                    "&aModifiers &e" + this.modifierDescription), 48);
+                    this.onPageArrowClick();
                 }));
 
         // Change name.
@@ -269,7 +249,26 @@ public class TreasureEditor extends InventoryInterface {
      * This should be called when the page has changed.
      */
     private void generatePageDescription() {
-        this.modifierDescription = "Cosmetic";
+        if (this.page == 0) this.modifierDescription = "Cosmetic";
+        if (this.page == 1) this.modifierDescription = "Mechanic";
+    }
+
+    /**
+     * Called when the back or previous button is pressed.
+     */
+    private void onPageArrowClick() {
+        this.generateModifiers();
+        this.generatePageDescription();
+
+        // Reset the items.
+        this.setItem(new CozyItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lPrevious")
+                .setLore("&7Click to go back a page.",
+                        "&aPage &e" + this.page,
+                        "&aModifiers &e" + this.modifierDescription), 48);
+        this.setItem(new CozyItem().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName("&e&lNext")
+                .setLore("&7Click to go to the next page.",
+                        "&aPage &e" + this.page,
+                        "&aModifiers &e" + this.modifierDescription), 50);
     }
 
     /**
@@ -584,7 +583,7 @@ public class TreasureEditor extends InventoryInterface {
                     // Reset the item.
                     this.setItem(new CozyItem()
                                     .setMaterial(Material.BLUE_CANDLE)
-                                    .setName("&a&lParticle Color Blue")
+                                    .setName("&b&lParticle Color Blue")
                                     .setLore("&7Click to change the amount of ",
                                             "&7blue in the particle.",
                                             "&7This will only work with particles ",
