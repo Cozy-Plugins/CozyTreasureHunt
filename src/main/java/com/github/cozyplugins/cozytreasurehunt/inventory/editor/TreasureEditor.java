@@ -388,7 +388,7 @@ public class TreasureEditor extends InventoryInterface {
                         .setAction((value, user) -> {
                             if (value != null) {
                                 try {
-                                    Particle particle = Particle.valueOf(value);
+                                    Particle particle = Particle.valueOf(value.toUpperCase());
                                     treasure.setParticleType(particle);
                                     treasure.save();
                                 } catch (Exception exception) {

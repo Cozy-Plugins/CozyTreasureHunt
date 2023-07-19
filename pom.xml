@@ -47,13 +47,6 @@
             <version>0.6.2</version>
         </dependency>
 
-        <!-- Particle Library -->
-        <dependency>
-            <groupId>com.github.ByteZ1337</groupId>
-            <artifactId>ParticleLib</artifactId>
-            <version>1.8.4</version>
-        </dependency>
-
         <!-- HeadDatabase -->
         <dependency>
             <groupId>com.arcaniax</groupId>
