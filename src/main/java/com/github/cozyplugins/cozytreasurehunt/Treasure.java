@@ -22,6 +22,7 @@ import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
+import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
@@ -29,6 +30,7 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -484,19 +486,45 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         location.setZ(location.getBlockZ() + 0.5d);
 
         // Check if a color is specified and the particle is able to display colors.
-        if (!this.particleColor.isEmpty() && this.particleType.getDataType() == Particle.DustOptions.class) {
+        if (this.particleType.getDataType() == Particle.DustOptions.class) {
+            // Check if there is no particle color set.
+            if (this.particleColor.isEmpty()) {
+                this.particleColor.add(255);
+                this.particleColor.add(255);
+                this.particleColor.add(255);
+            }
+
+            // Create the dust color.
             Particle.DustOptions options = new Particle.DustOptions(
                     Color.fromRGB(this.particleColor.get(0), this.particleColor.get(1), this.particleColor.get(2)),
                     this.particleSize
             );
 
             // Spawn the particle.
-            world.spawnParticle(this.particleType, location, this.particleAmount, options);
+            world.spawnParticle(this.particleType, location, this.particleAmount, 0d, 0d, 0d, 0.2d, options);
             return this;
         }
 
-        world.spawnParticle(this.particleType, location, this.particleAmount);
+        world.spawnParticle(this.particleType, location, this.particleAmount, 0d, 0d, 0d, 0.2d);
         return this;
+    }
+
+    /**
+     * Used to spawn particles in front of a player.
+     *
+     * @param playerUser The instance of the player.
+     */
+    public void spawnParticlesPlayerRight(@NotNull PlayerUser playerUser) {
+        Location clone = playerUser.getPlayer().getLocation();
+        Vector direction = clone.getDirection();
+
+        direction.rotateAroundY(Math.toRadians(40));
+        direction.multiply(2);
+
+        clone.add(direction);
+        clone.add(0, 1, 0);
+
+        this.spawnParticles(clone);
     }
 
     @Override
@@ -546,7 +574,12 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         this.privateBroadcastMessage = section.getString("private_broadcast_message");
         this.particleType = section.getString("particle.type") == null ?
                 null : Particle.valueOf(section.getString("particle.type"));
-        this.particleColor = section.getListInteger("particle.color");
+
+        List<Integer> defaultList = new ArrayList<>();
+        defaultList.add(255);
+        defaultList.add(255);
+        defaultList.add(255);
+        this.particleColor = section.getListInteger("particle.color", defaultList);
         this.particleSize = Float.valueOf(((Double) section.getSection("particle").get("size", 1.0d)).toString());
         this.particleAmount = section.getInteger("particle.amount", 10);
 

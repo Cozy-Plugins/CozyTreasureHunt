@@ -30,9 +30,11 @@ import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -391,6 +393,7 @@ public class TreasureEditor extends InventoryInterface {
                                     Particle particle = Particle.valueOf(value.toUpperCase());
                                     treasure.setParticleType(particle);
                                     treasure.save();
+                                    treasure.spawnParticlesPlayerRight(user);
                                 } catch (Exception exception) {
                                     user.sendMessage("&7Invalid particle type.");
                                 }
@@ -421,6 +424,7 @@ public class TreasureEditor extends InventoryInterface {
                     if (type == ClickType.SHIFT_RIGHT) treasure.setParticleAmount(treasure.getParticleAmount() - 10);
 
                     treasure.save();
+                    treasure.spawnParticlesPlayerRight(user);
 
                     // Reset the item.
                     this.setItem(new CozyItem()
@@ -461,6 +465,7 @@ public class TreasureEditor extends InventoryInterface {
                     if (treasure.getParticleSize() < 0f) treasure.setParticleSize(0f);
 
                     treasure.save();
+                    treasure.spawnParticlesPlayerRight(user);
 
                     // Reset the item.
                     this.setItem(new CozyItem()
@@ -499,10 +504,11 @@ public class TreasureEditor extends InventoryInterface {
                     if (type == ClickType.SHIFT_RIGHT) treasure.increaseRedParticle(-20);
 
                     // Boundary's.
-                    if (treasure.getParticleColor(0) < 0) treasure.increaseGreenParticle(255);
-                    if (treasure.getParticleColor(0) > 255) treasure.increaseGreenParticle(-255);
+                    if (treasure.getParticleColor(0) < 0) treasure.increaseRedParticle(255);
+                    if (treasure.getParticleColor(0) > 255) treasure.increaseRedParticle(-255);
 
                     treasure.save();
+                    treasure.spawnParticlesPlayerRight(user);
 
                     // Reset the item.
                     this.setItem(new CozyItem()
@@ -546,16 +552,17 @@ public class TreasureEditor extends InventoryInterface {
                     if (treasure.getParticleColor(1) > 255) treasure.increaseGreenParticle(-255);
 
                     treasure.save();
+                    treasure.spawnParticlesPlayerRight(user);
 
                     // Reset the item.
                     this.setItem(new CozyItem()
-                                    .setMaterial(Material.RED_CANDLE)
-                                    .setName("&c&lParticle Color Green")
+                                    .setMaterial(Material.GREEN_CANDLE)
+                                    .setName("&a&lParticle Color Green")
                                     .setLore("&7Click to change the amount of ",
-                                            "&7red in the particle.",
+                                            "&7green in the particle.",
                                             "&7This will only work with particles ",
                                             "&7where the colour can change.",
-                                            "&aCurrent &e" + treasure.getParticleColor(0),
+                                            "&aCurrent &e" + treasure.getParticleColor(1),
                                             "&f+20 &7Shift Left Click",
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
@@ -567,7 +574,7 @@ public class TreasureEditor extends InventoryInterface {
         // Particle color blue.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.BLUE_CANDLE)
-                .setName("&a&lParticle Color Blue")
+                .setName("&b&lParticle Color Blue")
                 .setLore("&7Click to change the amount of ",
                         "&7blue in the particle.",
                         "&7This will only work with particles ",
@@ -589,6 +596,7 @@ public class TreasureEditor extends InventoryInterface {
                     if (treasure.getParticleColor(2) > 255) treasure.increaseBlueParticle(-255);
 
                     treasure.save();
+                    treasure.spawnParticlesPlayerRight(user);
 
                     // Reset the item.
                     this.setItem(new CozyItem()
