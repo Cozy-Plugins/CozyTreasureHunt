@@ -80,7 +80,7 @@ public final class TreasureStorage {
      */
     public static @Nullable Treasure get(UUID identifier) {
         ConfigurationSection section = TreasureStorage.storage.getSection(identifier.toString());
-        if (section == null) return null;
+        if (section.getMap().isEmpty()) return null;
         return Treasure.create(identifier, section);
     }
 

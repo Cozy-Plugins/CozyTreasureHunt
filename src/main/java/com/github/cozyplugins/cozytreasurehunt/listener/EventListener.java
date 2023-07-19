@@ -46,6 +46,13 @@ public class EventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onClick(PlayerInteractEvent event) {
+        // Check if a treasure is clicked in the most efficient way.
+        if (event.getClickedBlock() == null) return;
+        if (!LocationStorage.contains(event.getClickedBlock().getLocation())) return;
+
+        // Get the treasure location.
+        TreasureLocation treasureLocation = LocationStorage.get(event.getClickedBlock().getLocation());
+        if (treasureLocation == null) return;
 
         // Check if the player is in the map.
         // Meaning they have clicked most recently
@@ -54,6 +61,7 @@ public class EventListener implements Listener {
 
             // Check if they have clicked within 0.5s.
             if (System.currentTimeMillis() - lastTimeStamp < 500) {
+                event.setCancelled(true);
                 return;
             }
             // Otherwise, reset the map.
@@ -63,20 +71,15 @@ public class EventListener implements Listener {
         // Add the player to the map.
         playerMap.put(event.getPlayer().getUniqueId(), System.currentTimeMillis());
 
-        // Check if a treasure is clicked in the most efficient way.
-        if (event.getClickedBlock() == null) return;
-        if (!LocationStorage.contains(event.getClickedBlock().getLocation())) return;
-
-        // Get the treasure location.
-        TreasureLocation treasureLocation = LocationStorage.get(event.getClickedBlock().getLocation());
-        if (treasureLocation == null) return;
-
         // Call the treasure click event.
         TreasurePreClickEvent treasureClickEvent = new TreasurePreClickEvent(treasureLocation, event);
         Bukkit.getPluginManager().callEvent(treasureClickEvent);
 
         // Check if the event has been canceled.
-        if (treasureClickEvent.isCancelled()) return;
+        if (treasureClickEvent.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
 
         // Call the treasure post click event.
         // This is where plugins will respond to a player clicking a treasure.

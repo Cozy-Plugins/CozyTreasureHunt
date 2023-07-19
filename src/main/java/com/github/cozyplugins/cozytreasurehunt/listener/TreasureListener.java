@@ -20,7 +20,7 @@ public class TreasureListener implements Listener {
         PlayerData playerData = event.getPlayerData();
         Treasure treasure = event.getTreasure();
 
-        int amountFound = playerData.getTreasureFound().get(treasure.getName());
+        int amountFound = playerData.getTreasureFound(treasure.getName());
         int limit = treasure.getLimit();
 
         // Check if the player has gone over the limit.

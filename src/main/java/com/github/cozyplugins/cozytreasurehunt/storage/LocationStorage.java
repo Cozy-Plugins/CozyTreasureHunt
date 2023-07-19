@@ -81,6 +81,7 @@ public final class LocationStorage {
      * @return The instance of the treasure location.
      */
     public static @Nullable TreasureLocation get(String identifier) {
+        LocationStorage.storage.reload(); // When files are deleted the config isn't reloaded.
         if (!LocationStorage.storage.getKeys().contains(identifier)) return null;
         ConfigurationSection section = LocationStorage.storage.getSection(identifier);
         if (section == null) return null;
@@ -122,12 +123,29 @@ public final class LocationStorage {
      * @return The list of all treasure locations.
      */
     public static @NotNull List<TreasureLocation> getAll() {
+        LocationStorage.storage.reload(); // When files are deleted the config isn't reloaded.
         List<TreasureLocation> treasureLocationList = new ArrayList<>();
+        boolean containsInvalidLocations = false;
 
         for (String key : LocationStorage.storage.getKeys()) {
             ConfigurationSection section = LocationStorage.storage.getSection(key);
             TreasureLocation location = TreasureLocation.create(section);
+
+            // Check if the location is null.
+            if (location == null) {
+                containsInvalidLocations = true;
+                continue;
+            }
+
             treasureLocationList.add(location);
+        }
+
+        // Check if there were invalid locations.
+        if (containsInvalidLocations) {
+            ConsoleManager.warn(
+                    "When spawning treasure, there was treasure that could " +
+                            "not be spawned due to the treasure type no longer existing."
+            );
         }
 
         return treasureLocationList;

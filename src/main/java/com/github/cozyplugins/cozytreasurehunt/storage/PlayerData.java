@@ -55,11 +55,23 @@ public class PlayerData implements Savable, ConfigurationConvertable {
 
     /**
      * Used to get the treasure the player has found.
+     * The map may not contain any values.
      *
      * @return The map of treasure to amount found.
      */
     public @NotNull Map<String, Integer> getTreasureFound() {
         return this.treasureFound;
+    }
+
+    /**
+     * Used to get the amount of treasure found.
+     * If the treasure is not listed in the map, it will return 0.
+     *
+     * @param treasureName The name of the treasure.
+     * @return The amount of treasure found by this player.
+     */
+    public int getTreasureFound(@NotNull String treasureName) {
+        return this.treasureFound.getOrDefault(treasureName, 0);
     }
 
     /**
