@@ -75,6 +75,21 @@ public class PlayerData implements Savable, ConfigurationConvertable {
     }
 
     /**
+     * Used to get the amount of treasure found in total.
+     *
+     * @return The amount of treasure found.
+     */
+    public int getAmountFound() {
+        int amount = 0;
+
+        for (int value : this.treasureFound.values()) {
+            amount += value;
+        }
+
+        return amount;
+    }
+
+    /**
      * Used to set a treasure to a certain amount in the map.
      *
      * @param treasureName The treasure identifier.

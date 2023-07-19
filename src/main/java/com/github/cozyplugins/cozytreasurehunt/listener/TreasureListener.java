@@ -5,6 +5,7 @@ import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreClickEvent;
+import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
 import com.github.cozyplugins.cozytreasurehunt.storage.PlayerData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,14 +21,31 @@ public class TreasureListener implements Listener {
         PlayerData playerData = event.getPlayerData();
         Treasure treasure = event.getTreasure();
 
-        int amountFound = playerData.getTreasureFound(treasure.getName());
+        // Check if they have reached the global limit.
+        int treasureFound = playerData.getAmountFound();
+        int globalLimit = ConfigFile.getGlobalLimit();
+
+        if (treasureFound >= globalLimit && globalLimit != -1) {
+            event.setCancelled(true);
+
+            if (!ConfigFile.getGlobalLimitMessage().equals("")) {
+                event.getPlayer().sendMessage(ConfigFile.getGlobalLimitMessage()
+                        .replace("{name}", treasure.getName())
+                );
+            }
+
+            return;
+        }
+
+        // Check if they have gone over the treasure type limit.
+        int treasureTypeFound = playerData.getTreasureFound(treasure.getName());
         int limit = treasure.getLimit();
 
         // Check if the player has gone over the limit.
-        if (amountFound >= limit) {
+        if (treasureTypeFound >= limit && limit != -1) {
             event.setCancelled(true);
 
-            if (treasure.getLimitMessage() != null) {
+            if (treasure.getLimitMessage() != null || !treasure.getLimitMessage().equals("")) {
                 event.getPlayer().sendMessage(treasure.getLimitMessage()
                         .replace("{name}", treasure.getName())
                 );

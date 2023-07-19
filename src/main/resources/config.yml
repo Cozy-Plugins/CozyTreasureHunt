@@ -1,0 +1,13 @@
+#  _____                                    _   _             _
+# |_   _| __ ___  __ _ ___ _   _ _ __ ___  | | | |_   _ _ __ | |_
+#   | || '__/ _ \/ _` / __| | | | '__/ _ \ | |_| | | | | '_ \| __|
+#   | || | |  __/ (_| \__ \ |_| | | |  __/ |  _  | |_| | | | | |_
+#   |_||_|  \___|\__,_|___/\__,_|_|  \___| |_| |_|\__,_|_| |_|\__|
+#
+# Organisation : Cozy Plugins
+# Author : Smudge
+
+# The amount of treasure each player is able to find.
+# Setting to -1 will let players get unlimited treasure.
+global_treasure_limit: -1
+global_treasure_limit_message: "&7You have reached the global treasure limit. You cannot redeem any more treasure."
