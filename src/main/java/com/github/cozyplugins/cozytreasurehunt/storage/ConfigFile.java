@@ -3,7 +3,6 @@ package com.github.cozyplugins.cozytreasurehunt.storage;
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
