@@ -159,8 +159,7 @@ public class TreasureListEditor extends InventoryInterface {
             if (treasureIndex > to) continue;
             slot += 1;
 
-            this.setItem(new InventoryItem()
-                    .setMaterial(treasure.getMaterial())
+            this.setItem(new InventoryItem(treasure.getItem().create())
                     .setName("&a&l" + treasure.getName())
                     .setLore("&7Click to edit this treasure.",
                             "&f" + treasure.getDescription(),

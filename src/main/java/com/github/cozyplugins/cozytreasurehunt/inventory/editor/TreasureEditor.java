@@ -181,7 +181,7 @@ public class TreasureEditor extends InventoryInterface {
         );
 
         // The treasure block.
-        this.setItem(new InventoryItem()
+        this.setItem(new InventoryItem(this.treasure.getItem().create())
                 .setMaterial(this.treasure.getMaterial())
                 .setName("&6&lMaterial")
                 .addLore("&7Replace this item with another")
