@@ -280,6 +280,10 @@ public class TreasureEditor extends InventoryInterface {
         // Remove actions.
         this.removeActionRange(27, 44);
 
+        // Remove items.
+        this.setItem(new CozyItem().setMaterial(Material.LIGHT_GRAY_STAINED_GLASS_PANE).setName("&7"), 28, 34);
+        this.setItem(new CozyItem().setMaterial(Material.LIGHT_GRAY_STAINED_GLASS_PANE).setName("&7"), 37, 43);
+
         // Set the items on this page.
         if (this.page == 0) this.setPage0();
         if (this.page == 1) this.setPage1();
@@ -601,6 +605,25 @@ public class TreasureEditor extends InventoryInterface {
                 .setLore("&7Click to change the type of fireworks spawned when found.",
                         "&eOnly available with CozyTreasureHuntPlus")
                 .addSlot(37)
+        );
+
+        // Sounds.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.MUSIC_DISC_CAT)
+                .setName("&7&lChange Global Sound.")
+                .setLore("&7Click to change the sound played for each",
+                        "&7player when a treasure is found.",
+                        "&eOnly available with CozyTreasureHuntPlus")
+                .addSlot(38)
+        );
+
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.MUSIC_DISC_CAT)
+                .setName("&7&lChange Local Sound.")
+                .setLore("&7Click to change the sound played by the ",
+                        "&7treasure when it is found.",
+                        "&eOnly available with CozyTreasureHuntPlus")
+                .addSlot(39)
         );
     }
 

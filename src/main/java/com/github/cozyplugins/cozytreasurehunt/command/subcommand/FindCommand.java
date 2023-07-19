@@ -12,6 +12,7 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
+import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -51,7 +52,7 @@ public class FindCommand implements CommandType {
 
     @Override
     public @Nullable CommandSuggestions getSuggestions(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
+        return new CommandSuggestions().append(TreasureStorage.getAllNames());
     }
 
     @Override
@@ -65,14 +66,15 @@ public class FindCommand implements CommandType {
         List<TreasureLocation> foundTreasure = new ArrayList<>();
 
         // If the player is searching for a specific treasure.
-        boolean specificTreasure = !arguments.getArguments().isEmpty() && !arguments.getArguments().get(0).equals("");
+        boolean specificTreasure = arguments.getArguments().size() > 1;
 
         // Loop though every treasure.
         for (TreasureLocation location : LocationStorage.getAll()) {
-            amountOfTreasure++;
-
             // If they are searching for a specific treasure and this is not that treasure.
-            if (specificTreasure && !location.getTreasure().getName().equals(arguments.getArguments().get(0))) continue;
+            if (specificTreasure && !location.getTreasure().getName().equals(arguments.getArguments().get(1))) continue;
+
+            // Increase amount of treasure.
+            amountOfTreasure++;
 
             // Add treasure location.
             foundTreasure.add(location);
