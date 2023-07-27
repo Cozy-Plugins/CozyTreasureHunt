@@ -4,6 +4,7 @@ import com.github.cozyplugins.cozytreasurehunt.storage.PlayerData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -38,7 +39,9 @@ public class Leaderboard {
             map.put(playerData.getAmountFound(), playerData);
         }
 
-        return map.descendingMap().get(rank - 1);
+        List<PlayerData> list = new ArrayList<>(map.descendingMap().values());
+
+        return list.size() >= rank ? list.get(rank - 1) : null;
     }
 
     /**
@@ -57,6 +60,8 @@ public class Leaderboard {
             map.put(playerData.getTreasureFound(treasureName), playerData);
         }
 
-        return map.descendingMap().get(rank - 1);
+        List<PlayerData> list = new ArrayList<>(map.descendingMap().values());
+
+        return list.size() >= rank ? list.get(rank - 1) : null;
     }
 }

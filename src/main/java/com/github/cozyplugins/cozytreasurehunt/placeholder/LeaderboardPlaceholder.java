@@ -32,10 +32,12 @@ public class LeaderboardPlaceholder implements CozyPlaceholder {
         // Check if there are arguments.
         if (args.length < 2) return "null";
 
+        System.out.println(args[1]);
+
         // If a rank is specified.
         if (args[1].matches("[0-9]")) {
 
-            PlayerData playerData = leaderboard.get(Integer.getInteger(args[1]));
+            PlayerData playerData = leaderboard.get(Integer.parseInt(args[1]));
             if (playerData == null) return "Empty";
 
             // If they want the players name.
@@ -46,7 +48,7 @@ public class LeaderboardPlaceholder implements CozyPlaceholder {
             return Integer.toString(playerData.getAmountFound());
         }
 
-        PlayerData playerData = leaderboard.get(Integer.getInteger(args[2]));
+        PlayerData playerData = leaderboard.get(Integer.parseInt(args[2]));
         if (playerData == null) return "Empty";
 
         // If they want the players name.

@@ -153,7 +153,7 @@ public class PlayerData implements Savable, ConfigurationConvertable<PlayerData>
             this.treasureFound.put(treasure, section.getInteger("treasure_found." + treasure));
         }
 
-        this.information = section.getSection("info");
+        this.information = new MemoryConfigurationSection(section.getSection("info").getMap());
         return this;
     }
 

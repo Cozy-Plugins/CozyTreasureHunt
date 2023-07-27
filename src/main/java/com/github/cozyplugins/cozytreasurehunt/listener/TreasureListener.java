@@ -69,7 +69,6 @@ public class TreasureListener implements Listener {
         // Player information.
         ConfigurationSection section = playerData.getInformation();
         section.set("name", event.getPlayer().getName());
-        playerData.setInformation(section);
 
         // Save player data.
         playerData.save();
