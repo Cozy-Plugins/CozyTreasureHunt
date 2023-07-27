@@ -20,8 +20,10 @@ package com.github.cozyplugins.cozytreasurehunt.inventory.editor;
 
 import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
-import com.github.cozyplugins.cozylibrary.inventory.action.ActionResult;
-import com.github.cozyplugins.cozylibrary.inventory.action.action.*;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.AnvilValueAction;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.PlaceAction;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.reward.RewardBundle;
 import com.github.cozyplugins.cozylibrary.reward.RewardBundleEditorInventory;
@@ -30,13 +32,9 @@ import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

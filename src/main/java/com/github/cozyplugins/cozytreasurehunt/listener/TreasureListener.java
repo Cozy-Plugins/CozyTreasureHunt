@@ -7,6 +7,7 @@ import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
 import com.github.cozyplugins.cozytreasurehunt.storage.PlayerData;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -62,9 +63,16 @@ public class TreasureListener implements Listener {
         treasureLocation.removeSilently();
 
         // Add treasure to player data.
-        event.getPlayerData()
-                .increaseTreasureFound(event.getTreasure().getName(), 1)
-                .save();
+        PlayerData playerData = event.getPlayerData();
+        playerData.increaseTreasureFound(event.getTreasure().getName(), 1);
+
+        // Player information.
+        ConfigurationSection section = playerData.getInformation();
+        section.set("name", event.getPlayer().getName());
+        playerData.setInformation(section);
+
+        // Save player data.
+        playerData.save();
 
         // Broadcasts.
         if (treasure.getPublicBroadcastMessage() != null) {

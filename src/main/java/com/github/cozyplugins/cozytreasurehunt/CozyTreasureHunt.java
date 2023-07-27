@@ -22,8 +22,11 @@ import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.cozyplugins.cozytreasurehunt.command.TreasureCommand;
 import com.github.cozyplugins.cozytreasurehunt.listener.EventListener;
 import com.github.cozyplugins.cozytreasurehunt.listener.TreasureListener;
+import com.github.cozyplugins.cozytreasurehunt.placeholder.LeaderboardPlaceholder;
+import com.github.cozyplugins.cozytreasurehunt.placeholder.TotalPlaceholder;
 import com.github.cozyplugins.cozytreasurehunt.result.TreasureSpawnResult;
 import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
+import com.github.cozyplugins.cozytreasurehunt.storage.DataStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +56,10 @@ public final class CozyTreasureHunt extends CozyPlugin {
         // Add listeners.
         this.getServer().getPluginManager().registerEvents(new EventListener(), this);
         this.getServer().getPluginManager().registerEvents(new TreasureListener(), this);
+
+        // Add placeholders.
+        this.addPlaceholder(new TotalPlaceholder());
+        this.addPlaceholder(new LeaderboardPlaceholder());
     }
 
 
@@ -62,6 +69,9 @@ public final class CozyTreasureHunt extends CozyPlugin {
      */
     public static @NotNull TreasureSpawnResult spawnTreasure() {
         TreasureSpawnResult result = new TreasureSpawnResult();
+
+        // Remove all treasure in data file.
+        DataStorage.removeAll();
 
         for (TreasureLocation location : LocationStorage.getAll()) {
             result.add(location, location.spawn());

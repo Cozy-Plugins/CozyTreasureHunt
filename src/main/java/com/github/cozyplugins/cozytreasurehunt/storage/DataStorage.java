@@ -19,6 +19,7 @@
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
+import com.github.cozyplugins.cozytreasurehunt.Leaderboard;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.DataConfigurationDirectory;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
@@ -26,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -122,5 +125,64 @@ public class DataStorage {
     public static @NotNull PlayerData get(@NotNull UUID playerUuid) {
         ConfigurationSection section = DataStorage.getSaveConfiguration().getSection(playerUuid.toString());
         return PlayerData.create(playerUuid, section);
+    }
+
+    /**
+     * Used to get all the players in the data file.
+     */
+    public static @NotNull List<PlayerData> getAll() {
+        List<PlayerData> data = new ArrayList<>();
+
+        for (String key : DataStorage.getSaveConfiguration().getKeys()) {
+            data.add(DataStorage.get(UUID.fromString(key)));
+        }
+
+        return data;
+    }
+
+    /**
+     * Used to get the current instance of the leaderboard.
+     *
+     * @return The current instance of the leaderboard.
+     */
+    public static @NotNull Leaderboard getLeaderboard() {
+        return new Leaderboard(DataStorage.getAll());
+    }
+
+    /**
+     * Used to get the total treasure found.
+     *
+     * @return Amount of treasure found in total.
+     */
+    public static int getTotalTreasureFound() {
+        int total = 0;
+        for (PlayerData playerData : DataStorage.getAll()) {
+            total += playerData.getAmountFound();
+        }
+
+        return total;
+    }
+
+    /**
+     * Used to get the total treasure found for a
+     * specific type of treasure.
+     *
+     * @param treasureName The name of the treasure.
+     * @return The amount of treasure found.
+     */
+    public static int getTotalTreasureFound(@NotNull String treasureName) {
+        int total = 0;
+        for (PlayerData playerData : DataStorage.getAll()) {
+            total += playerData.getTreasureFound(treasureName);
+        }
+
+        return total;
+    }
+
+    public static void removeAll() {
+        YamlConfiguration configuration = DataStorage.getSaveConfiguration();
+        configuration.set(null);
+        configuration.save();
+
     }
 }
