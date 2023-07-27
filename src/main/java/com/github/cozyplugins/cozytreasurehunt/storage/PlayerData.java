@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * Represents the player's data located in this plugin's data file.
  */
-public class PlayerData implements Savable, ConfigurationConvertable {
+public class PlayerData implements Savable, ConfigurationConvertable<PlayerData> {
 
     private final @NotNull UUID playerUuid;
     private @NotNull ConfigurationSection information;
@@ -145,7 +145,7 @@ public class PlayerData implements Savable, ConfigurationConvertable {
     }
 
     @Override
-    public void convert(ConfigurationSection section) {
+    public PlayerData convert(ConfigurationSection section) {
         this.treasureFound = new HashMap<>();
 
         // Put the treasure found into the map.
@@ -154,6 +154,7 @@ public class PlayerData implements Savable, ConfigurationConvertable {
         }
 
         this.information = section.getSection("info");
+        return this;
     }
 
     /**

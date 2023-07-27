@@ -22,6 +22,7 @@ import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
+import com.github.cozyplugins.cozylibrary.reward.RewardBundle;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
@@ -45,7 +46,7 @@ import java.util.UUID;
  * Defaults to {@link Material#CHEST}
  * </li>
  */
-public class Treasure implements ConfigurationConvertable, Savable, Replicable<Treasure> {
+public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Replicable<Treasure> {
 
     private final @NotNull UUID identifier;
     private @NotNull String name;
@@ -65,6 +66,8 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
     private int limit;
     private @Nullable String limitMessage;
 
+    private @NotNull RewardBundle rewardBundle;
+
     /**
      * Used to create a treasure type.
      *
@@ -76,6 +79,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         this.description = "None";
         this.material = Material.CHEST;
         this.particleSize = 1f;
+        this.rewardBundle = new RewardBundle();
     }
 
     /**
@@ -229,6 +233,15 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
      */
     public @Nullable String getLimitMessage() {
         return this.limitMessage;
+    }
+
+    /**
+     * Used to get the reward bundle for this treasure.
+     *
+     * @return The reward bundle.
+     */
+    public @NotNull RewardBundle getRewardBundle() {
+        return rewardBundle;
     }
 
     /**
@@ -438,6 +451,18 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
         return this;
     }
 
+    /**
+     * Used to set the reward bundle.
+     * This will be given when found.
+     *
+     * @param rewardBundle The instance of a reward bundle.
+     * @return This instance.
+     */
+    public @NotNull Treasure setRewardBundle(@NotNull RewardBundle rewardBundle) {
+        this.rewardBundle = rewardBundle;
+        return this;
+    }
+
 
     /**
      * Used to spawn the treasure block.
@@ -546,13 +571,14 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
 
         section.set("limit", this.limit);
         section.set("limit_message", this.limitMessage);
+        section.set("reward", this.rewardBundle.convert().getMap());
 
         return section;
     }
 
     @Override
     @SuppressWarnings("all")
-    public void convert(ConfigurationSection section) {
+    public Treasure convert(ConfigurationSection section) {
         String materialName = section.getString("material", "CHEST").toUpperCase();
         if (Material.getMaterial(materialName) == null) {
             ConsoleManager.error("The treasure with identifier &f" + identifier + " &chas an invalid material. The treasure will default to a &fCHEST&c.");
@@ -561,7 +587,7 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
 
         if (Material.getMaterial(materialName) == null) {
             ConsoleManager.error("The material CHEST is invalid on this server version, further errors may occur.");
-            return;
+            return this;
         }
 
         this.name = section.getString("name", "New Treasure");
@@ -585,6 +611,9 @@ public class Treasure implements ConfigurationConvertable, Savable, Replicable<T
 
         this.limit = section.getInteger("limit", -1);
         this.limitMessage = section.getString("limit_message", "&7You have reached the maximum amount of &f{name}&7.");
+        this.rewardBundle = new RewardBundle().convert(section.getSection("reward"));
+
+        return this;
     }
 
     @Override

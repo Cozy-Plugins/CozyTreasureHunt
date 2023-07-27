@@ -76,5 +76,8 @@ public class TreasureListener implements Listener {
 
         // Particles.
         treasure.spawnParticles(event.getLocation());
+
+        // Rewards.
+        treasure.getRewardBundle().giveRewardBundle(event.getPlayer());
     }
 }

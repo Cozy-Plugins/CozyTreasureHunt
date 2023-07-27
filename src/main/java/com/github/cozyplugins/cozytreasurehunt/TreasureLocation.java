@@ -39,7 +39,7 @@ import java.util.UUID;
 /**
  * Represents a location of a treasure.
  */
-public class TreasureLocation implements ConfigurationConvertable, Savable, Replicable<TreasureLocation> {
+public class TreasureLocation implements ConfigurationConvertable<TreasureLocation>, Savable, Replicable<TreasureLocation> {
 
     private final @NotNull Treasure treasure;
     private final @NotNull Location location;
@@ -178,8 +178,9 @@ public class TreasureLocation implements ConfigurationConvertable, Savable, Repl
     }
 
     @Override
-    public void convert(ConfigurationSection section) {
+    public TreasureLocation convert(ConfigurationSection section) {
         this.isSpawned = section.getBoolean("is_spawned");
+        return this;
     }
 
     @Override
