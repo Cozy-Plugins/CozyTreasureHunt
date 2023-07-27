@@ -49,6 +49,11 @@ public class SpawnCommand implements CommandType {
 
     @Override
     public @Nullable CommandStatus onUser(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
+        return null;
+    }
+
+    @Override
+    public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
         // Confirm action.
         new ConfirmationInventory(new ConfirmAction()
                 .setAnvilTitle("&8&lDelete data and spawn")
@@ -61,24 +66,35 @@ public class SpawnCommand implements CommandType {
                             .replace("{result}", result.toString())
                     );
                 })
+        ).open(user.getPlayer());
+
+        return new CommandStatus();
+    }
+
+    @Override
+    public @Nullable CommandStatus onFakeUser(@NotNull FakeUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
+        // Spawn all treasure locations.
+        TreasureSpawnResult result = CozyTreasureHunt.spawnTreasure();
+
+        // Display the result to the user.
+        user.sendMessage(section.getString("spawned_treasure", "&7Attempted to spawn all treasure. {result}")
+                .replace("{result}", result.toString())
         );
 
         return new CommandStatus();
     }
 
     @Override
-    public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
-    }
-
-    @Override
-    public @Nullable CommandStatus onFakeUser(@NotNull FakeUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
-    }
-
-    @Override
     public @Nullable CommandStatus onConsole(@NotNull ConsoleUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        return null;
+        // Spawn all treasure locations.
+        TreasureSpawnResult result = CozyTreasureHunt.spawnTreasure();
+
+        // Display the result to the user.
+        user.sendMessage(section.getString("spawned_treasure", "&7Attempted to spawn all treasure. {result}")
+                .replace("{result}", result.toString())
+        );
+
+        return new CommandStatus();
     }
 
 }
