@@ -5,6 +5,8 @@ import com.github.cozyplugins.cozylibrary.command.datatype.CommandArguments;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandStatus;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandSuggestions;
 import com.github.cozyplugins.cozylibrary.command.datatype.CommandTypePool;
+import com.github.cozyplugins.cozylibrary.inventory.action.action.ConfirmAction;
+import com.github.cozyplugins.cozylibrary.inventory.inventory.ConfirmationInventory;
 import com.github.cozyplugins.cozylibrary.user.ConsoleUser;
 import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
@@ -47,12 +49,18 @@ public class SpawnCommand implements CommandType {
 
     @Override
     public @Nullable CommandStatus onUser(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
-        // Spawn all treasure locations.
-        TreasureSpawnResult result = CozyTreasureHunt.spawnTreasure();
+        // Confirm action.
+        new ConfirmationInventory(new ConfirmAction()
+                .setAnvilTitle("&8&lDelete data and spawn")
+                .setConfirm(user1 -> {
+                    // Spawn all treasure locations.
+                    TreasureSpawnResult result = CozyTreasureHunt.spawnTreasure();
 
-        // Display the result to the user.
-        user.sendMessage(section.getString("spawned_treasure", "&7Attempted to spawn all treasure. {result}")
-                .replace("{result}", result.toString())
+                    // Display the result to the user.
+                    user1.sendMessage(section.getString("spawned_treasure", "&7Attempted to spawn all treasure. {result}")
+                            .replace("{result}", result.toString())
+                    );
+                })
         );
 
         return new CommandStatus();
