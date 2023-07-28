@@ -91,6 +91,7 @@ public class FindCommand implements CommandType {
 
         // Loop though found treasure.
         for (TreasureLocation location : foundTreasure) {
+            if (!location.isSpawned()) continue;
             current++;
             if (current > max) return new CommandStatus();
 
