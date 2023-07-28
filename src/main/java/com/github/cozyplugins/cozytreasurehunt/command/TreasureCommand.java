@@ -38,6 +38,7 @@ public class TreasureCommand implements CommandType {
         pool.add(new EditorCommand());
         pool.add(new FindCommand());
         pool.add(new RemoveCommand());
+        pool.add(new ReloadCommand());
         pool.add(new SetCommand());
         pool.add(new SpawnCommand());
         pool.add(new UnSpawnCommand());

@@ -10,6 +10,9 @@ import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
 import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
+import com.github.cozyplugins.cozytreasurehunt.storage.DataStorage;
+import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
+import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,6 +51,8 @@ public class ReloadCommand implements CommandType {
     @Override
     public @Nullable CommandStatus onUser(@NotNull User user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
         ConfigFile.setup();
+        TreasureStorage.load();
+        LocationStorage.load();
         user.sendMessage("&7Configuration reloaded.");
         return new CommandStatus();
     }

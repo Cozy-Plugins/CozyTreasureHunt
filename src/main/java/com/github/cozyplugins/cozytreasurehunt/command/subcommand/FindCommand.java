@@ -72,7 +72,7 @@ public class FindCommand implements CommandType {
         for (TreasureLocation location : LocationStorage.getAll()) {
             // Check if the treasure is not spawned.
             if (!location.isSpawned()) continue;
-            
+
             // If they are searching for a specific treasure and this is not that treasure.
             if (specificTreasure && !location.getTreasure().getName().equals(arguments.getArguments().get(1))) continue;
 
