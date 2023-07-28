@@ -75,10 +75,19 @@ public class TreasureListener implements Listener {
 
         // Broadcasts.
         if (treasure.getPublicBroadcastMessage() != null) {
-            MessageManager.broadcast(MessageManager.parse(treasure.getPublicBroadcastMessage(), event.getPlayer().getPlayer()));
+            MessageManager.broadcast(MessageManager.parse(
+                    treasure.getPublicBroadcastMessage()
+                            .replace("{player}", event.getPlayer().getName())
+                            .replace("{treasure}", treasure.getName()),
+                    event.getPlayer().getPlayer())
+            );
         }
         if (treasure.getPrivateBroadcastMessage() != null) {
-            event.getPlayer().sendMessage(treasure.getPrivateBroadcastMessage());
+            event.getPlayer().sendMessage(
+                    treasure.getPrivateBroadcastMessage()
+                            .replace("{player}", event.getPlayer().getName())
+                            .replace("{treasure}", treasure.getName())
+            );
         }
 
         // Particles.

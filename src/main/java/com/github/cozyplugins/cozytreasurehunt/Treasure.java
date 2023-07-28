@@ -78,6 +78,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.name = "New Treasure";
         this.description = "None";
         this.material = Material.CHEST;
+        this.privateBroadcastMessage = "&aYou found &f{treasure}";
         this.particleSize = 1f;
         this.limit = -1;
         this.rewardBundle = new RewardBundle();
