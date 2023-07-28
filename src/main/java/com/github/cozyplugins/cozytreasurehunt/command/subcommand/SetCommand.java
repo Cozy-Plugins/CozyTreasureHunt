@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -65,7 +66,9 @@ public class SetCommand implements CommandType {
         }
 
         // Get the treasure type.
-        Treasure treasure = TreasureStorage.getFirst(arguments.getArguments().get(1));
+        List<String> treasureNameList = arguments.getArguments().subList(1, arguments.getArguments().size());
+        String treasureName = String.join(" ", treasureNameList);
+        Treasure treasure = TreasureStorage.getFirst(treasureName);
 
         // Check if the treasure exists.
         if (treasure == null) {

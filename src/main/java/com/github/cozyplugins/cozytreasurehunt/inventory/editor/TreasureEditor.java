@@ -312,6 +312,8 @@ public class TreasureEditor extends InventoryInterface {
                 .setLore("&7Click to change the public broadcast message.",
                         "&7This message will appear in chat to all players",
                         "&7when a player finds this treasure.",
+                        "&f{player} &7returns the players name.",
+                        "&f{treasure} &7returns this treasures name.",
                         "&aCurrently &e" + this.treasure.getPublicBroadcastMessage())
                 .addSlot(28)
                 .addAction(new AnvilValueAction()
@@ -337,6 +339,8 @@ public class TreasureEditor extends InventoryInterface {
                 .setLore("&7Click to change the private broadcast message.",
                         "&7This message will be sent to the player ",
                         "&7that finds this treasure.",
+                        "&f{player} &7returns the players name.",
+                        "&f{treasure} &7returns this treasures name.",
                         "&aCurrently &e" + this.treasure.getPrivateBroadcastMessage())
                 .addSlot(29)
                 .addAction(new AnvilValueAction()
