@@ -32,8 +32,6 @@ public class LeaderboardPlaceholder implements CozyPlaceholder {
         // Check if there are arguments.
         if (args.length < 2) return "null";
 
-        System.out.println(args[1]);
-
         // If a rank is specified.
         if (args[1].matches("[0-9]")) {
 

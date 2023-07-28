@@ -22,6 +22,7 @@ import com.github.cozyplugins.cozylibrary.CozyPlugin;
 import com.github.cozyplugins.cozytreasurehunt.command.TreasureCommand;
 import com.github.cozyplugins.cozytreasurehunt.listener.EventListener;
 import com.github.cozyplugins.cozytreasurehunt.listener.TreasureListener;
+import com.github.cozyplugins.cozytreasurehunt.placeholder.FindPlaceholder;
 import com.github.cozyplugins.cozytreasurehunt.placeholder.LeaderboardPlaceholder;
 import com.github.cozyplugins.cozytreasurehunt.placeholder.TotalPlaceholder;
 import com.github.cozyplugins.cozytreasurehunt.result.TreasureSpawnResult;
@@ -60,6 +61,7 @@ public final class CozyTreasureHunt extends CozyPlugin {
         // Add placeholders.
         this.addPlaceholder(new TotalPlaceholder());
         this.addPlaceholder(new LeaderboardPlaceholder());
+        this.addPlaceholder(new FindPlaceholder());
     }
 
 

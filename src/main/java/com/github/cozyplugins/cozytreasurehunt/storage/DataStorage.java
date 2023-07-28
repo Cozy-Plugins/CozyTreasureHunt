@@ -179,6 +179,9 @@ public class DataStorage {
         return total;
     }
 
+    /**
+     * Used to remove all the player data.
+     */
     public static void removeAll() {
         YamlConfiguration configuration = DataStorage.getSaveConfiguration();
         configuration.set(null);

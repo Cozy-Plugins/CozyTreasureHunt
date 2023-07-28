@@ -10,7 +10,6 @@ import com.github.cozyplugins.cozylibrary.user.FakeUser;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozylibrary.user.User;
 import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
-import com.github.cozyplugins.cozytreasurehunt.storage.DataStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;

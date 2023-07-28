@@ -179,6 +179,64 @@ public final class LocationStorage {
     }
 
     /**
+     * Used to get the total amount of spawn locations.
+     *
+     * @return The total amount of spawn locations.
+     */
+    public static int getTotalAmount() {
+        return LocationStorage.storage.getKeys().size();
+    }
+
+    /**
+     * Used to get the total amount of spawn locations.
+     *
+     * @return The total amount of spawn locations.
+     */
+    public static int getTotalAmount(@NotNull String treasureName) {
+        int amount = 0;
+
+        for (TreasureLocation location : LocationStorage.getAll()) {
+            if (!location.getTreasure().getName().equals(treasureName)) continue;
+            amount++;
+        }
+
+        return amount;
+    }
+
+    /**
+     * Used to get the total amount of treasure that is spawned.
+     *
+     * @return The total amount spawned.
+     */
+    public static int getAmountSpawned() {
+        int amount = 0;
+
+        for (String key : LocationStorage.storage.getKeys()) {
+            if (LocationStorage.storage.getSection(key).getBoolean("is_spawned", false)) amount++;
+        }
+
+        return amount;
+    }
+
+    /**
+     * Used to get the total amount of treasure that is spawned.
+     *
+     * @param treasureName The name of the treasure.
+     * @return The requested amount treasure that is spawned.
+     */
+    public static int getAmountSpawned(@NotNull String treasureName) {
+        int amount = 0;
+
+        for (TreasureLocation location : LocationStorage.getAll()) {
+            if (!location.isSpawned()) continue;
+            if (!location.getTreasure().getName().equals(treasureName)) continue;
+            amount++;
+        }
+
+        return amount;
+    }
+
+    /**
      * Used to check if the configuration contains a key.
      * This will check if there is a treasure in that
      * location in an efficient way.
