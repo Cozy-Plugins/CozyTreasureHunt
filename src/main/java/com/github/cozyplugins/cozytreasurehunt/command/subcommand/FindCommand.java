@@ -70,6 +70,9 @@ public class FindCommand implements CommandType {
 
         // Loop though every treasure.
         for (TreasureLocation location : LocationStorage.getAll()) {
+            // Check if the treasure is not spawned.
+            if (!location.isSpawned()) continue;
+            
             // If they are searching for a specific treasure and this is not that treasure.
             if (specificTreasure && !location.getTreasure().getName().equals(arguments.getArguments().get(1))) continue;
 
@@ -91,7 +94,6 @@ public class FindCommand implements CommandType {
 
         // Loop though found treasure.
         for (TreasureLocation location : foundTreasure) {
-            if (!location.isSpawned()) continue;
             current++;
             if (current > max) return new CommandStatus();
 
