@@ -62,6 +62,9 @@ public final class CozyTreasureHunt extends CozyPlugin {
         this.addPlaceholder(new TotalPlaceholder());
         this.addPlaceholder(new LeaderboardPlaceholder());
         this.addPlaceholder(new FindPlaceholder());
+
+        // Metrics.
+        new Metrics(this, 19286);
     }
 
 
