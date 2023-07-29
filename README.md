@@ -36,13 +36,71 @@
         <img src="./graphics/paper.png" width="200"></a>
     <a href="https://modrinth.com/plugin/leaf">
         <img src="./graphics/modrinth.png" width="200"></a>
-    <a href="https://hangar.papermc.io/Smudge/Leaf">
-        <img src="./graphics/hangar.png" width="200"></a>
 </div>
 
 [![BStats](https://bstats.org/signatures/velocity/Leaf.svg)](https://bstats.org/plugin/velocity/Leaf/17381)
 
 <div align=center>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/donate.png" width="512"></a>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/button_donate.png" width="512"></a>
 </div>
 
+# Developers
+[![GitHub version](https://img.shields.io/github/v/tag/Cozy-Plugins/CozyTreasureHunt?sort=semver)](https://github.com/smuddgge/leaf/releases)
+
+**Maven**
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
+```xml
+<dependency>
+    <groupId>com.github.Cozy-Plugins</groupId>
+    <artifactId>CozyTreasureHunt</artifactId>
+    <version>Tag</version>
+</dependency>
+```
+
+**Gradle**
+```gradle
+allprojects {
+    repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+    }
+}
+```
+```gradle
+dependencies {
+    implementation 'com.github.Cozy-Plugins:CozyTreasureHunt:Tag'
+}
+```
+
+## Events
+```java
+@EventHandler()
+public void onTreasurePreClick(TreasurePreClickEvent event) {
+    // Called when a treasure is clicked.
+}
+
+@EventHandler()
+public void onTreasurePreClick(TreasurePostClickEvent event) {
+    // Called if the pre click event is not canncelled.
+}
+
+@EventHandler()
+public void onTreasurePreClick(TreasurePreSpawnEvent event) {
+    // Called when a treasure is spawned.
+}
+
+@EventHandler()
+public void onTreasurePreClick(TreasurePostSpawnEvent event) {
+    // Called if the pre spawn event is not canncelled.
+}
+```
+
+## Data
+```java
+PlayerData playerData = DataStorage.get(player.getUniqueId());
+```
