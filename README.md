@@ -7,11 +7,6 @@
         <img src="./graphics/button_discord.png" width="512"></a>
 </div>
 
-<div >
-    <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/field?field=dependencies">
-        <img src="./graphics/button_dependencys.png" width="190"></a>
-</div>
-
 [![CodeFactor](https://www.codefactor.io/repository/github/cozy-plugins/cozytreasurehunt/badge)](https://www.codefactor.io/repository/github/cozy-plugins/cozytreasurehunt)
 [![Github All Releases](https://img.shields.io/github/downloads/Cozy-Plugins/CozyTreasureHunt/total.svg)](https://github.com/smuddgge/leaf/releases)
 [![GitHub issues](https://img.shields.io/github/issues/Cozy-Plugins/cozytreasurehunt.svg)](https://github.com/smuddgge/leaf/issues)
@@ -28,15 +23,6 @@
 # Organisation : Cozy Plugins
 # Author : Smudge
 ```
-
-<div>
-    <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/">
-        <img src="./graphics/builtbybit.png" width="200"></a>
-    <a href="https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/">
-        <img src="./graphics/paper.png" width="200"></a>
-    <a href="https://modrinth.com/plugin/leaf">
-        <img src="./graphics/modrinth.png" width="200"></a>
-</div>
 
 [![BStats](https://bstats.org/signatures/bukkit/CozyTreasureHunt.svg)](https://bstats.org/plugin/bukkit/CozyTreasureHunt/19286)
 
