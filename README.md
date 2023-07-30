@@ -38,7 +38,7 @@
         <img src="./graphics/modrinth.png" width="200"></a>
 </div>
 
-[![BStats](https://bstats.org/signatures/velocity/Leaf.svg)](https://bstats.org/plugin/velocity/Leaf/17381)
+[![BStats](https://bstats.org/signatures/bukkit/CozyTreasureHunt.svg)](https://bstats.org/plugin/bukkit/CozyTreasureHunt/19286)
 
 <div align=center>
     <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/button_donate.png" width="512"></a>
