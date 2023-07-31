@@ -26,6 +26,9 @@
 
 [![BStats](https://bstats.org/signatures/bukkit/CozyTreasureHunt.svg)](https://bstats.org/plugin/bukkit/CozyTreasureHunt/19286)
 
+- https://www.spigotmc.org/resources/cozytreasurehunt.111614/
+- https://modrinth.com/plugin/cozytreasurehunt
+
 <div align=center>
     <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/button_donate.png" width="512"></a>
 </div>
