@@ -3,7 +3,7 @@
         <img src="./graphics/button_download.png" width="512"></a>
     <a href="">
         <img src="./graphics/button_wiki.png" width="512"></a>
-    <a href="https://discord.com/invite/ZxCnrJfk7Z">
+    <a href="https://discord.gg/pax7uFhaaD">
         <img src="./graphics/button_discord.png" width="512"></a>
 </div>
 
