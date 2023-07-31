@@ -45,15 +45,6 @@ Designed for your **server events**, this plugin will help you **create, log and
 - Set a treasure location with `/treasure set [name]`
 - Spawn the treasure with `/treasure spawn`
 
-<video width="320" height="240" controls>
-  <source src="https://i.imgur.com/aswZjRJ.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-<video width="320" height="240" controls>
-  <source src="https://i.imgur.com/lxMNRAD.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
 # Developers
 [![GitHub version](https://img.shields.io/github/v/tag/Cozy-Plugins/CozyTreasureHunt?sort=semver)](https://github.com/smuddgge/leaf/releases)
 
