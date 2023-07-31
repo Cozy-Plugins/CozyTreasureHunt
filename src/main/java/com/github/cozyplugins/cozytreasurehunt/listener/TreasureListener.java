@@ -6,6 +6,7 @@ import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreClickEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
+import com.github.cozyplugins.cozytreasurehunt.storage.DataStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.PlayerData;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,14 @@ public class TreasureListener implements Listener {
     public void onTreasurePreClick(TreasurePreClickEvent event) {
         PlayerData playerData = event.getPlayerData();
         Treasure treasure = event.getTreasure();
+
+        // Check if they have already redeemed this treasure.
+        if (playerData.hasRedeemed(event.getTreasureLocation())) {
+
+            event.getPlayer().sendMessage("&7You have already redeemed this treasure.");
+            event.setCancelled(true);
+            return;
+        }
 
         // Check if they have reached the global limit.
         int treasureFound = playerData.getAmountFound();
@@ -58,13 +67,28 @@ public class TreasureListener implements Listener {
     public void onTreasurePostClick(TreasurePostClickEvent event) {
         Treasure treasure = event.getTreasure();
         TreasureLocation treasureLocation = event.getTreasureLocation();
+        PlayerData playerData = event.getPlayerData();
 
-        // Remove the treasure.
-        treasureLocation.removeSilently();
+        // Check if the treasure can be redeemed again by a different pearson.
+        int maxRedeemableAmount = treasure.getRedeemable();
+        int redeemedAmount = DataStorage.getAmountRedeemed(treasureLocation);
+
+        // If the treasure will be fully redeemed.
+        // If the max is -1 that means the treasure will always be spawned.
+        if ((redeemedAmount + 1) >= maxRedeemableAmount && maxRedeemableAmount != -1) {
+            // Remove the treasure.
+            treasureLocation.removeSilently();
+
+            // Reset the location player data.
+            DataStorage.resetLocationData(treasureLocation);
+        } else {
+
+            // Add redeemed location for the player.
+            playerData.addRedeemedLocation(treasureLocation);
+        }
 
         // Add treasure to player data.
-        PlayerData playerData = event.getPlayerData();
-        playerData.increaseTreasureFound(event.getTreasure().getName(), 1);
+        playerData.increaseTreasureFound(treasureLocation);
 
         // Player information.
         ConfigurationSection section = playerData.getInformation();

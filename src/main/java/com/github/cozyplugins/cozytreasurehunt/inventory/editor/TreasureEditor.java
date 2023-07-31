@@ -756,5 +756,85 @@ public class TreasureEditor extends InventoryInterface {
                     editorInventory.open(user.getPlayer());
                 })
         );
+
+        // Multiple redeeming.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.COBWEB)
+                .setName("&6&lSet Redeemable Amount")
+                .setLore("&7Click to set the redeemable amount.",
+                        "&7This defines the amount of times it can be",
+                        "&7clicked by unique players before it disappears.",
+                        "&7Setting this to -1 will ensure that the treasure",
+                        "&7never disappears when a player clicks it.",
+                        "&aCurrent &e" + treasure.getRedeemable(),
+                        "&f+20 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-20 &7Shift Right Click")
+                .addSlot(31)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.setRedeemable(treasure.getRedeemable() + 20);
+                    if (type == ClickType.LEFT) treasure.setRedeemable(treasure.getRedeemable() + 1);
+                    if (type == ClickType.RIGHT) treasure.setRedeemable(treasure.getRedeemable() - 1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.setRedeemable(treasure.getRedeemable() - 20);
+
+                    // Boundary's.
+                    if (treasure.getRedeemable() < -1) treasure.setRedeemable(-1);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.COBWEB)
+                                    .setName("&6&lSet Redeemable Amount")
+                                    .setLore("&7Click to set the redeemable amount.",
+                                            "&7This defines the amount of times it can be",
+                                            "&7clicked by unique players before it disappears.",
+                                            "&7Setting this to -1 will ensure that the treasure",
+                                            "&7never disappears when a player clicks it.",
+                                            "&aCurrent &e" + treasure.getRedeemable(),
+                                            "&f+20 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-20 &7Shift Right Click")
+                            , 31);
+                })
+        );
+
+        // TODO Multiple redeeming message.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.COBWEB)
+                .setName("&6&lNot Redeemable Message")
+                .setLore("&7Click to set the not redeemable message.",
+                        "&7This message is sent to the player when",
+                        "&7the player attempts to click anouther treasure",
+                        "&7when they have already clicked it.",
+                        "&aCurrently &e" + treasure.getRedeemableMessage())
+                .addSlot(32)
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lNot Redeemable Message")
+                        .setAction((value, user) -> {
+                            if (value != null) {
+                                if (value.equals("")) {
+                                    treasure.setRedeemableMessage(null);
+                                } else {
+                                    treasure.setRedeemableMessage(value);
+                                }
+                            }
+
+                            treasure.save();
+
+                            this.setItem(new CozyItem()
+                                            .setMaterial(Material.COBWEB)
+                                            .setName("&6&lNot Redeemable Message")
+                                            .setLore("&7Click to set the not redeemable message.",
+                                                    "&7This message is sent to the player when",
+                                                    "&7the player attempts to click anouther treasure",
+                                                    "&7when they have already clicked it.",
+                                                    "&aCurrently &e" + treasure.getRedeemableMessage())
+                                    , 29);
+                        })
+                )
+        );
     }
 }

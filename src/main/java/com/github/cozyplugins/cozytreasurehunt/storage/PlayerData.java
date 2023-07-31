@@ -1,14 +1,13 @@
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents the player's data located in this plugin's data file.
@@ -90,31 +89,21 @@ public class PlayerData implements Savable, ConfigurationConvertable<PlayerData>
     }
 
     /**
-     * Used to set a treasure to a certain amount in the map.
-     *
-     * @param treasureName The treasure identifier.
-     * @param amount       The amount to set found.
-     * @return This instance.
-     */
-    public @NotNull PlayerData putTreasureFound(@NotNull String treasureName, int amount) {
-        this.treasureFound.put(treasureName, amount);
-        return this;
-    }
-
-    /**
      * Used to increase the amount of treasure found for a specific treasure.
+     * This will also increase the amount redeemed.
      *
-     * @param treasureName The treasure's identifier.
-     * @param amount       The amount to increase.
+     * @param location The instance of the treasure location.
      * @return This instance.
      */
-    public @NotNull PlayerData increaseTreasureFound(@NotNull String treasureName, int amount) {
+    public @NotNull PlayerData increaseTreasureFound(@NotNull TreasureLocation location) {
+        String treasureName = location.getTreasure().getName();
         if (this.treasureFound.containsKey(treasureName)) {
-            this.treasureFound.put(treasureName, this.treasureFound.get(treasureName) + amount);
+            this.treasureFound.put(treasureName, this.treasureFound.get(treasureName) + 1);
+
             return this;
         }
 
-        this.treasureFound.put(treasureName, amount);
+        this.treasureFound.put(treasureName, 1);
         return this;
     }
 
@@ -127,6 +116,57 @@ public class PlayerData implements Savable, ConfigurationConvertable<PlayerData>
     public @NotNull PlayerData setInformation(@NotNull ConfigurationSection section) {
         this.information = section;
         return this;
+    }
+
+    /**
+     * Used to add the location to the player information.
+     * This value changes when the treasure disappears.
+     *
+     * @param location The instance of the location.
+     */
+    public void addRedeemedLocation(@NotNull TreasureLocation location) {
+        String treasureName = location.getTreasure().getName();
+
+        // Store treasure location.
+        ConfigurationSection locationSection = this.information.getSection("no_longer_redeemable");
+        List<String> locationList = locationSection.getListString(treasureName, new ArrayList<>());
+        locationList.add(location.getIdentifier());
+        locationSection.set(treasureName, locationList);
+    }
+
+    /**
+     * Used to remove a redeemed location.
+     * This is called normally when the treasure disappears.
+     *
+     * @param location The instance of the location.
+     * @return This instance.
+     */
+    public @NotNull PlayerData removeRedeemedLocation(@NotNull TreasureLocation location) {
+        String treasureName = location.getTreasure().getName();
+
+        // Remove redeemed location.
+        ConfigurationSection locationSection = this.information.getSection("no_longer_redeemable");
+        List<String> locationList = locationSection.getListString(treasureName, new ArrayList<>());
+        locationList.remove(location.getIdentifier());
+        locationSection.set(treasureName, locationList);
+
+        return this;
+    }
+
+    /**
+     * Used to check if a player has redeemed a treasure location.
+     *
+     * @param location The instance of the location.
+     * @return True if the player has redeemed this location.
+     */
+    public boolean hasRedeemed(@NotNull TreasureLocation location) {
+        for (String locationIdentifier : this.information.getSection("no_longer_redeemable")
+                .getListString(location.getTreasure().getName())) {
+
+            if (locationIdentifier.equals(location.getIdentifier())) return true;
+        }
+
+        return false;
     }
 
     @Override

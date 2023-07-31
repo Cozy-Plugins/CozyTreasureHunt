@@ -20,6 +20,7 @@ package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozytreasurehunt.Leaderboard;
+import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.DataConfigurationDirectory;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
@@ -187,5 +188,36 @@ public class DataStorage {
         configuration.set(null);
         configuration.save();
 
+    }
+
+    /**
+     * Used to get the amount of times the same treasure has been redeemed.
+     *
+     * @param treasureLocation The instance of a treasure location.
+     * @return The amount of times it has been redeemed.
+     */
+    public static int getAmountRedeemed(TreasureLocation treasureLocation) {
+        int amountRedeemed = 0;
+
+        for (PlayerData playerData : DataStorage.getAll()) {
+            if (playerData.hasRedeemed(treasureLocation)) amountRedeemed++;
+        }
+
+        return amountRedeemed;
+    }
+
+    /**
+     * Loops though every player and removes the treasure
+     * location if they have it in there info section.
+     *
+     * @param treasureLocation The instance of the treasure location.
+     */
+    public static void resetLocationData(TreasureLocation treasureLocation) {
+        for (PlayerData playerData : DataStorage.getAll()) {
+            if (!playerData.hasRedeemed(treasureLocation)) continue;
+
+            playerData.removeRedeemedLocation(treasureLocation);
+            playerData.save();
+        }
     }
 }

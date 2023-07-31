@@ -65,8 +65,9 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
 
     private int limit;
     private @Nullable String limitMessage;
-
     private @NotNull RewardBundle rewardBundle;
+    private int redeemable;
+    private @Nullable String redeemableMessage;
 
     /**
      * Used to create a treasure type.
@@ -82,6 +83,8 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.particleSize = 1f;
         this.limit = -1;
         this.rewardBundle = new RewardBundle();
+        this.redeemable = 1;
+        this.redeemableMessage = "&7You have already redeemed this treasure.";
     }
 
     /**
@@ -243,7 +246,28 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
      * @return The reward bundle.
      */
     public @NotNull RewardBundle getRewardBundle() {
-        return rewardBundle;
+        return this.rewardBundle;
+    }
+
+    /**
+     * Used to get the amount of times the treasure is redeemable
+     * by different players before it disappears.
+     *
+     * @return The amount of times this treasure is redeemable.
+     */
+    public int getRedeemable() {
+        return this.redeemable;
+    }
+
+    /**
+     * Used to get the redeemable message.
+     * This message is sent when a player trys to click
+     * a treasure they have already redeemed.
+     *
+     * @return The redeemable message.
+     */
+    public @Nullable String getRedeemableMessage() {
+        return redeemableMessage;
     }
 
     /**
@@ -465,6 +489,30 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         return this;
     }
 
+    /**
+     * Used to set the amount of times the treasure is redeemable
+     * by different players before it disappears.
+     *
+     * @param amount The amount of times it can be redeemed.
+     * @return This instance.
+     */
+    public @NotNull Treasure setRedeemable(int amount) {
+        this.redeemable = amount;
+        return this;
+    }
+
+    /**
+     * Used to set the redeemable message.
+     * This message is sent to the player if they
+     * try and redeem a treasure they have already redeemed.
+     *
+     * @param message The redeemable message.
+     * @return This instance.
+     */
+    public @NotNull Treasure setRedeemableMessage(@Nullable String message) {
+        this.redeemableMessage = message;
+        return this;
+    }
 
     /**
      * Used to spawn the treasure block.
@@ -574,6 +622,8 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         section.set("limit", this.limit);
         section.set("limit_message", this.limitMessage);
         section.set("reward", this.rewardBundle.convert().getMap());
+        section.set("redeemable", this.redeemable);
+        section.set("redeemable_message", this.redeemableMessage);
 
         return section;
     }
@@ -614,6 +664,8 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.limit = section.getInteger("limit", -1);
         this.limitMessage = section.getString("limit_message", "&7You have reached the maximum amount of &f{name}&7.");
         this.rewardBundle = new RewardBundle().convert(section.getSection("reward"));
+        this.redeemable = section.getInteger("redeemable", 1);
+        this.redeemableMessage = section.getString("redeemable_message", "&7You have already redeemed this treasure.");
 
         return this;
     }

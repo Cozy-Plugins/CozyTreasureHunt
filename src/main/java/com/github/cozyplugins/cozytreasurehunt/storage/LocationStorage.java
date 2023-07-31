@@ -254,6 +254,14 @@ public final class LocationStorage {
      * @param identifier The treasure's identifier.
      */
     public static void remove(@NotNull String identifier) {
+        // Get the treasure location.
+        TreasureLocation location = LocationStorage.get(identifier);
+        if (location == null) return;
+
+        // Remove the location from the world.
+        location.removeSilently();
+
+        // Remove the location from configuration.
         for (File file : LocationStorage.storage.getFiles()) {
             YamlConfiguration configuration = new YamlConfiguration(file);
             configuration.load();
@@ -273,6 +281,12 @@ public final class LocationStorage {
      * Used to remove all locations.
      */
     public static void removeAll() {
+        // Remove the treasures from the worlds.
+        for (TreasureLocation location : LocationStorage.getAll()) {
+            location.removeSilently();
+        }
+
+        // Remove the treasures from the configuration file.
         for (File file : LocationStorage.storage.getFiles()) {
             YamlConfiguration configuration = new YamlConfiguration(file);
             configuration.set(null);
