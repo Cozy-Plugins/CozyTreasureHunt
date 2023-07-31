@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/Cozy-Plugins/CozyTreasureHunt/main/graphics/1000x300_banner.png">
+
 <div align=center>
     <a href="https://github.com/Cozy-Plugins/CozyTreasureHunt/releases">
         <img src="./graphics/button_download.png" width="512"></a>
@@ -29,9 +31,22 @@
 - https://www.spigotmc.org/resources/cozytreasurehunt.111614/
 - https://modrinth.com/plugin/cozytreasurehunt
 
-<div align=center>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/button_donate.png" width="512"></a>
-</div>
+<img src="https://raw.githubusercontent.com/Cozy-Plugins/CozyTreasureHunt/main/graphics/heading_about.png">
+
+\
+User-friendly **treasure hunt** creator.
+
+Designed for your **server events**, this plugin will help you **create, log and place** treasure for players to **find, click and gain** a reward!
+
+\
+<img src="https://raw.githubusercontent.com/Cozy-Plugins/CozyTreasureHunt/main/graphics/heading_guide.png">
+
+- Create treasure with `/treasure editor`
+- Set a treasure location with `/treasure set [name]`
+- Spawn the treasure with `/treasure spawn`
+
+<img src="https://i.imgur.com/aswZjRJ.mp4">
+<img src="https://i.imgur.com/lxMNRAD.mp4">
 
 # Developers
 [![GitHub version](https://img.shields.io/github/v/tag/Cozy-Plugins/CozyTreasureHunt?sort=semver)](https://github.com/smuddgge/leaf/releases)
@@ -93,3 +108,7 @@ public void onTreasurePreClick(TreasurePostSpawnEvent event) {
 ```java
 PlayerData playerData = DataStorage.get(player.getUniqueId());
 ```
+
+<div align=center>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/button_donate.png" width="512"></a>
+</div>
