@@ -19,6 +19,7 @@
 package com.github.cozyplugins.cozytreasurehunt;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
+import com.github.cozyplugins.cozylibrary.datatype.ratio.Ratio;
 import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
@@ -69,6 +70,11 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
     private int redeemable;
     private @Nullable String redeemableMessage;
 
+    private boolean isRespawnable;
+    private boolean isStatic; // If the treasure respawns in the same place.
+    private int respawnTime;
+    private @NotNull Ratio spawnRatio;
+
     /**
      * Used to create a treasure type.
      *
@@ -81,10 +87,16 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.material = Material.CHEST;
         this.privateBroadcastMessage = "&aYou found &f{treasure}";
         this.particleSize = 1f;
+
         this.limit = -1;
         this.rewardBundle = new RewardBundle();
         this.redeemable = 1;
         this.redeemableMessage = "&7You have already redeemed this treasure.";
+
+        this.isRespawnable = false;
+        this.isStatic = false;
+        this.respawnTime = 5;
+        this.spawnRatio = new Ratio();
     }
 
     /**
@@ -110,7 +122,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
 
     /**
      * Used to get the treasure's description.
-     * Defaults to "None".
+     * Defaults to "None"
      *
      * @return The treasures description.
      */
@@ -268,6 +280,48 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
      */
     public @Nullable String getRedeemableMessage() {
         return redeemableMessage;
+    }
+
+    /**
+     * Used to check if this treasure is respawnable.
+     * If true, the treasure will respawn.
+     *
+     * @return True if the treasure respawns.
+     */
+    public boolean isRespawnable() {
+        return isRespawnable;
+    }
+
+    /**
+     * Used to check if the treasure is static.
+     * If true the treasure will favour respawning in the same location.
+     *
+     * @return If the treasure is static.
+     */
+    public boolean isStatic() {
+        return isStatic;
+    }
+
+    /**
+     * Used to get the respawn time.
+     * The amount of tile until it will respawn after it disappears.
+     *
+     * @return The respawn time.
+     */
+    public int getRespawnTime() {
+        return respawnTime;
+    }
+
+    /**
+     * Used to get the spawn ratio.
+     * The ratio of spawns to locations.
+     * <li>1:1 means for every location there will be 1 spawn.</li>
+     * <li>1:2 means for every 2 locations there will be 1 spawn.</li>
+     *
+     * @return The spawn ratio.
+     */
+    public @NotNull Ratio getSpawnRatio() {
+        return spawnRatio;
     }
 
     /**
@@ -515,6 +569,66 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
     }
 
     /**
+     * Used to set if the treasure will be respawnable.
+     * True if the treasure is respawnable.
+     *
+     * @param respawnable If the treasure is respawnable.
+     * @return This instance.
+     */
+    public @NotNull Treasure setRespawnable(boolean respawnable) {
+        this.isRespawnable = respawnable;
+        return this;
+    }
+
+    /**
+     * Used to set if the treasure is static.
+     * If true the treasure will favour respawning in the same location.
+     *
+     * @param isStatic If the treasure is static.
+     * @return This instance.
+     */
+    public @NotNull Treasure setStatic(boolean isStatic) {
+        this.isStatic = isStatic;
+        return this;
+    }
+
+    /**
+     * Used to set the amount of time until the treasure
+     * will respawn once it disappears.
+     *
+     * @param respawnTime The respawn time.
+     * @return This instance.
+     */
+    public @NotNull Treasure setRespawnTime(int respawnTime) {
+        this.respawnTime = respawnTime;
+        return this;
+    }
+
+    /**
+     * Used to set the spawn ratio.
+     * The ratio of spawns to locations.
+     * <li>1:1 means for every location there will be 1 spawn.</li>
+     * <li>1:2 means for every 2 locations there will be 1 spawn.</li>
+     *
+     * @param spawnRatio The spawn ratio.
+     * @return This instance.
+     */
+    public @NotNull Treasure setSpawnRatio(@NotNull Ratio spawnRatio) {
+        this.spawnRatio = spawnRatio;
+        return this;
+    }
+
+    /**
+     * Used to set the spawn ratio to 1:1.
+     *
+     * @return This instance.
+     */
+    public @NotNull Treasure setSpawnRatioEven() {
+        this.spawnRatio = new Ratio();
+        return this;
+    }
+
+    /**
      * Used to spawn the treasure block.
      *
      * @param location The location to spawn the treasure block.
@@ -624,6 +738,10 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         section.set("reward", this.rewardBundle.convert().getMap());
         section.set("redeemable", this.redeemable);
         section.set("redeemable_message", this.redeemableMessage);
+        section.set("respawn.is_respawnable", this.isRespawnable);
+        section.set("respawn.is_static", this.isStatic);
+        section.set("respawn.time", this.respawnTime);
+        section.set("respawn.ratio", this.spawnRatio.convert().getMap());
 
         return section;
     }
@@ -666,7 +784,10 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.rewardBundle = new RewardBundle().convert(section.getSection("reward"));
         this.redeemable = section.getInteger("redeemable", 1);
         this.redeemableMessage = section.getString("redeemable_message", "&7You have already redeemed this treasure.");
-
+        this.isRespawnable = section.getBoolean("respawn.is_respawnable", false);
+        this.isStatic = section.getBoolean("respawn.is_static", false);
+        this.respawnTime = section.getInteger("respawn.time", -1);
+        this.spawnRatio = new Ratio().convert(section.getSection("respawn").getSection("ratio"));
         return this;
     }
 

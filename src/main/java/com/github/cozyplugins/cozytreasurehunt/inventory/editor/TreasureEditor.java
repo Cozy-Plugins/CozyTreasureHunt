@@ -801,13 +801,13 @@ public class TreasureEditor extends InventoryInterface {
                 })
         );
 
-        // TODO Multiple redeeming message.
+        // Multiple redeeming message.
         this.setItem(new InventoryItem()
                 .setMaterial(Material.COBWEB)
                 .setName("&6&lNot Redeemable Message")
                 .setLore("&7Click to set the not redeemable message.",
                         "&7This message is sent to the player when",
-                        "&7the player attempts to click anouther treasure",
+                        "&7the player attempts to click another treasure",
                         "&7when they have already clicked it.",
                         "&aCurrently &e" + treasure.getRedeemableMessage())
                 .addSlot(32)
@@ -829,7 +829,7 @@ public class TreasureEditor extends InventoryInterface {
                                             .setName("&6&lNot Redeemable Message")
                                             .setLore("&7Click to set the not redeemable message.",
                                                     "&7This message is sent to the player when",
-                                                    "&7the player attempts to click anouther treasure",
+                                                    "&7the player attempts to click another treasure",
                                                     "&7when they have already clicked it.",
                                                     "&aCurrently &e" + treasure.getRedeemableMessage())
                                     , 29);

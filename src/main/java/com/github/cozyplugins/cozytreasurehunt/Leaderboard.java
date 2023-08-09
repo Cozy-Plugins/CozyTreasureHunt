@@ -50,7 +50,7 @@ public class Leaderboard {
      * <li>1 is first place.</li>
      *
      * @param rank         The rank in the leaderboard.
-     * @param treasureName The treasures name.
+     * @param treasureName The treasure's name.
      * @return The requested player data.
      */
     public @Nullable PlayerData get(int rank, @NotNull String treasureName) {
