@@ -18,7 +18,9 @@
 
 package com.github.cozyplugins.cozytreasurehunt;
 
+import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
+import com.github.cozyplugins.cozylibrary.datatype.ratio.Ratio;
 import com.github.cozyplugins.cozytreasurehunt.command.TreasureCommand;
 import com.github.cozyplugins.cozytreasurehunt.listener.EventListener;
 import com.github.cozyplugins.cozytreasurehunt.listener.TreasureListener;
@@ -30,7 +32,11 @@ import com.github.cozyplugins.cozytreasurehunt.storage.ConfigFile;
 import com.github.cozyplugins.cozytreasurehunt.storage.DataStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
+import org.bukkit.Raid;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
 
 /**
  * Represents the main plugin class.
@@ -78,9 +84,77 @@ public final class CozyTreasureHunt extends CozyPlugin {
         // Remove all treasure in data file.
         DataStorage.removeAll();
 
+        // The treasure with non-identical spawn ratios.
+        HashMap<UUID, @NotNull List<TreasureLocation>> ratioTreasure = new HashMap<>();
+
+        // Spawn identical ratios and find non-identical ratios.
         for (TreasureLocation location : LocationStorage.getAll()) {
+
+            // Check if the spawn ratio is not identical.
+            if (!location.getTreasure().getSpawnRatio().isIdentical()) {
+
+                // Check if the map contains the treasure type.
+                if (ratioTreasure.containsKey(location.getTreasure().getIdentifier())) {
+                    List<TreasureLocation> list = ratioTreasure.get(location.getTreasure().getIdentifier());
+                    list.add(location);
+                    ratioTreasure.put(location.getTreasure().getIdentifier(), list);
+                    continue;
+                }
+
+                List<TreasureLocation> list = new ArrayList<>();
+                list.add(location);
+                ratioTreasure.put(location.getTreasure().getIdentifier(), list);
+                continue;
+            }
+
             result.add(location, location.spawn());
         }
+
+        // Spawn non-identical ratios.
+        for (Map.Entry<UUID, @NotNull List<TreasureLocation>> entry : ratioTreasure.entrySet()) {
+            int amount = entry.getValue().size();
+            List<TreasureLocation> locations = entry.getValue();
+            Treasure treasure = TreasureStorage.get(entry.getKey());
+
+            // Check if the treasure is null.
+            if (treasure == null) {
+                ConsoleManager.warn("Treasure was null when spawning a ratio treasure. Identifier = " + entry.getKey());
+                continue;
+            }
+
+            // Shuffle locations.
+            Collections.shuffle(locations);
+
+            // Get the spawn ratio.
+            Ratio ratio = treasure.getSpawnRatio().getLeftScaled(amount);
+
+            // Ensure the left is not over the number of locations.
+            if (ratio.getLeft() > amount) ratio.setLeft(amount);
+
+            // Loop "amount" times.
+            for (int i = 0; i < amount; i++) {
+
+                // Spawn location.
+                TreasureLocation location = locations.get(i);
+                result.add(location, location.spawn());
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Used to spawn treasure at one random treasure location.
+     *
+     * @param treasureIdentifier The treasure's identifier to spawn.
+     * @return The treasure spawn result.
+     */
+    public static @NotNull TreasureSpawnResult spawnOneTreasure(@NotNull UUID treasureIdentifier) {
+        TreasureSpawnResult result = new TreasureSpawnResult();
+        TreasureLocation location = LocationStorage.getRandomEmpty(treasureIdentifier);
+        if (location == null) return result;
+
+        result.add(location, location.spawn());
 
         return result;
     }
@@ -92,7 +166,7 @@ public final class CozyTreasureHunt extends CozyPlugin {
      */
     public static void unSpawnTreasure() {
         for (TreasureLocation location : LocationStorage.getAll()) {
-            location.removeSilently();
+            location.removeForever();
         }
     }
 }

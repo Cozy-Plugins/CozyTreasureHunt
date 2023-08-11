@@ -18,6 +18,7 @@
 
 package com.github.cozyplugins.cozytreasurehunt.inventory.editor;
 
+import com.github.cozyplugins.cozylibrary.datatype.ratio.Ratio;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.AnvilValueAction;
@@ -61,6 +62,7 @@ public class TreasureEditor extends InventoryInterface {
 
         this.treasure = treasure;
         this.listEditor = listEditor;
+        this.modifierDescription = "null";
 
         this.page = 0;
         this.generatePageDescription();
@@ -91,7 +93,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setMaterial(Material.GRAY_STAINED_GLASS_PANE)
                 .setName("&7")
                 .addSlotRange(0, 26)
-                .addSlot(27, 36, 25, 45)
+                .addSlot(27, 36, 35, 44)
                 .addSlotRange(45, 53)
         );
 
@@ -149,7 +151,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction(new AnvilValueAction()
                         .setAnvilTitle("&8&lChange name to")
                         .setAction((value, user) -> {
-                            if (value != null && !value.equals("")) {
+                            if (value != null && !value.isEmpty()) {
                                 treasure.setName(value);
                                 treasure.save();
 
@@ -172,7 +174,7 @@ public class TreasureEditor extends InventoryInterface {
                 .addAction(new AnvilValueAction()
                         .setAnvilTitle("&8&lChange description to")
                         .setAction((value, user) -> {
-                            if (value != null && !value.equals("")) {
+                            if (value != null && !value.isEmpty()) {
                                 treasure.setDescription(value);
                                 treasure.save();
                             }
@@ -698,7 +700,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&6&lLimit Message")
                 .setLore("&7Click to set the limit message.",
                         "&7This message is sent to the player when",
-                        "&7the player attempts to click anouther treasure",
+                        "&7the player attempts to click another treasure",
                         "&7while over the limit.",
                         "&aCurrently &e" + treasure.getLimitMessage())
                 .addSlot(29)
@@ -706,7 +708,7 @@ public class TreasureEditor extends InventoryInterface {
                         .setAnvilTitle("&8&lLimit message")
                         .setAction((value, user) -> {
                             if (value != null) {
-                                if (value.equals("")) {
+                                if (value.isEmpty()) {
                                     treasure.setLimitMessage(null);
                                 } else {
                                     treasure.setLimitMessage(value);
@@ -734,7 +736,7 @@ public class TreasureEditor extends InventoryInterface {
                 .setName("&6&lRewards")
                 .setLore("&7Click to change the rewards that",
                         "&7will be given when this treasure is found.")
-                .addSlot(30)
+                .addSlot(31)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     InventoryInterface back = this;
 
@@ -771,7 +773,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&f+1 &7Left Click",
                         "&f-1 &7Right Click",
                         "&f-20 &7Shift Right Click")
-                .addSlot(31)
+                .addSlot(33)
                 .addAction((ClickAction) (user, type, inventory) -> {
                     if (type == ClickType.SHIFT_LEFT) treasure.setRedeemable(treasure.getRedeemable() + 20);
                     if (type == ClickType.LEFT) treasure.setRedeemable(treasure.getRedeemable() + 1);
@@ -797,7 +799,7 @@ public class TreasureEditor extends InventoryInterface {
                                             "&f+1 &7Left Click",
                                             "&f-1 &7Right Click",
                                             "&f-20 &7Shift Right Click")
-                            , 31);
+                            , 33);
                 })
         );
 
@@ -810,12 +812,12 @@ public class TreasureEditor extends InventoryInterface {
                         "&7the player attempts to click another treasure",
                         "&7when they have already clicked it.",
                         "&aCurrently &e" + treasure.getRedeemableMessage())
-                .addSlot(32)
+                .addSlot(34)
                 .addAction(new AnvilValueAction()
                         .setAnvilTitle("&8&lNot Redeemable Message")
                         .setAction((value, user) -> {
                             if (value != null) {
-                                if (value.equals("")) {
+                                if (value.isEmpty()) {
                                     treasure.setRedeemableMessage(null);
                                 } else {
                                     treasure.setRedeemableMessage(value);
@@ -832,7 +834,147 @@ public class TreasureEditor extends InventoryInterface {
                                                     "&7the player attempts to click another treasure",
                                                     "&7when they have already clicked it.",
                                                     "&aCurrently &e" + treasure.getRedeemableMessage())
-                                    , 29);
+                                    , 34);
+                        })
+                )
+        );
+
+        // Respawnable toggle.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.ENDER_EYE)
+                .setName("&6&lRespawnable")
+                .setLore("&7Click to toggle if this treasure",
+                        "&7will respawn when clicked.",
+                        "&aCurrently &e" + treasure.isRespawnable())
+                .addSlot(37)
+                .addAction((ClickAction) (playerUser, clickType, inventory) -> {
+                    treasure.setRespawnable(!treasure.isRespawnable());
+                    treasure.save();
+
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.ENDER_EYE)
+                                    .setName("&6&lRespawnable")
+                                    .setLore("&7Click to toggle if this treasure",
+                                            "&7will respawn when clicked.",
+                                            "&aCurrently &e" + treasure.isRespawnable())
+                            , 37);
+                })
+        );
+
+        // Static toggle.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.ENDER_EYE)
+                .setName("&6&lStatic")
+                .setLore("&7Click to toggle if this treasure",
+                        "&7will will respawn in the same location.",
+                        "&aCurrently &e" + treasure.isStatic())
+                .addSlot(38)
+                .addAction((ClickAction) (playerUser, clickType, inventory) -> {
+                    treasure.setStatic(!treasure.isStatic());
+                    treasure.save();
+
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.ENDER_EYE)
+                                    .setName("&6&lStatic")
+                                    .setLore("&7Click to toggle if this treasure",
+                                            "&7will will respawn in the same location.",
+                                            "&aCurrently &e" + treasure.isStatic())
+                            , 38);
+                })
+        );
+
+        // Respawn time.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.ENDER_EYE)
+                .setName("&6&lRespawn Time")
+                .setLore("&7Click to set the respawn time.",
+                        "&7When the treasure is clicked, if the treasure",
+                        "&7is respawnable it will wait this amount of seconds",
+                        "&7and respawn.",
+                        "&aCurrent &e" + treasure.getRespawnTime(),
+                        "&f+20 &7Shift Left Click",
+                        "&f+1 &7Left Click",
+                        "&f-1 &7Right Click",
+                        "&f-20 &7Shift Right Click")
+                .addSlot(39)
+                .addAction((ClickAction) (user, type, inventory) -> {
+                    if (type == ClickType.SHIFT_LEFT) treasure.setRespawnTime(treasure.getRespawnTime() + 20);
+                    if (type == ClickType.LEFT) treasure.setRespawnTime(treasure.getRespawnTime() + 1);
+                    if (type == ClickType.RIGHT) treasure.setRespawnTime(treasure.getRespawnTime() - 1);
+                    if (type == ClickType.SHIFT_RIGHT) treasure.setRespawnTime(treasure.getRespawnTime() - 20);
+
+                    // Boundary's.
+                    if (treasure.getRespawnTime() < 0) treasure.setRespawnTime(0);
+
+                    treasure.save();
+
+                    // Reset the item.
+                    this.setItem(new CozyItem()
+                                    .setMaterial(Material.ENDER_EYE)
+                                    .setName("&6&lRespawn Time")
+                                    .setLore("&7Click to set the respawn time.",
+                                            "&7When the treasure is clicked, if the treasure",
+                                            "&7is respawnable it will wait this amount of seconds",
+                                            "&7and respawn.",
+                                            "&aCurrent &e" + treasure.getRespawnTime(),
+                                            "&f+20 &7Shift Left Click",
+                                            "&f+1 &7Left Click",
+                                            "&f-1 &7Right Click",
+                                            "&f-20 &7Shift Right Click")
+                            , 39);
+                })
+        );
+
+        // Respawn ratio.
+        this.setItem(new InventoryItem()
+                .setMaterial(Material.PUMPKIN_PIE)
+                .setName("&6&lSpawn Ratio")
+                .setLore("&7Click to set the spawn ratio.",
+                        "&7The amount of treasure to spawn locations.",
+                        "&7Example:",
+                        "&7 &7 &7 &7 1:2",
+                        "&7 &7 &7 &7 Every 2 locations, 1 treasure will spawn.",
+                        "&aCurrently &e" + treasure.getSpawnRatio())
+                .addSlot(40)
+                .addAction(new AnvilValueAction()
+                        .setAnvilTitle("&8&lNot Redeemable Message")
+                        .setAction((value, user) -> {
+                            if (value != null) {
+                                if (value.isEmpty()) {
+                                    treasure.setSpawnRatio(new Ratio());
+                                } else {
+                                    try {
+                                        Ratio ratio = new Ratio(value);
+
+                                        // Check if the ratio is valid.
+                                        if (!ratio.isLeftSmallerOrEqual()) {
+                                            user.sendMessage("&7The left number must be smaller or" +
+                                                    " equal to the right number.");
+                                            return;
+                                        }
+
+                                        // Set the spawn ratio.
+                                        treasure.setSpawnRatio(ratio);
+
+                                    } catch (Exception exception) {
+                                        user.sendMessage("&7Unable to convert to a ratio. Make sure it" +
+                                                " follows the format &fnumber:number");
+                                    }
+                                }
+                            }
+
+                            treasure.save();
+
+                            this.setItem(new CozyItem()
+                                            .setMaterial(Material.ENDER_EYE)
+                                            .setName("&6&lSpawn Ratio")
+                                            .setLore("&7Click to set the spawn ratio.",
+                                                    "&7The amount of treasure to spawn locations.",
+                                                    "&7Example:",
+                                                    "&7 &7 &7 &7 1:2",
+                                                    "&7 &7 &7 &7 Every 2 locations, 1 treasure will spawn.",
+                                                    "&aCurrently &e" + treasure.getSpawnRatio())
+                                    , 40);
                         })
                 )
         );

@@ -119,13 +119,47 @@ public class TreasureLocation implements ConfigurationConvertable<TreasureLocati
      * Used to remove the treasure at the location.
      * This will also set {@link TreasureLocation#isSpawned} to false.
      * <li>This will not call the treasure click event.</li>
+     * <li>This will check if the treasure should be respawned.</li>
      *
      * @return This instance.
      */
     public @NotNull TreasureLocation removeSilently() {
+        this.removeForever();
+
+        // Check if the treasure is respawnable.
+        if (this.getTreasure().isRespawnable()) {
+
+            // Calculate the number of ticks to wait.
+            int seconds = this.getTreasure().getRespawnTime();
+            long ticks = seconds * 20L;
+
+            // Respawn the treasure after the number of ticks.
+            Bukkit.getScheduler().runTaskLater(CozyTreasureHunt.getPlugin(), () -> {
+
+                // Check if the treasure is static.
+                if (this.getTreasure().isStatic()) {
+                    this.spawn();
+                    return;
+                }
+
+                // Otherwise it will be spawned in a random location.
+                CozyTreasureHunt.spawnOneTreasure(this.getTreasure().getIdentifier());
+
+            }, ticks);
+        }
+
+        return this;
+    }
+
+    /**
+     * Removes the treasure without looking to
+     * see if it should be respawned.
+     */
+    public @NotNull TreasureLocation removeForever() {
         this.location.getBlock().setType(Material.AIR);
         this.isSpawned = false;
         this.save();
+
         return this;
     }
 

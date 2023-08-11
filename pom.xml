@@ -6,7 +6,7 @@
 
     <groupId>com.github.cozyplugins</groupId>
     <artifactId>CozyTreasureHunt</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
     <name>CozyTreasureHunt</name>
 
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.github.Cozy-Plugins</groupId>
             <artifactId>CozyLibrary</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </dependency>
 
         <!-- HeadDatabase -->

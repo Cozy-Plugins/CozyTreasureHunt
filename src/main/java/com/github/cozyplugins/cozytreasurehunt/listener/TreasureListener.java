@@ -38,7 +38,7 @@ public class TreasureListener implements Listener {
         if (treasureFound >= globalLimit && globalLimit != -1) {
             event.setCancelled(true);
 
-            if (!ConfigFile.getGlobalLimitMessage().equals("")) {
+            if (!ConfigFile.getGlobalLimitMessage().isEmpty()) {
                 event.getPlayer().sendMessage(ConfigFile.getGlobalLimitMessage()
                         .replace("{name}", treasure.getName())
                 );
@@ -55,7 +55,7 @@ public class TreasureListener implements Listener {
         if (treasureTypeFound >= limit && limit != -1) {
             event.setCancelled(true);
 
-            if (treasure.getLimitMessage() != null || !treasure.getLimitMessage().equals("")) {
+            if (treasure.getLimitMessage() != null || !treasure.getLimitMessage().isEmpty()) {
                 event.getPlayer().sendMessage(treasure.getLimitMessage()
                         .replace("{name}", treasure.getName())
                 );
@@ -73,10 +73,11 @@ public class TreasureListener implements Listener {
         int maxRedeemableAmount = treasure.getRedeemable();
         int redeemedAmount = DataStorage.getAmountRedeemed(treasureLocation);
 
-        // If the treasure will be fully redeemed.
+        // If the treasure is fully redeemed.
         // If the max is -1 that means the treasure will always be spawned.
         if ((redeemedAmount + 1) >= maxRedeemableAmount && maxRedeemableAmount != -1) {
             // Remove the treasure.
+            // This will also respawn the treasure if the treasure is respawnable.
             treasureLocation.removeSilently();
 
             // Reset the location player data.

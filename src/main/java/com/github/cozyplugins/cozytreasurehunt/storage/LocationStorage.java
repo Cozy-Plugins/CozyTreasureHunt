@@ -27,12 +27,12 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents the treasure location storage.
@@ -179,6 +179,32 @@ public final class LocationStorage {
     }
 
     /**
+     * Used to get a random empty treasure location
+     * that the treasure can spawn in.
+     *
+     * @param identifier The treasure's identifier.
+     * @return A random treasure location.
+     */
+    public static @Nullable TreasureLocation getRandomEmpty(@NotNull UUID identifier) {
+        List<TreasureLocation> options = new ArrayList<>();
+
+        // Loop though all treasure locations.
+        for (TreasureLocation location : LocationStorage.getAll()) {
+
+            // Check if the location is already taken.
+            if (location.isSpawned()) continue;
+
+            // Check if they have the same identifier.
+            if (location.getTreasure().getIdentifier() != identifier) continue;
+
+            options.add(location);
+        }
+
+        Collections.shuffle(options);
+        return options.isEmpty() ? null : options.get(0);
+    }
+
+    /**
      * Used to get the total amount of spawn locations.
      *
      * @return The total amount of spawn locations.
@@ -283,7 +309,7 @@ public final class LocationStorage {
     public static void removeAll() {
         // Remove the treasures from the worlds.
         for (TreasureLocation location : LocationStorage.getAll()) {
-            location.removeSilently();
+            location.removeForever();
         }
 
         // Remove the treasures from the configuration file.

@@ -569,7 +569,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
     }
 
     /**
-     * Used to set if the treasure will be respawnable.
+     * Used to set if the treasure is respawnable.
      * True if the treasure is respawnable.
      *
      * @param respawnable If the treasure is respawnable.
@@ -615,16 +615,6 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
      */
     public @NotNull Treasure setSpawnRatio(@NotNull Ratio spawnRatio) {
         this.spawnRatio = spawnRatio;
-        return this;
-    }
-
-    /**
-     * Used to set the spawn ratio to 1:1.
-     *
-     * @return This instance.
-     */
-    public @NotNull Treasure setSpawnRatioEven() {
-        this.spawnRatio = new Ratio();
         return this;
     }
 
@@ -786,7 +776,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.redeemableMessage = section.getString("redeemable_message", "&7You have already redeemed this treasure.");
         this.isRespawnable = section.getBoolean("respawn.is_respawnable", false);
         this.isStatic = section.getBoolean("respawn.is_static", false);
-        this.respawnTime = section.getInteger("respawn.time", -1);
+        this.respawnTime = section.getInteger("respawn.time", 5);
         this.spawnRatio = new Ratio().convert(section.getSection("respawn").getSection("ratio"));
         return this;
     }
