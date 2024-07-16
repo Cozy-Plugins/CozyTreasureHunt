@@ -22,7 +22,7 @@ import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozylibrary.location.Region3D;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.LocationConfigurationDirectory;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -1,8 +1,8 @@
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
-import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
+import com.github.smuddgge.squishyconfiguration.indicator.ConfigurationConvertable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.jetbrains.annotations.NotNull;

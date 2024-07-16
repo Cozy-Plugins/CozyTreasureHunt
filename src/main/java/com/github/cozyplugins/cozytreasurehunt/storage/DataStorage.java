@@ -22,7 +22,7 @@ import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozytreasurehunt.Leaderboard;
 import com.github.cozyplugins.cozytreasurehunt.TreasureLocation;
 import com.github.cozyplugins.cozytreasurehunt.storage.configuration.DataConfigurationDirectory;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 

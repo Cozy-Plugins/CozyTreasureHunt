@@ -19,7 +19,7 @@
 package com.github.cozyplugins.cozytreasurehunt.inventory.editor;
 
 import com.github.cozyplugins.cozylibrary.datatype.ratio.Ratio;
-import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
+import com.github.cozyplugins.cozylibrary.inventory.CozyInventory;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.AnvilValueAction;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * An inventory used to edit a type of treasure.
  */
-public class TreasureEditor extends InventoryInterface {
+public class TreasureEditor extends CozyInventory {
 
     private final @NotNull Treasure treasure;
     private final TreasureListEditor listEditor;
@@ -205,6 +205,22 @@ public class TreasureEditor extends InventoryInterface {
 
                         // Check if there is a hdb value.
                         if (hdb != null) this.treasure.setHdb(hdb);
+                    }
+
+                    if (this.treasure.getMaterial() == Material.PLAYER_HEAD) {
+
+                        if (HeadDatabaseDependency.isEnabled()) {
+                            HeadDatabaseAPI api = HeadDatabaseDependency.get();
+                            String hdb = api.getItemID(item.create());
+
+                            if (hdb != null) {
+                                this.treasure.setHdb(hdb);
+                            }
+                        }
+
+                        if (this.treasure.getHdb() == null) {
+                            this.treasure.setSkullOwner(item.getSkullOwner());
+                        }
                     }
 
                     this.treasure.save();
@@ -738,7 +754,7 @@ public class TreasureEditor extends InventoryInterface {
                         "&7will be given when this treasure is found.")
                 .addSlot(31)
                 .addAction((ClickAction) (user, type, inventory) -> {
-                    InventoryInterface back = this;
+                    CozyInventory back = this;
 
                     // Create editor inventory.
                     RewardBundleEditorInventory editorInventory = new RewardBundleEditorInventory(this.treasure.getRewardBundle()) {
@@ -749,7 +765,7 @@ public class TreasureEditor extends InventoryInterface {
                         }
 
                         @Override
-                        protected @Nullable InventoryInterface onBackButton(@NotNull PlayerUser user) {
+                        protected @Nullable CozyInventory onBackButton(@NotNull PlayerUser user) {
                             return back;
                         }
                     };

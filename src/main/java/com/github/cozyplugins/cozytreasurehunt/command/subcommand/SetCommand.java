@@ -60,7 +60,7 @@ public class SetCommand implements CommandType {
     @Override
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
         // Check if there is no treasure specified.
-        if (arguments.getArguments().isEmpty() || Objects.equals(arguments.getArguments().get(1), "")) {
+        if (arguments.getArguments().isEmpty() || Objects.equals(arguments.getArguments().get(0), "")) {
             user.sendMessage(section.getString("invalid_treasure", "&7Treasure type does not exist."));
             return new CommandStatus();
         }

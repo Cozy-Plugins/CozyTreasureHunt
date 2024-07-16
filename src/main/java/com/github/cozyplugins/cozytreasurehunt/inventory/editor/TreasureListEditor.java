@@ -18,14 +18,14 @@
 
 package com.github.cozyplugins.cozytreasurehunt.inventory.editor;
 
-import com.github.cozyplugins.cozylibrary.inventory.InventoryInterface;
+import com.github.cozyplugins.cozylibrary.inventory.CozyInventory;
 import com.github.cozyplugins.cozylibrary.inventory.InventoryItem;
 import com.github.cozyplugins.cozylibrary.inventory.action.action.ClickAction;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.Treasure;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ import java.util.UUID;
  * An inventory that displays the list of types of
  * treasure that the player can edit.
  */
-public class TreasureListEditor extends InventoryInterface {
+public class TreasureListEditor extends CozyInventory {
 
     private @NotNull List<Treasure> treasureList;
     private int page;

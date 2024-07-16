@@ -1,7 +1,7 @@
 package com.github.cozyplugins.cozytreasurehunt.storage;
 
 import com.github.cozyplugins.cozylibrary.CozyPlugin;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

@@ -20,7 +20,6 @@ package com.github.cozyplugins.cozytreasurehunt;
 
 import com.github.cozyplugins.cozylibrary.ConsoleManager;
 import com.github.cozyplugins.cozylibrary.datatype.ratio.Ratio;
-import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozylibrary.item.CozyItem;
 import com.github.cozyplugins.cozylibrary.reward.RewardBundle;
@@ -28,9 +27,11 @@ import com.github.cozyplugins.cozylibrary.user.PlayerUser;
 import com.github.cozyplugins.cozytreasurehunt.dependency.HeadDatabaseDependency;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
+import com.github.smuddgge.squishyconfiguration.indicator.ConfigurationConvertable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.*;
+import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
 
     private @NotNull Material material;
     private @Nullable String hdb;
+    private @Nullable UUID skullOwner;
 
     private @Nullable String publicBroadcastMessage;
     private @Nullable String privateBroadcastMessage;
@@ -154,10 +156,18 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
      * @return The treasure as an item.
      */
     public @NotNull CozyItem getItem() {
+
         // Check if the head database is enabled and there is a hdb value.
         if (HeadDatabaseDependency.isEnabled() && this.hdb != null && !this.hdb.equals("")) {
             ItemStack item = HeadDatabaseDependency.get().getItemHead(this.hdb);
             return new CozyItem(item);
+        }
+
+        // Check if there is a skull owner.
+        if (this.skullOwner != null) {
+            return new CozyItem(this.material)
+                    .setMaterial(Material.PLAYER_HEAD)
+                    .setSkull(this.skullOwner);
         }
 
         return new CozyItem(this.material);
@@ -365,6 +375,17 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
      */
     public @NotNull Treasure setHdb(@Nullable String hdb) {
         this.hdb = hdb;
+        return this;
+    }
+
+    /**
+     * Used to set the skull owner.
+     *
+     * @param skullOwner The skull owner.
+     * @return This instance.
+     */
+    public @NotNull Treasure setSkullOwner(UUID skullOwner) {
+        this.skullOwner = skullOwner;
         return this;
     }
 
@@ -640,6 +661,13 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
             HeadDatabaseDependency.get().setBlockSkin(location.getBlock(), this.hdb);
         }
 
+        if (this.skullOwner != null) {
+            location.getBlock().setType(Material.PLAYER_HEAD);
+            Skull skull = (Skull) location.getBlock().getState();
+            skull.setOwningPlayer(Bukkit.getOfflinePlayer(this.skullOwner));
+            skull.update();
+        }
+
         return this;
     }
 
@@ -715,6 +743,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
 
         section.set("material", this.material.toString());
         section.set("hdb", this.hdb);
+        if (this.skullOwner != null) section.set("skull_owner", this.skullOwner.toString());
 
         section.set("public_broadcast_message", this.publicBroadcastMessage);
         section.set("private_broadcast_message", this.privateBroadcastMessage);
@@ -755,6 +784,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
 
         this.material = Material.getMaterial(materialName);
         this.hdb = section.getString("hdb");
+        if (section.getKeys().contains("skull_owner")) this.skullOwner = UUID.fromString(section.getString("skull_owner"));
 
         this.publicBroadcastMessage = section.getString("public_broadcast_message");
         this.privateBroadcastMessage = section.getString("private_broadcast_message");
@@ -780,6 +810,7 @@ public class Treasure implements ConfigurationConvertable<Treasure>, Savable, Re
         this.spawnRatio = new Ratio().convert(section.getSection("respawn").getSection("ratio"));
         return this;
     }
+
 
     @Override
     public void save() {

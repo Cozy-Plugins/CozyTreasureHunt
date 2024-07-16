@@ -18,13 +18,13 @@
 
 package com.github.cozyplugins.cozytreasurehunt;
 
-import com.github.cozyplugins.cozylibrary.indicator.ConfigurationConvertable;
 import com.github.cozyplugins.cozylibrary.indicator.Replicable;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePostSpawnEvent;
 import com.github.cozyplugins.cozytreasurehunt.event.TreasurePreSpawnEvent;
 import com.github.cozyplugins.cozytreasurehunt.storage.LocationStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.TreasureStorage;
 import com.github.cozyplugins.cozytreasurehunt.storage.indicator.Savable;
+import com.github.smuddgge.squishyconfiguration.indicator.ConfigurationConvertable;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import org.bukkit.Bukkit;
@@ -212,7 +212,7 @@ public class TreasureLocation implements ConfigurationConvertable<TreasureLocati
     }
 
     @Override
-    public TreasureLocation convert(ConfigurationSection section) {
+    public @NotNull TreasureLocation convert(@NotNull  ConfigurationSection section) {
         this.isSpawned = section.getBoolean("is_spawned");
         return this;
     }
