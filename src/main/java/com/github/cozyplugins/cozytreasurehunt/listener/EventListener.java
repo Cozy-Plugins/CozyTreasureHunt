@@ -46,16 +46,23 @@ public class EventListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onClick(PlayerInteractEvent event) {
+
         // Check if a treasure is clicked in the most efficient way.
+        // Did the player click a block.
         if (event.getClickedBlock() == null) return;
+
+        // Check if the location is in storage.
         if (!LocationStorage.contains(event.getClickedBlock().getLocation())) return;
 
         // Get the treasure location.
         TreasureLocation treasureLocation = LocationStorage.get(event.getClickedBlock().getLocation());
         if (treasureLocation == null) return;
 
+        // Is the treasure spawned?
+        if (!treasureLocation.isSpawned()) return;
+
         // Check if the player is in the map.
-        // Meaning they have clicked most recently
+        // Meaning they have clicked most recently.
         if (playerMap.containsKey(event.getPlayer().getUniqueId())) {
             long lastTimeStamp = playerMap.get(event.getPlayer().getUniqueId());
 

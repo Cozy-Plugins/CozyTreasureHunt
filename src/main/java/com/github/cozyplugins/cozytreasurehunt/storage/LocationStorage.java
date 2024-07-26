@@ -27,12 +27,14 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents the treasure location storage.

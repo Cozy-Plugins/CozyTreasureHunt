@@ -18,7 +18,6 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -59,6 +58,7 @@ public class SetCommand implements CommandType {
 
     @Override
     public @Nullable CommandStatus onPlayer(@NotNull PlayerUser user, @NotNull ConfigurationSection section, @NotNull CommandArguments arguments) {
+
         // Check if there is no treasure specified.
         if (arguments.getArguments().isEmpty() || Objects.equals(arguments.getArguments().get(0), "")) {
             user.sendMessage(section.getString("invalid_treasure", "&7Treasure type does not exist."));
@@ -66,8 +66,7 @@ public class SetCommand implements CommandType {
         }
 
         // Get the treasure type.
-        List<String> treasureNameList = arguments.getArguments().subList(1, arguments.getArguments().size());
-        String treasureName = String.join(" ", treasureNameList);
+        String treasureName = String.join(" ", arguments.getArguments());
         Treasure treasure = TreasureStorage.getFirst(treasureName);
 
         // Check if the treasure exists.

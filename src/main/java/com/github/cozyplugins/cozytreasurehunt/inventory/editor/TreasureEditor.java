@@ -413,6 +413,7 @@ public class TreasureEditor extends CozyInventory {
                         .setAction((value, user) -> {
                             if (value != null) {
                                 try {
+                                    System.out.println(value.toUpperCase());
                                     Particle particle = Particle.valueOf(value.toUpperCase());
                                     treasure.setParticleType(particle);
                                     treasure.save();
